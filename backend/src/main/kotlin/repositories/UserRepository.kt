@@ -1,8 +1,9 @@
 package eu.karcags.mythscape.repositories
 
-import eu.karcags.mythscape.models.User
+import eu.karcags.mythscape.dtos.UserDTO
 
 interface UserRepository {
-    suspend fun byName(userName: String): User?
-    suspend fun add(user: User)
+
+    suspend fun all(): List<UserDTO>
+    suspend fun get(id: Int): UserDTO?
 }

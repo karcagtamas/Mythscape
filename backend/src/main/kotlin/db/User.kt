@@ -12,7 +12,7 @@ object Users : IntIdTable("users") {
     val username = varchar("username", 24).uniqueIndex()
     val email = varchar("email", 120)
     val password = varchar("password", 255)
-    val register = datetime("date").default(current())
+    val register = datetime("register").default(current())
 }
 
 class User(id: EntityID<Int>) : IntEntity(id) {
