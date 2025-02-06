@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
-group = "eu.karcags"
+group = "eu.karcags.mythscape"
 version = "0.0.1"
 
 application {

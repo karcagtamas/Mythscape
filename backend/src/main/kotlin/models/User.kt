@@ -1,4 +1,4 @@
-package eu.karcags.models
+package eu.karcags.mythscape.models
 
 import kotlinx.serialization.Serializable
 
@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 data class User(
     val id: Int,
     val name: String,
-    val userName: String,
+    val username: String,
     val email: String,
 )

@@ -1,21 +1,11 @@
-package eu.karcags
+package eu.karcags.mythscape
 
-import eu.karcags.models.User
+import eu.karcags.mythscape.controllers.userController
 import io.ktor.server.application.*
-import io.ktor.server.request.*
 import io.ktor.server.routing.*
 
 fun Application.configureRouting() {
     routing {
-        route("/users") {
-            get {
-
-            }
-
-            post {
-                val user = call.receive<User>()
-
-            }
-        }
+        userController()
     }
 }

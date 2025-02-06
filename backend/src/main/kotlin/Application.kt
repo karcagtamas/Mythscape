@@ -1,4 +1,4 @@
-package eu.karcags
+package eu.karcags.mythscape
 
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
@@ -25,4 +25,5 @@ fun main(args: Array<String>) {
 
 fun Application.module() {
     configureRouting()
+    configureDatabases()
 }
