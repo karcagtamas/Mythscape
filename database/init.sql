@@ -14,6 +14,8 @@ CREATE TABLE users
     UNIQUE (username)
 );
 
+GRANT ALL PRIVILEGES ON TABLE users TO mythscape;
+
 CREATE TABLE campaigns
 (
     id          SERIAL PRIMARY KEY,
@@ -25,6 +27,8 @@ CREATE TABLE campaigns
     UNIQUE (name, creator_id)
 );
 
+GRANT ALL PRIVILEGES ON TABLE campaigns TO mythscape;
+
 CREATE TABLE campaign_members
 (
     id          SERIAL PRIMARY KEY,
@@ -34,6 +38,8 @@ CREATE TABLE campaign_members
     creation    DATE        NOT NULL DEFAULT CURRENT_DATE,
     is_dm       BOOLEAN              DEFAULT FALSE
 );
+
+GRANT ALL PRIVILEGES ON TABLE campaign_members TO mythscape;
 
 CREATE TABLE campaign_tags
 (
@@ -45,6 +51,8 @@ CREATE TABLE campaign_tags
     UNIQUE (campaign_id, caption)
 );
 
+GRANT ALL PRIVILEGES ON TABLE campaign_tags TO mythscape;
+
 CREATE TABLE sessions
 (
     id          SERIAL PRIMARY KEY,
@@ -53,6 +61,8 @@ CREATE TABLE sessions
     end_time    TIME    NOT NULL,
     campaign_id INTEGER NOT NULL REFERENCES campaigns (id)
 );
+
+GRANT ALL PRIVILEGES ON TABLE sessions TO mythscape;
 
 CREATE TABLE note_categories
 (
@@ -66,6 +76,8 @@ CREATE TABLE note_categories
     UNIQUE (name)
 );
 
+GRANT ALL PRIVILEGES ON TABLE note_categories TO mythscape;
+
 CREATE TABLE notes
 (
     id          SERIAL PRIMARY KEY,
@@ -78,3 +90,5 @@ CREATE TABLE notes
     creation    DATE         NOT NULL DEFAULT CURRENT_DATE,
     last_update DATE         NOT NULL DEFAULT CURRENT_DATE
 );
+
+GRANT ALL PRIVILEGES ON TABLE notes TO mythscape;

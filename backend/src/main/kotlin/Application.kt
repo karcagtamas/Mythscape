@@ -16,25 +16,17 @@ import org.koin.dsl.module
 import org.koin.ktor.plugin.Koin
 import org.koin.logger.slf4jLogger
 
+val koinModule = module {
+    singleOf(::UserRepositoryImpl) { bind<UserRepository>() }
+}
+
 fun main(args: Array<String>) {
     embeddedServer(Netty, 8080) {
-        install(ContentNegotiation) {
-            json()
-        }
 
-        install(StatusPages) {
-            exception<Throwable> { call, cause ->
-                call.respondText(text = "500: $cause", status = HttpStatusCode.InternalServerError)
-            }
-        }
     }.start(wait = true)
 }
 
 fun Application.module() {
-    val koinModule = module {
-        singleOf(::UserRepositoryImpl) { bind<UserRepository>() }
-    }
-
     install(Koin) {
         slf4jLogger()
         modules(koinModule)
@@ -42,4 +34,14 @@ fun Application.module() {
 
     configureRouting()
     configureDatabases()
+
+    install(ContentNegotiation) {
+        json()
+    }
+
+    install(StatusPages) {
+        exception<Throwable> { call, cause ->
+            call.respondText(text = "500: $cause", status = HttpStatusCode.InternalServerError)
+        }
+    }
 }

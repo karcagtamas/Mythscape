@@ -5,7 +5,7 @@ import org.jetbrains.exposed.sql.Database
 
 fun Application.configureDatabases() {
     Database.connect(
-        "jdbc:postgresql://localhost:5433/mythscape",
+        "jdbc:postgresql://localhost:5432/mythscape",
         user = "mythscape",
         password = "mythscape",
     )
