@@ -11,6 +11,10 @@ data class UserDTO(
     val email: String,
 )
 
-fun dto(user: User): UserDTO {
-    return UserDTO(user.id.value, user.name, user.userName, user.email)
+fun User.dto(): UserDTO {
+    return UserDTO(id.value, name, userName, email)
+}
+
+fun List<User>.dto(): List<UserDTO> {
+    return map { it.dto() }
 }

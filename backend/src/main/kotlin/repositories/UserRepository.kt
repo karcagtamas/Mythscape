@@ -1,9 +1,5 @@
 package eu.karcags.mythscape.repositories
 
-import eu.karcags.mythscape.dtos.UserDTO
+import eu.karcags.mythscape.db.User
 
-interface UserRepository {
-
-    suspend fun all(): List<UserDTO>
-    suspend fun get(id: Int): UserDTO?
-}
+interface UserRepository : Repository<User>
