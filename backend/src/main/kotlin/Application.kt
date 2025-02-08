@@ -1,37 +1,57 @@
 package eu.karcags.mythscape
 
-import eu.karcags.mythscape.repositories.UserRepository
-import eu.karcags.mythscape.repositories.impl.UserRepositoryImpl
+import eu.karcags.mythscape.plugins.configureDatabases
+import eu.karcags.mythscape.plugins.configureKoin
+import eu.karcags.mythscape.plugins.configureRouting
+import eu.karcags.mythscape.utils.getBooleanProperty
+import eu.karcags.mythscape.utils.getIntProperty
+import eu.karcags.mythscape.utils.getStringProperty
+import eu.karcags.mythscape.utils.loadYamlConfig
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import io.ktor.server.plugins.calllogging.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.statuspages.*
+import io.ktor.server.request.*
 import io.ktor.server.response.*
-import org.koin.core.module.dsl.bind
-import org.koin.core.module.dsl.singleOf
-import org.koin.dsl.module
-import org.koin.ktor.plugin.Koin
-import org.koin.logger.slf4jLogger
-
-val koinModule = module {
-    singleOf(::UserRepositoryImpl) { bind<UserRepository>() }
-}
+import org.slf4j.event.Level
+import java.io.File
+import java.security.KeyStore
 
 fun main(args: Array<String>) {
-    embeddedServer(Netty, 8080) {
+    embeddedServer(Netty, environment = applicationEnvironment {
+        config = loadYamlConfig(args.getOrNull(0))!!
+    }, configure = {
+        val config = loadYamlConfig(args.getOrNull(0))!!
+        connector {
+            host = config.getStringProperty(ConfigKey.SERVER_HOST, "localhost")
+            port = config.getIntProperty(ConfigKey.SERVER_PORT, 8080)
+        }
 
-    }.start(wait = true)
+        if (config.getBooleanProperty(ConfigKey.SSL_USE, false)) {
+            val keyStoreFile = File(config.getStringProperty(ConfigKey.SSL_KEYSTORE, "keystore.jks"))
+            val key = config.getStringProperty(ConfigKey.SSL_KEYSTORE_PASSWORD, "key")
+
+            sslConnector(
+                keyStore = KeyStore.getInstance("JKS").apply { load(keyStoreFile.inputStream(), key.toCharArray()) },
+                keyAlias = config.getStringProperty(ConfigKey.SSL_KEY_ALIAS, "alias"),
+                keyStorePassword = { key.toCharArray() },
+                privateKeyPassword = { key.toCharArray() },
+            ) {
+                keyStorePath = keyStoreFile
+                port = config.getIntProperty(ConfigKey.SSL_PORT, 8081)
+            }
+        }
+    }, module = {
+        mainModule()
+    }).start(wait = true)
 }
 
-fun Application.module() {
-    install(Koin) {
-        slf4jLogger()
-        modules(koinModule)
-    }
-
+fun Application.mainModule() {
+    configureKoin()
     configureRouting()
     configureDatabases()
 
@@ -44,4 +64,11 @@ fun Application.module() {
             call.respondText(text = "500: $cause", status = HttpStatusCode.InternalServerError)
         }
     }
+
+    install(CallLogging) {
+        level = Level.INFO
+        filter { call -> call.request.path().startsWith("/") }
+    }
 }
+
+

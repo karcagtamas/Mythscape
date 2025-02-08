@@ -1,5 +1,5 @@
 server:
-  host: "localhost"
+  host: "0.0.0.0"
   port: 8080
 
 client:
@@ -9,11 +9,11 @@ client:
 
   internal:
     path: "web/dist"
-    userResource: false
+    userResource: true
     index: "index.html"
 
 ssl:
-  use: false
+  use: "$MYTH_SSL:false"
   keyStore: "$MYTH_KEY_STORE:keyStore.jks"
   keyAlias: "$MYTH_ALIAS:alias"
   keyStorePassword: "$MYTH_KEY_STORE_PASSWORD:key"
