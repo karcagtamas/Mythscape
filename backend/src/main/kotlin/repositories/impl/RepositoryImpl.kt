@@ -14,16 +14,16 @@ abstract class RepositoryImpl<T : IntEntity> : Repository<T> {
         entityClass().findById(id)
     }
 
-    override suspend fun delete(id: Int) = suspendTransaction {
-        TODO("Not yet implemented")
+    override suspend fun delete(id: Int): Unit = suspendTransaction {
+        entityClass().findById(id)?.delete()
     }
 
-    override suspend fun update(id: Int, entity: T) = suspendTransaction {
-        TODO("Not yet implemented")
-    }
+    override suspend fun create(fn: T.() -> Unit): Int = suspendTransaction {
+        val result = entityClass().new {
+            this.apply(fn)
+        }
 
-    override suspend fun create(entity: T): Int = suspendTransaction {
-        TODO("Not yet implemented")
+        result.id.value
     }
 
     abstract fun entityClass(): IntEntityClass<T>
