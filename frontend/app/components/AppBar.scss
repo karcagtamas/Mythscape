@@ -1,0 +1,16 @@
+@import "../mixins.scss";
+
+.app-bar {
+    @include flexbox();
+    align-items: center;
+    height: 40px;
+    background-color: var(--primary-color);
+    border-radius: 4px;
+    padding: 0.6rem;
+
+    .app-bar-title {
+        font-weight: bold;
+        font-size: 1.1rem;
+        color: var(--white);
+    }
+}
