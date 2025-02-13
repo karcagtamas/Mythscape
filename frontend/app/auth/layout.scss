@@ -1,0 +1,23 @@
+@import "../mixins.scss";
+
+.auth-layout {
+    @include flexbox();
+    gap: 0.4rem;
+
+    header {
+        @include flexbox(row, false);
+        @include shadow();
+        height: 120px;
+        align-items: center;
+        justify-content: center;
+        border-bottom: 2px solid var(--primary-light);
+        background-color: var(--primary-color);
+        color: var(--white);
+    }
+
+    .layout-body {
+        @include flexbox();
+        align-items: center;
+        justify-content: center;
+    }
+}

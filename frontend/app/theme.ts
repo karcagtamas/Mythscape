@@ -74,6 +74,7 @@ const theme = createTheme({
     MuiTextField: {
       defaultProps: {
         margin: 'dense',
+        size: 'small',
       },
     },
     MuiToolbar: {
