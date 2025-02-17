@@ -1,5 +1,6 @@
 package eu.karcags.mythscape
 
+import eu.karcags.mythscape.plugins.configureAuthentication
 import eu.karcags.mythscape.plugins.configureDatabases
 import eu.karcags.mythscape.plugins.configureKoin
 import eu.karcags.mythscape.plugins.configureRouting
@@ -52,7 +53,7 @@ fun main(args: Array<String>) {
 
 fun Application.mainModule() {
     configureKoin()
-    configureRouting()
+    configureAuthentication()
     configureDatabases()
 
     install(ContentNegotiation) {
@@ -64,6 +65,8 @@ fun Application.mainModule() {
             call.respondText(text = "500: $cause", status = HttpStatusCode.InternalServerError)
         }
     }
+
+    configureRouting()
 
     install(CallLogging) {
         level = Level.INFO

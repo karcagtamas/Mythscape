@@ -2,7 +2,9 @@ package eu.karcags.mythscape.controllers
 
 import eu.karcags.mythscape.dtos.dto
 import eu.karcags.mythscape.repositories.UserRepository
+import eu.karcags.mythscape.utils.UserPrincipal
 import io.ktor.http.*
+import io.ktor.server.auth.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
@@ -20,6 +22,12 @@ fun Route.userController(repository: UserRepository) {
             } else {
                 call.respond(HttpStatusCode.BadRequest)
             }
+        }
+
+        get("/current") {
+            val principal = call.principal<UserPrincipal>()
+
+            call.respond(principal!!.user.dto())
         }
     }
 }

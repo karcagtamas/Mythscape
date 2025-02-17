@@ -23,3 +23,9 @@ database:
   user: "mythscape"
   password: "mythscape"
   url: "jdbc:postgresql://localhost:5433/mythscape"
+
+jwt:
+  secret: "mythscape0123456789mythscape"
+  issuer: "https://karcags.eu"
+  audience: "https://karcags.eu"
+  realm: "mythscape"
