@@ -15,6 +15,7 @@ CREATE TABLE users
 );
 
 GRANT ALL PRIVILEGES ON TABLE users TO mythscape;
+GRANT ALL PRIVILEGES ON SEQUENCE users_id_seq TO mythscape;
 
 CREATE TABLE campaigns
 (
@@ -28,6 +29,7 @@ CREATE TABLE campaigns
 );
 
 GRANT ALL PRIVILEGES ON TABLE campaigns TO mythscape;
+GRANT ALL PRIVILEGES ON SEQUENCE campaigns_id_seq TO mythscape;
 
 CREATE TABLE campaign_members
 (
@@ -40,6 +42,7 @@ CREATE TABLE campaign_members
 );
 
 GRANT ALL PRIVILEGES ON TABLE campaign_members TO mythscape;
+GRANT ALL PRIVILEGES ON SEQUENCE campaign_members_id_seq TO mythscape;
 
 CREATE TABLE campaign_tags
 (
@@ -52,6 +55,7 @@ CREATE TABLE campaign_tags
 );
 
 GRANT ALL PRIVILEGES ON TABLE campaign_tags TO mythscape;
+GRANT ALL PRIVILEGES ON SEQUENCE campaign_tags_id_seq TO mythscape;
 
 CREATE TABLE sessions
 (
@@ -63,6 +67,7 @@ CREATE TABLE sessions
 );
 
 GRANT ALL PRIVILEGES ON TABLE sessions TO mythscape;
+GRANT ALL PRIVILEGES ON SEQUENCE sessions_id_seq TO mythscape;
 
 CREATE TABLE note_categories
 (
@@ -77,6 +82,7 @@ CREATE TABLE note_categories
 );
 
 GRANT ALL PRIVILEGES ON TABLE note_categories TO mythscape;
+GRANT ALL PRIVILEGES ON SEQUENCE note_categories_id_seq TO mythscape;
 
 CREATE TABLE notes
 (
@@ -92,3 +98,4 @@ CREATE TABLE notes
 );
 
 GRANT ALL PRIVILEGES ON TABLE notes TO mythscape;
+GRANT ALL PRIVILEGES ON SEQUENCE notes_id_seq TO mythscape;
