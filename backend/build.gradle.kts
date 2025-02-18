@@ -35,13 +35,14 @@ dependencies {
     implementation(libs.ktor.server.auth.jwt)
     implementation(libs.ktor.certificates)
 
-    implementation(libs.logback.classic)
     implementation(libs.exposed.core)
     implementation(libs.exposed.jdbc)
     implementation(libs.exposed.dao)
     implementation(libs.exposed.kotlin.datetime)
 
     implementation(libs.postgresql)
+    implementation(libs.logback.classic)
+    implementation(libs.jbcrypt)
 
     implementation(libs.koin.ktor)
     implementation(libs.koin.logger)

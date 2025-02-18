@@ -19,7 +19,7 @@ class User(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<User>(Users)
 
     var name by Users.name
-    var userName by Users.username
+    var username by Users.username
     var email by Users.email
     var password by Users.password
     var register by Users.register

@@ -12,7 +12,7 @@ data class UserDTO(
 )
 
 fun User.dto(): UserDTO {
-    return UserDTO(id.value, name, userName, email)
+    return UserDTO(id.value, name, username, email)
 }
 
 fun List<User>.dto(): List<UserDTO> {
