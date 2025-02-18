@@ -7,7 +7,9 @@ import eu.karcags.mythscape.dtos.LoginDTO
 import eu.karcags.mythscape.dtos.RegisterDTO
 import eu.karcags.mythscape.repositories.UserRepository
 import eu.karcags.mythscape.utils.current
+import eu.karcags.mythscape.utils.failure
 import eu.karcags.mythscape.utils.getStringProperty
+import eu.karcags.mythscape.utils.wrap
 import io.ktor.http.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -24,7 +26,7 @@ fun Route.authenticationController(userRepository: UserRepository) {
 
             if (user != null) {
                 if (!BCrypt.checkpw(data.password, user.password)) {
-                    call.respond(HttpStatusCode.Unauthorized)
+                    call.respond(failure(HttpStatusCode.Unauthorized))
                 } else {
                     val token = JWT.create()
                         .withAudience(environment.config.getStringProperty(ConfigKey.JWT_AUDIENCE))
@@ -37,7 +39,7 @@ fun Route.authenticationController(userRepository: UserRepository) {
                     call.respond(hashMapOf("token" to token))
                 }
             } else {
-                call.respond(HttpStatusCode.Unauthorized)
+                call.respond(failure(HttpStatusCode.Unauthorized))
             }
         }
 
@@ -45,13 +47,13 @@ fun Route.authenticationController(userRepository: UserRepository) {
             val data = call.receive<RegisterDTO>()
 
             if (userRepository.existsByUsernameOrEmail(data.username, data.email)) {
-                call.respond(HttpStatusCode.BadRequest)
+                call.respond(failure(HttpStatusCode.BadRequest))
                 return@post
             }
 
             val hashedPassword = BCrypt.hashpw(data.password, BCrypt.gensalt())
 
-            userRepository.create {
+            val id = userRepository.create {
                 username = data.username
                 email = data.email
                 password = hashedPassword
@@ -59,7 +61,7 @@ fun Route.authenticationController(userRepository: UserRepository) {
                 register = current()
             }
 
-            call.respond(HttpStatusCode.Created)
+            call.respond(id.wrap(HttpStatusCode.Created))
         }
     }
 }

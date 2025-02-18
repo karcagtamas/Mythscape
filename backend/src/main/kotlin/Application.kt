@@ -4,11 +4,7 @@ import eu.karcags.mythscape.plugins.configureAuthentication
 import eu.karcags.mythscape.plugins.configureDatabases
 import eu.karcags.mythscape.plugins.configureKoin
 import eu.karcags.mythscape.plugins.configureRouting
-import eu.karcags.mythscape.utils.getBooleanProperty
-import eu.karcags.mythscape.utils.getIntProperty
-import eu.karcags.mythscape.utils.getStringProperty
-import eu.karcags.mythscape.utils.loadYamlConfig
-import io.ktor.http.*
+import eu.karcags.mythscape.utils.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
@@ -62,7 +58,7 @@ fun Application.mainModule() {
 
     install(StatusPages) {
         exception<Throwable> { call, cause ->
-            call.respondText(text = "500: $cause", status = HttpStatusCode.InternalServerError)
+            call.respond(cause.failure())
         }
     }
 
