@@ -6,10 +6,7 @@ import eu.karcags.mythscape.ConfigKey
 import eu.karcags.mythscape.dtos.LoginDTO
 import eu.karcags.mythscape.dtos.RegisterDTO
 import eu.karcags.mythscape.repositories.UserRepository
-import eu.karcags.mythscape.utils.current
-import eu.karcags.mythscape.utils.failure
-import eu.karcags.mythscape.utils.getStringProperty
-import eu.karcags.mythscape.utils.wrap
+import eu.karcags.mythscape.utils.*
 import io.ktor.http.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -22,33 +19,28 @@ fun Route.authenticationController(userRepository: UserRepository) {
         post("/login") {
             val data = call.receive<LoginDTO>()
 
-            val user = userRepository.findByUsername(data.username)
+            val user = userRepository.findByUsername(data.username) ?: throw ServerException.Unauthorized("User not found with username: ${data.username}")
 
-            if (user != null) {
-                if (!BCrypt.checkpw(data.password, user.password)) {
-                    call.respond(failure(HttpStatusCode.Unauthorized))
-                } else {
-                    val token = JWT.create()
-                        .withAudience(environment.config.getStringProperty(ConfigKey.JWT_AUDIENCE))
-                        .withIssuer(environment.config.getStringProperty(ConfigKey.JWT_ISSUER))
-                        .withClaim("userId", user.id.value)
-                        .withClaim("username", data.username)
-                        .withExpiresAt(Date(System.currentTimeMillis() + 60 * 1000))
-                        .sign(Algorithm.HMAC256(environment.config.getStringProperty(ConfigKey.JWT_SECRET)))
-
-                    call.respond(hashMapOf("token" to token))
-                }
-            } else {
-                call.respond(failure(HttpStatusCode.Unauthorized))
+            if (!BCrypt.checkpw(data.password, user.password)) {
+                throw ServerException.Unauthorized("Incorrect password was provided.")
             }
+
+            val token = JWT.create()
+                .withAudience(environment.config.getStringProperty(ConfigKey.JWT_AUDIENCE))
+                .withIssuer(environment.config.getStringProperty(ConfigKey.JWT_ISSUER))
+                .withClaim("userId", user.id.value)
+                .withClaim("username", data.username)
+                .withExpiresAt(Date(System.currentTimeMillis() + environment.config.getIntProperty(ConfigKey.JWT_EXPIRATION) * 1000))
+                .sign(Algorithm.HMAC256(environment.config.getStringProperty(ConfigKey.JWT_SECRET)))
+
+            call.respond(hashMapOf("token" to token))
         }
 
         post("/register") {
             val data = call.receive<RegisterDTO>()
 
             if (userRepository.existsByUsernameOrEmail(data.username, data.email)) {
-                call.respond(failure(HttpStatusCode.BadRequest))
-                return@post
+                throw ServerException("Username or email already exists.", HttpStatusCode.BadRequest)
             }
 
             val hashedPassword = BCrypt.hashpw(data.password, BCrypt.gensalt())

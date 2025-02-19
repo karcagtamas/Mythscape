@@ -29,3 +29,4 @@ jwt:
   issuer: "https://karcags.eu"
   audience: "https://karcags.eu"
   realm: "mythscape"
+  expiration: 3600

@@ -29,3 +29,7 @@ fun failure(statusCode: HttpStatusCode = HttpStatusCode.InternalServerError): Fa
 fun <T : Throwable> T.failure(statusCode: HttpStatusCode = HttpStatusCode.InternalServerError): Failure {
     return Failure(statusCode.value, error = ErrorData(message, stackTrace.map { it.toString() }))
 }
+
+fun ServerException.failure(): Failure {
+    return Failure(statusCode.value, ErrorData(message, stackTrace.map { it.toString() }))
+}

@@ -2,9 +2,7 @@ package eu.karcags.mythscape.controllers
 
 import eu.karcags.mythscape.dtos.dto
 import eu.karcags.mythscape.repositories.UserRepository
-import eu.karcags.mythscape.utils.UserPrincipal
-import eu.karcags.mythscape.utils.failure
-import eu.karcags.mythscape.utils.wrap
+import eu.karcags.mythscape.utils.*
 import io.ktor.server.auth.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -16,19 +14,15 @@ fun Route.userController(repository: UserRepository) {
         }
 
         get("/{id}") {
-            val userId = call.parameters["id"]?.toIntOrNull()
+            val userId = call.parameters["id"]?.toIntOrNull().requireNonNull()
 
-            if (userId != null) {
-                call.respond(repository.get(userId)?.dto().wrap())
-            } else {
-                call.respond(failure())
-            }
+            call.respond(repository.get(userId).required().dto().wrap())
         }
 
         get("/current") {
             val principal = call.principal<UserPrincipal>()
 
-            call.respond(principal!!.user.dto().wrap())
+            call.respond(principal.required().user.dto().wrap())
         }
     }
 }

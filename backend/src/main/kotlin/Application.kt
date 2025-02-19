@@ -58,7 +58,12 @@ fun Application.mainModule() {
 
     install(StatusPages) {
         exception<Throwable> { call, cause ->
-            call.respond(cause.failure())
+            if (cause is ServerException) {
+                @Suppress("USELESS_CAST")
+                call.respond((cause as ServerException).failure())
+            } else {
+                call.respond(cause.failure())
+            }
         }
     }
 
