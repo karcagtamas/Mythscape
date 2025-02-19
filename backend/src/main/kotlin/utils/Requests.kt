@@ -1,6 +1,7 @@
 package eu.karcags.mythscape.utils
 
 import io.ktor.http.*
+import io.ktor.server.plugins.requestvalidation.*
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -10,7 +11,7 @@ class Success<out T : Any>(val data: T?, val statusCode: Int = HttpStatusCode.OK
 }
 
 @Serializable
-class ErrorData(val message: String?, val stackTrace: List<String> = emptyList())
+class ErrorData(val message: String?, val stackTrace: List<String> = emptyList(), val subMessages: List<String> = emptyList())
 
 @Serializable
 class Failure(val statusCode: Int = HttpStatusCode.InternalServerError.value, val error: ErrorData? = null) {
@@ -32,4 +33,8 @@ fun <T : Throwable> T.failure(statusCode: HttpStatusCode = HttpStatusCode.Intern
 
 fun ServerException.failure(): Failure {
     return Failure(statusCode.value, ErrorData(message, stackTrace.map { it.toString() }))
+}
+
+fun RequestValidationException.errorData(): ErrorData {
+    return ErrorData(message, stackTrace.map { it.toString() }, reasons)
 }

@@ -33,6 +33,7 @@ dependencies {
     implementation(libs.ktor.server.openapi)
     implementation(libs.ktor.server.auth)
     implementation(libs.ktor.server.auth.jwt)
+    implementation(libs.ktor.server.request.validation)
     implementation(libs.ktor.certificates)
 
     implementation(libs.exposed.core)

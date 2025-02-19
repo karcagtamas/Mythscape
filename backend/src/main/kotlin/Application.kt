@@ -1,19 +1,17 @@
 package eu.karcags.mythscape
 
-import eu.karcags.mythscape.plugins.configureAuthentication
-import eu.karcags.mythscape.plugins.configureDatabases
-import eu.karcags.mythscape.plugins.configureKoin
-import eu.karcags.mythscape.plugins.configureRouting
-import eu.karcags.mythscape.utils.*
+import eu.karcags.mythscape.plugins.*
+import eu.karcags.mythscape.utils.getBooleanProperty
+import eu.karcags.mythscape.utils.getIntProperty
+import eu.karcags.mythscape.utils.getStringProperty
+import eu.karcags.mythscape.utils.loadYamlConfig
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.calllogging.*
 import io.ktor.server.plugins.contentnegotiation.*
-import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.request.*
-import io.ktor.server.response.*
 import org.slf4j.event.Level
 import java.io.File
 import java.security.KeyStore
@@ -56,17 +54,8 @@ fun Application.mainModule() {
         json()
     }
 
-    install(StatusPages) {
-        exception<Throwable> { call, cause ->
-            if (cause is ServerException) {
-                @Suppress("USELESS_CAST")
-                call.respond((cause as ServerException).failure())
-            } else {
-                call.respond(cause.failure())
-            }
-        }
-    }
-
+    configureErrorHandling()
+    configureValidation()
     configureRouting()
 
     install(CallLogging) {
