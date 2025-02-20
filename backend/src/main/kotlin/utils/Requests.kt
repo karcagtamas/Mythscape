@@ -19,6 +19,10 @@ class Failure(val statusCode: Int = HttpStatusCode.InternalServerError.value, va
     val success: Boolean = false
 }
 
+fun success(statusCode: HttpStatusCode = HttpStatusCode.OK): Success<String> {
+    return Success(null, statusCode.value)
+}
+
 fun <T : Any> T?.wrap(statusCode: HttpStatusCode = HttpStatusCode.OK): Success<T> {
     return Success(this, statusCode.value)
 }

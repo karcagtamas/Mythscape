@@ -1,5 +1,6 @@
 package eu.karcags.mythscape.plugins
 
+import eu.karcags.mythscape.dtos.CampaignEditDTO
 import eu.karcags.mythscape.dtos.LoginDTO
 import eu.karcags.mythscape.dtos.RegisterDTO
 import io.ktor.server.application.*
@@ -41,6 +42,13 @@ fun Application.configureValidation() {
                 .rule("Password must contains special characters") {
                     password.contains(Regex("[!@#$%^&*()+=_?]"))
                 }
+                .validate()
+        }
+
+        validate<CampaignEditDTO> {
+            Validation.start(it)
+                .notEmpty("name") { name }
+                .maxLength("name", 40) { name }
                 .validate()
         }
     }

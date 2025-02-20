@@ -14,6 +14,10 @@ abstract class RepositoryImpl<T : IntEntity> : Repository<T> {
         entityClass().findById(id)
     }
 
+    override suspend fun <U> get(id: Int, mapper: (T) -> U): U? = suspendTransaction {
+        entityClass().findById(id)?.let { mapper(it) }
+    }
+
     override suspend fun delete(id: Int): Unit = suspendTransaction {
         entityClass().findById(id)?.delete()
     }
@@ -24,6 +28,10 @@ abstract class RepositoryImpl<T : IntEntity> : Repository<T> {
         }
 
         result.id.value
+    }
+
+    override suspend fun update(id: Int, fn: T.() -> Unit): Unit = suspendTransaction {
+        entityClass().findById(id)?.apply(fn)
     }
 
     abstract fun entityClass(): IntEntityClass<T>
