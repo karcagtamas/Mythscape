@@ -1,1 +1,3 @@
-@use "vuetify";
+@use "vuetify" with (
+    $body-font-family: "Bree Serif"
+);
