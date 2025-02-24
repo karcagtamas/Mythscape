@@ -5,12 +5,14 @@ import eu.karcags.mythscape.utils.getBooleanProperty
 import eu.karcags.mythscape.utils.getIntProperty
 import eu.karcags.mythscape.utils.getStringProperty
 import eu.karcags.mythscape.utils.loadYamlConfig
+import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.calllogging.*
 import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.request.*
 import org.slf4j.event.Level
 import java.io.File
@@ -57,6 +59,14 @@ fun Application.mainModule() {
     configureErrorHandling()
     configureValidation()
     configureRouting()
+
+    val allowedClient = environment.config.getStringProperty(ConfigKey.CORS_CLIENT, "localhost")
+    install(CORS) {
+        allowHost(allowedClient)
+        anyMethod()
+        allowHeader(HttpHeaders.ContentType)
+        allowHeader(HttpHeaders.Authorization)
+    }
 
     install(CallLogging) {
         level = Level.INFO

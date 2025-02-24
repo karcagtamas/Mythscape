@@ -30,3 +30,6 @@ jwt:
   audience: "https://karcags.eu"
   realm: "mythscape"
   expiration: 3600
+
+cors:
+  client: "$MYTH_CLIENT:localhost:5173"

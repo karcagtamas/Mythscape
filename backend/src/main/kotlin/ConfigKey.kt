@@ -15,5 +15,6 @@ enum class ConfigKey(val key: String) {
     JWT_ISSUER("jwt.issuer"),
     JWT_AUDIENCE("jwt.audience"),
     JWT_REALM("jwt.realm"),
-    JWT_EXPIRATION("jwt.expiration");
+    JWT_EXPIRATION("jwt.expiration"),
+    CORS_CLIENT("cors.client");
 }

@@ -25,7 +25,7 @@
           :error-messages="passwordErrors"
           @blur="v$.password.$touch()"
         ></v-text-field>
-        <v-btn elevation="2" raised block color="primary" @click="submit" :disabled="!valid"
+        <v-btn elevation="2" raised block color="primary" @click="handleSubmit" :disabled="!valid"
           >Login</v-btn
         >
       </v-form>
@@ -50,9 +50,15 @@
 </template>
 
 <script setup lang="ts">
+import type { LoginDTO } from '../../models/auth'
 import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+
+const store = useStore()
+const router = useRouter()
 
 const username = ref('')
 const password = ref('')
@@ -71,7 +77,7 @@ const usernameErrors = computed(() => {
     return []
   }
 
-  return v$.value.username.required ? ['User Name is required'] : []
+  return v$.value.username.required.$invalid ? ['User Name is required'] : []
 })
 
 const passwordErrors = computed(() => {
@@ -79,17 +85,24 @@ const passwordErrors = computed(() => {
     return []
   }
 
-  return v$.value.password.required ? ['Password is required'] : []
+  return v$.value.password.required.$invalid ? ['Password is required'] : []
 })
 
-function submit() {
-  v$.value.$touch()
+const handleSubmit = async () => {
+  v$.value.$validate()
 
   if (v$.value.$invalid) {
     return
   }
 
-  // TODO: Submit
+  try {
+    const dto: LoginDTO = { username: username.value, password: password.value }
+    await store.dispatch('login', dto)
+    await store.dispatch('fetchUser')
+    router.push('/dashboard')
+  } catch (err) {
+    console.error(err)
+  }
 }
 </script>
 

@@ -5,6 +5,8 @@ import com.auth0.jwt.algorithms.Algorithm
 import eu.karcags.mythscape.ConfigKey
 import eu.karcags.mythscape.dtos.LoginDTO
 import eu.karcags.mythscape.dtos.RegisterDTO
+import eu.karcags.mythscape.dtos.TokenDTO
+import eu.karcags.mythscape.dtos.dto
 import eu.karcags.mythscape.repositories.UserRepository
 import eu.karcags.mythscape.utils.*
 import io.ktor.http.*
@@ -33,7 +35,7 @@ fun Route.authenticationController(userRepository: UserRepository) {
                 .withExpiresAt(Date(System.currentTimeMillis() + environment.config.getIntProperty(ConfigKey.JWT_EXPIRATION) * 1000))
                 .sign(Algorithm.HMAC256(environment.config.getStringProperty(ConfigKey.JWT_SECRET)))
 
-            call.respond(hashMapOf("token" to token))
+            call.respond(TokenDTO(token, user.dto()).wrap())
         }
 
         post("/register") {

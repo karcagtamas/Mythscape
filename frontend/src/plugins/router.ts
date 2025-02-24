@@ -4,6 +4,8 @@ import LoginView from '../views/auth/LoginView.vue'
 import RegisterView from '../views/auth/RegisterView.vue'
 import AuthView from '../views/auth/AuthView.vue'
 import CampaignsView from '../views/CampaignsView.vue'
+import DashboardView from '../views/DashboardView.vue'
+import store from './store'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,9 +16,16 @@ const router = createRouter({
       component: HomeView,
     },
     {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: DashboardView,
+      meta: { requiresAuth: true },
+    },
+    {
       path: '/campaigns',
       name: 'campaigns',
       component: CampaignsView,
+      meta: { requiresAuth: true },
     },
     {
       path: '/auth',
@@ -28,6 +37,14 @@ const router = createRouter({
       ],
     },
   ],
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.requiresAuth && !store.getters.isAuthenticated) {
+    next('/')
+  } else {
+    next()
+  }
 })
 
 export default router
