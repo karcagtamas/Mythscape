@@ -1,11 +1,9 @@
 import type { LoginDTO, TokenDTO } from '@/models/auth'
 import type { ServerResponse } from '@/models/response'
 import type { UserDTO } from '@/models/user'
+import { API_URL, SERVER_URL } from '@/utils/contants'
 import axios from 'axios'
 import { defineStore } from 'pinia'
-
-const SERVER_URL = 'http://localhost:8080'
-const API_URL = `${SERVER_URL}/api`
 
 interface AuthState {
   user: UserDTO | null

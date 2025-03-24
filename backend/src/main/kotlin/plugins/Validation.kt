@@ -24,8 +24,8 @@ fun Application.configureValidation() {
                 .maxLength("username", 120) { email }
                 .notEmpty("password") { password }
                 .notEmpty("passwordConfirm") { passwordConfirm }
-                .minLength("username", 8) { password }
-                .maxLength("username", 32) { password }
+                .minLength("password", 8) { password }
+                .maxLength("password", 32) { password }
                 .maxLength("fullname", 80) { fullname }
                 .rule("Password and confirmation must be the same") {
                     password == passwordConfirm
