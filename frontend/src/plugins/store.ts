@@ -15,9 +15,11 @@ const store = createStore<AuthState>({
   mutations: {
     SET_USER(state, user: UserDTO) {
       state.user = user
+      localStorage.setItem('user', JSON.stringify(user))
     },
     SET_TOKEN(state, token: string) {
       state.token = token
+      localStorage.setItem('token', token)
     },
     LOGOUT(state) {
       state.user = null
