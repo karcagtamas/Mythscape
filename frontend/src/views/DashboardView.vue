@@ -4,18 +4,18 @@
 </template>
 
 <script setup lang="ts">
+import { useAuthStore } from '@/stores/auth.store'
 import type { UserDTO } from '../models/user'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useStore } from 'vuex'
 
-const store = useStore()
+const authStore = useAuthStore()
 const router = useRouter()
 
-const user = computed<UserDTO | null>(() => store.state.user)
+const user = computed<UserDTO | null>(() => authStore.user)
 
 const handleLogout = () => {
-  store.dispatch('logout')
+  authStore.logout()
   router.push('/')
 }
 </script>

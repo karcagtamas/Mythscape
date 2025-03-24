@@ -5,7 +5,7 @@ interface ErrorData {
 }
 
 export interface ServerResponse<T> {
-  data?: T
+  data: T | null
   statusCode: number
   success: boolean
   error?: ErrorData

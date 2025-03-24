@@ -5,7 +5,7 @@ import RegisterView from '../views/auth/RegisterView.vue'
 import AuthView from '../views/auth/AuthView.vue'
 import CampaignsView from '../views/CampaignsView.vue'
 import DashboardView from '../views/DashboardView.vue'
-import store from './store'
+import { useAuthStore } from '@/stores/auth.store'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,8 +40,10 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.meta.requiresAuth && !store.getters.isAuthenticated) {
-    next('/')
+  const authStore = useAuthStore()
+
+  if (to.meta.requiresAuth && !authStore.loggedIn) {
+    next('/auth/login')
   } else {
     next()
   }

@@ -50,14 +50,14 @@
 </template>
 
 <script setup lang="ts">
+import { useAuthStore } from '@/stores/auth.store'
 import type { LoginDTO } from '../../models/auth'
 import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useStore } from 'vuex'
 
-const store = useStore()
+const authStore = useAuthStore()
 const router = useRouter()
 
 const username = ref('')
@@ -97,8 +97,8 @@ const handleSubmit = async () => {
 
   try {
     const dto: LoginDTO = { username: username.value, password: password.value }
-    await store.dispatch('login', dto)
-    await store.dispatch('fetchUser')
+    await authStore.login(dto)
+    await authStore.fetchUser()
     router.push('/dashboard')
   } catch (err) {
     console.error(err)
