@@ -1,5 +1,5 @@
 <template>
-  <div>Welcome {{ user?.fullname }}</div>
+  <div>Welcome {{ user?.name }}</div>
   <button @click="handleLogout">Logout</button>
 </template>
 
@@ -12,7 +12,7 @@ import { useRouter } from 'vue-router'
 const authStore = useAuthStore()
 const router = useRouter()
 
-const user = computed<UserDTO | null>(() => authStore.user)
+const user = computed<UserDTO | null>(() => authStore.currentUser)
 
 const handleLogout = () => {
   authStore.logout()

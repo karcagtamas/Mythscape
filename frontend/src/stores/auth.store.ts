@@ -1,7 +1,8 @@
 import type { LoginDTO, TokenDTO } from '@/models/auth'
-import type { ServerResponse } from '@/models/response'
 import type { UserDTO } from '@/models/user'
-import { API_URL, SERVER_URL } from '@/utils/contants'
+import { loginConfig } from '@/requests/auth.request'
+import { currentUserConfig } from '@/requests/user.request'
+import { get, post } from '@/utils/requests'
 import axios from 'axios'
 import { defineStore } from 'pinia'
 
@@ -16,17 +17,14 @@ export const useAuthStore = defineStore('auth', {
     token: localStorage.getItem('token') || '',
   }),
   getters: {
-    user: (state) => state.user,
+    currentUser: (state) => state.user,
     loggedIn: (state) => !!state.token,
   },
   actions: {
     async login(payload: LoginDTO) {
       try {
-        const response = await axios.post<ServerResponse<TokenDTO>>(
-          `${SERVER_URL}/auth/login`,
-          payload,
-        )
-        const token = response.data.data?.token ?? ''
+        const response = await post<TokenDTO, LoginDTO>(loginConfig(), payload)
+        const token = response.data?.token ?? ''
         this.setToken(token)
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
       } catch (error) {
@@ -36,16 +34,18 @@ export const useAuthStore = defineStore('auth', {
     },
     async fetchUser() {
       try {
-        const response = await axios.get<ServerResponse<UserDTO>>(`${API_URL}/users/current`)
-        if (response.data.data) {
-          this.setUser(response.data.data)
+        const response = await get<UserDTO>(currentUserConfig())
+        if (response.data) {
+          this.setUser(response.data)
         }
       } catch (err) {
         console.error(err)
       }
     },
     setUser(payload: UserDTO) {
-      this.user = payload
+      console.log(payload)
+      console.log(this)
+      this.user = { ...payload }
       localStorage.setItem('user', JSON.stringify(payload))
     },
     setToken(payload: string) {

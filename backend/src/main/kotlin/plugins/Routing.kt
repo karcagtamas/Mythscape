@@ -20,10 +20,10 @@ fun Application.configureRouting() {
         swaggerUI(path = "openapi")
         openAPI(path = "openapi")
 
-        authenticationController(userRepository)
+        route("/api") {
+            authenticationController(userRepository)
 
-        authenticate("auth-jwt") {
-            route("/api") {
+            authenticate("auth-jwt") {
                 userController(userRepository)
                 campaignController(campaignRepository)
             }

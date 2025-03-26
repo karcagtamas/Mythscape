@@ -88,9 +88,8 @@ import { maxLength, minLength, required, email as email$, sameAs } from '@vuelid
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { collectErrors } from '@/utils/validation.helper'
-import type { ServerResponse } from '@/models/response'
-import axios from 'axios'
-import { SERVER_URL } from '@/utils/contants'
+import { post } from '@/utils/requests'
+import { registerConfig } from '@/requests/auth.request'
 
 const router = useRouter()
 
@@ -167,7 +166,7 @@ const handleSubmit = async () => {
     }
 
     try {
-      await axios.post<ServerResponse<number>>(`${SERVER_URL}/auth/register`, dto)
+      await post<number, RegisterDTO>(registerConfig(), dto)
       router.push('/auth/login')
     } catch (error) {
       console.error(error)
