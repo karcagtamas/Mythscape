@@ -13,6 +13,11 @@ export type RequestConfig = {
   queryParams: QueryParams
 }
 
+type ErrorData = {
+  message: string
+  severity: 'critical' | 'error' | 'warn'
+}
+
 const assemblePath = (segments: string[] | string): string => {
   if (typeof segments === 'string') {
     return `${API_URL}/${segments}`
@@ -23,7 +28,7 @@ const assemblePath = (segments: string[] | string): string => {
 
 export const useAPI = async <T, TBody>(config: RequestConfig, body: TBody | null = null) => {
   const data = ref<T | null>(null)
-  const error = ref<unknown>(null)
+  const error = ref<ErrorData | null>(null)
   const loading = ref(false)
 
   try {
@@ -38,11 +43,33 @@ export const useAPI = async <T, TBody>(config: RequestConfig, body: TBody | null
     }
 
     if (response) {
-      data.value = response.data.data
+      if (response.data) {
+        if (response.data.success) {
+          data.value = response.data.data
+        } else {
+          const responseError = response.data.error!
+          console.error(responseError)
+          error.value = { message: responseError.message ?? '', severity: 'error' }
+        }
+      }
+    } else {
+      error.value = {
+        message: 'Missing response has been detected',
+        severity: 'critical',
+      }
     }
-  } catch (err) {
+  } catch (err: Error | unknown) {
     console.error(err)
-    error.value = err
+
+    let msg = 'Unknow exception'
+    if (err instanceof Error) {
+      msg = err.message
+    }
+
+    error.value = {
+      message: msg,
+      severity: 'critical',
+    }
   } finally {
     loading.value = false
   }
