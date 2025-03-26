@@ -2,6 +2,7 @@ import axios, { type AxiosResponse } from 'axios'
 import { ref } from 'vue'
 import { API_URL } from './constants'
 import type { ServerResponse } from '@/models/response'
+import { useCommonStore } from '@/stores/common.store'
 
 type QueryParams = {
   [key: string]: string | number | boolean | string[] | number[]
@@ -30,6 +31,12 @@ export const useAPI = async <T, TBody>(config: RequestConfig, body: TBody | null
   const data = ref<T | null>(null)
   const error = ref<ErrorData | null>(null)
   const loading = ref(false)
+  const commonStore = useCommonStore()
+
+  const handleError = (errorData: ErrorData): ErrorData => {
+    commonStore.setMessage(errorData.message)
+    return errorData
+  }
 
   try {
     const path = assemblePath(config.pathSegments)
@@ -49,14 +56,14 @@ export const useAPI = async <T, TBody>(config: RequestConfig, body: TBody | null
         } else {
           const responseError = response.data.error!
           console.error(responseError)
-          error.value = { message: responseError.message ?? '', severity: 'error' }
+          error.value = handleError({ message: responseError.message ?? '', severity: 'error' })
         }
       }
     } else {
-      error.value = {
+      error.value = handleError({
         message: 'Missing response has been detected',
         severity: 'critical',
-      }
+      })
     }
   } catch (err: Error | unknown) {
     console.error(err)
@@ -66,10 +73,10 @@ export const useAPI = async <T, TBody>(config: RequestConfig, body: TBody | null
       msg = err.message
     }
 
-    error.value = {
+    error.value = handleError({
       message: msg,
       severity: 'critical',
-    }
+    })
   } finally {
     loading.value = false
   }
