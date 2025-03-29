@@ -6,6 +6,7 @@ import AuthView from '../views/auth/AuthView.vue'
 import CampaignsView from '../views/CampaignsView.vue'
 import DashboardView from '../views/DashboardView.vue'
 import { useAuthStore } from '@/stores/auth.store'
+import VersionsView from '@/views/VersionsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,6 +15,11 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
+    },
+    {
+      path: '/versions',
+      name: 'versions',
+      component: VersionsView,
     },
     {
       path: '/dashboard',

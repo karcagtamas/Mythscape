@@ -32,6 +32,10 @@
         </div>
       </v-card-text>
     </v-card>
+    <footer>
+      <div>Created by KarcagS</div>
+      <div @click="handleToVersions">Version 1.0.0</div>
+    </footer>
   </div>
 </template>
 
@@ -46,6 +50,10 @@ const handleToLogin = () => {
 
 const handleToRegister = () => {
   return router.push('/auth/register')
+}
+
+const handleToVersions = () => {
+  return router.push('/versions')
 }
 </script>
 
@@ -85,6 +93,27 @@ const handleToRegister = () => {
       justify-content: center;
       flex: 1;
       gap: 1rem;
+    }
+  }
+
+  footer {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    bottom: 0;
+    width: 100%;
+
+    div {
+      flex: 1;
+      padding: 0.4rem;
+
+      &:last-child {
+        text-align: right;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
     }
   }
 }
