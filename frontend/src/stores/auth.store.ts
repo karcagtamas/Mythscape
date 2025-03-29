@@ -1,8 +1,7 @@
-import type { LoginDTO, TokenDTO } from '@/models/auth'
+import type { TokenDTO } from '@/models/auth'
 import type { UserDTO } from '@/models/user'
-import { loginConfig } from '@/requests/auth.request'
 import { currentUserConfig } from '@/requests/user.request'
-import { get, post } from '@/utils/requests'
+import { get } from '@/utils/requests'
 import axios from 'axios'
 import { defineStore } from 'pinia'
 
@@ -21,16 +20,9 @@ export const useAuthStore = defineStore('auth', {
     loggedIn: (state) => !!state.token,
   },
   actions: {
-    async login(payload: LoginDTO) {
-      try {
-        const response = await post<TokenDTO, LoginDTO>(loginConfig(), payload)
-        const token = response.data?.token ?? ''
-        this.setToken(token)
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-      } catch (error) {
-        console.error(error)
-        throw error
-      }
+    login(token: TokenDTO) {
+      this.setToken(token.token)
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token.token}`
     },
     async fetchUser() {
       try {
@@ -43,8 +35,6 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     setUser(payload: UserDTO) {
-      console.log(payload)
-      console.log(this)
       this.user = { ...payload }
       localStorage.setItem('user', JSON.stringify(payload))
     },

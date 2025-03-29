@@ -18,7 +18,7 @@ const user = computed<UserDTO | null>(() => authStore.currentUser)
 
 const handleLogout = () => {
   authStore.logout()
-  store.setMessage('Hello')
+  store.setMessage({ text: 'You successfully logged out', type: 'success' })
   router.push('/')
 }
 </script>

@@ -27,14 +27,38 @@ const assemblePath = (segments: string[] | string): string => {
   return [API_URL, ...segments].join('/')
 }
 
-export const useAPI = async <T, TBody>(config: RequestConfig, body: TBody | null = null) => {
+export const useAPI = () => {
+  const doRequest = async <T>(
+    query: () => Promise<ServerResponse<T>>,
+  ): Promise<ServerResponse<T>> => {
+    const result = await query()
+
+    if (!result) {
+      throw Error('Missing response content')
+    }
+
+    if (!result.success) {
+      console.error(result.error)
+      throw Error(result.error?.message)
+    }
+
+    return result
+  }
+
+  return {
+    doRequest,
+  }
+}
+
+export const fetch = async <T, TBody>(config: RequestConfig, body: TBody | null = null) => {
   const data = ref<T | null>(null)
   const error = ref<ErrorData | null>(null)
   const loading = ref(false)
   const commonStore = useCommonStore()
 
   const handleError = (errorData: ErrorData): ErrorData => {
-    commonStore.setMessage(errorData.message)
+    commonStore.setMessage({ text: errorData.message, type: 'error' })
+    console.error(errorData)
     return errorData
   }
 

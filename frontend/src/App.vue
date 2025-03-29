@@ -1,7 +1,9 @@
 <template>
   <v-app>
     <v-main>
-      <v-snackbar v-model="message.show" :timeout="timeout"> {{ message.text }} </v-snackbar>
+      <v-snackbar v-model="show" :timeout="timeout" :color="message?.type" location="top right">
+        {{ message?.text }}
+      </v-snackbar>
       <router-view />
     </v-main>
   </v-app>
@@ -10,10 +12,10 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useCommonStore } from './stores/common.store'
-
-const timeout = ref(2000)
-
 const store = useCommonStore()
 
-const message = computed(() => ({ text: store.message, show: !!store.message }))
+const timeout = ref(100)
+
+const message = computed(() => store.message)
+const show = computed(() => store.message !== null)
 </script>

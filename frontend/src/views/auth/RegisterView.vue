@@ -88,10 +88,15 @@ import { maxLength, minLength, required, email as email$, sameAs } from '@vuelid
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { collectErrors } from '@/utils/validation.helper'
-import { post } from '@/utils/requests'
+import { post, useAPI } from '@/utils/requests'
 import { registerConfig } from '@/requests/auth.request'
+import { useCommonStore } from '@/stores/common.store'
+import { AsyncExecutorBuilder } from '@/utils/snackbars'
+import type { ServerResponse } from '@/models/response'
 
 const router = useRouter()
+const commonStore = useCommonStore()
+const { doRequest } = useAPI()
 
 const username = ref('')
 const email = ref('')
@@ -156,26 +161,21 @@ const handleSubmit = async () => {
     return
   }
 
-  try {
-    const dto: RegisterDTO = {
-      username: username.value,
-      email: email.value,
-      password: password.value,
-      passwordConfirm: passwordConfirm.value,
-      fullname: fullname.value,
-    }
-
-    try {
-      await post<number, RegisterDTO>(registerConfig(), dto)
-      router.push('/auth/login')
-    } catch (error) {
-      console.error(error)
-      throw error
-    }
-    router.push('/dashboard')
-  } catch (err) {
-    console.error(err)
+  const dto: RegisterDTO = {
+    username: username.value,
+    email: email.value,
+    password: password.value,
+    passwordConfirm: passwordConfirm.value,
+    fullname: fullname.value,
   }
+
+  const result = await AsyncExecutorBuilder.asyncExecutorBuilder<ServerResponse<number>>()
+    .action(() => doRequest(() => post<number, RegisterDTO>(registerConfig(), dto)))
+    .success('The registration was successful')
+    .build()
+    .execute()
+  commonStore.setMessage(result.message)
+  router.push('/auth/login')
 }
 </script>
 

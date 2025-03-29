@@ -51,13 +51,20 @@
 
 <script setup lang="ts">
 import { useAuthStore } from '@/stores/auth.store'
-import type { LoginDTO } from '../../models/auth'
+import type { LoginDTO, TokenDTO } from '../../models/auth'
 import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useCommonStore } from '@/stores/common.store'
+import { AsyncExecutorBuilder } from '@/utils/snackbars'
+import { post, useAPI } from '@/utils/requests'
+import { loginConfig } from '@/requests/auth.request'
+import type { ServerResponse } from '@/models/response'
 
+const commonStore = useCommonStore()
 const authStore = useAuthStore()
+const { doRequest } = useAPI()
 const router = useRouter()
 
 const username = ref('')
@@ -95,14 +102,16 @@ const handleSubmit = async () => {
     return
   }
 
-  try {
-    const dto: LoginDTO = { username: username.value, password: password.value }
-    await authStore.login(dto)
-    await authStore.fetchUser()
-    router.push('/dashboard')
-  } catch (err) {
-    console.error(err)
-  }
+  const dto: LoginDTO = { username: username.value, password: password.value }
+  const result = await AsyncExecutorBuilder.asyncExecutorBuilder<ServerResponse<TokenDTO>>()
+    .action(() => doRequest(() => post<TokenDTO, LoginDTO>(loginConfig(), dto)))
+    .success('You successfully logged in')
+    .build()
+    .execute()
+  authStore.login(result.result?.data ?? { token: '' })
+  await authStore.fetchUser()
+  commonStore.setMessage(result.message)
+  router.push('/dashboard')
 }
 </script>
 
