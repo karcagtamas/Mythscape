@@ -1,3 +1,8 @@
 @use "vuetify" with (
     $body-font-family: "Bree Serif"
 );
+
+img.main-color {
+    color: rgb(var(--v-theme-primary)) !important;
+    fill: rgb(var(--v-theme-primary)) !important;
+}
