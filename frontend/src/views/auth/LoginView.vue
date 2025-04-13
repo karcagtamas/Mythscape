@@ -111,7 +111,7 @@ const handleSubmit = async () => {
   authStore.login(result.result?.data ?? { token: '' })
   await authStore.fetchUser()
   commonStore.setMessage(result.message)
-  router.push('/dashboard')
+  router.push('/app/dashboard')
 }
 </script>
 

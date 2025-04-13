@@ -2,37 +2,49 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/auth/LoginView.vue'
 import RegisterView from '../views/auth/RegisterView.vue'
-import AuthView from '../views/auth/AuthView.vue'
-import CampaignsView from '../views/CampaignsView.vue'
+import AuthView from '../views/frame/AuthView.vue'
 import DashboardView from '../views/DashboardView.vue'
 import { useAuthStore } from '@/stores/auth.store'
 import VersionsView from '@/views/VersionsView.vue'
+import AppBaseView from '@/views/frame/AppBaseView.vue'
+import BaseView from '@/views/frame/BaseView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/app',
+      name: 'app',
+      component: AppBaseView,
+      meta: { requiresAuth: true },
+      children: [
+        {
+          path: 'dashboard',
+          name: 'dashboard',
+          component: DashboardView,
+          meta: { requiresAuth: true },
+        },
+      ],
+      redirect: 'app/dashboard',
+    },
+    {
       path: '/',
-      name: 'home',
-      component: HomeView,
+      name: 'index',
+      component: BaseView,
+      children: [
+        {
+          path: '',
+          name: 'home',
+          component: HomeView,
+        },
+        {
+          path: 'versions',
+          name: 'versions',
+          component: VersionsView,
+        },
+      ],
     },
-    {
-      path: '/versions',
-      name: 'versions',
-      component: VersionsView,
-    },
-    {
-      path: '/dashboard',
-      name: 'dashboard',
-      component: DashboardView,
-      meta: { requiresAuth: true },
-    },
-    {
-      path: '/campaigns',
-      name: 'campaigns',
-      component: CampaignsView,
-      meta: { requiresAuth: true },
-    },
+
     {
       path: '/auth',
       name: 'auth',
