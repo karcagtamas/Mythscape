@@ -1,10 +1,3 @@
-import type { UserDTO } from './user'
-
-export interface AuthState {
-  user: UserDTO | null
-  token: string
-}
-
 export interface LoginDTO {
   username: string
   password: string

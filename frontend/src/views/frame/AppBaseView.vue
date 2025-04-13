@@ -23,14 +23,23 @@
         </v-avatar>
       </template>
     </v-tooltip>
-    <v-divider class="mx-3 my-5"></v-divider>
+    <v-divider v-if="campaigns.length" class="mx-3 my-5"></v-divider>
     <v-avatar
-      v-for="n in 6"
-      :key="n"
+      v-for="campaign in campaigns"
+      :key="campaign.id"
       class="d-block text-center mx-auto mb-9"
       color="grey-lighten-1"
       size="28"
     ></v-avatar>
+    <v-divider class="mx-3 my-5"></v-divider>
+    <v-avatar
+      class="d-flex text-center mx-auto mt-4 profile"
+      color="secondary"
+      size="36"
+      @click="handleAdd"
+    >
+      <v-icon>mdi-plus</v-icon>
+    </v-avatar>
   </v-navigation-drawer>
   <v-navigation-drawer width="244">
     <v-sheet color="grey-lighten-5 text-center py-3" height="128" width="100%">
@@ -56,15 +65,18 @@
 </template>
 
 <script setup lang="ts">
+import type { CampaignDTO } from '@/models/campaign'
 import type { UserDTO } from '@/models/user'
 import { useAuthStore } from '@/stores/auth.store'
+import { useCampaignStore } from '@/stores/campaign.store'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
 const authStore = useAuthStore()
+const campaignStore = useCampaignStore()
 const router = useRouter()
-
 const user = computed<UserDTO | null>(() => authStore.currentUser)
+const campaigns = computed<CampaignDTO[]>(() => campaignStore.campaigns)
 
 const toProfile = () => {
   router.push('/profile')
@@ -73,6 +85,8 @@ const toProfile = () => {
 const toVersions = () => {
   router.push('/versions')
 }
+
+const handleAdd = () => {}
 </script>
 
 <style lang="scss">
