@@ -13,7 +13,7 @@
     <v-tooltip :text="user?.name">
       <template v-slot:activator="{ props }">
         <v-avatar
-          class="d-flex text-center mx-auto mt-4 profile"
+          class="d-flex text-center mx-auto mt-4 item"
           color="primary"
           size="36"
           v-bind="props"
@@ -24,24 +24,51 @@
       </template>
     </v-tooltip>
     <v-divider v-if="campaigns.length" class="mx-3 my-5"></v-divider>
-    <v-avatar
-      v-for="campaign in campaigns"
-      :key="campaign.id"
-      class="d-block text-center mx-auto mb-9"
-      color="grey-lighten-1"
-      size="28"
-    ></v-avatar>
+    <v-tooltip v-for="campaign in campaigns" :key="campaign.id" :text="campaign.name">
+      <template v-slot:activator="{ props }">
+        <v-avatar
+          class="d-block text-center mx-auto mb-6 mt-6 item"
+          color="grey-lighten-1"
+          size="28"
+          v-bind="props"
+          @click="() => handleSelect(campaign)"
+        ></v-avatar>
+      </template>
+    </v-tooltip>
+
     <v-divider class="mx-3 my-5"></v-divider>
-    <v-avatar
-      class="d-flex text-center mx-auto mt-4 profile"
-      color="secondary"
-      size="36"
-      @click="handleAdd"
-    >
-      <v-icon>mdi-plus</v-icon>
-    </v-avatar>
+
+    <v-tooltip text="Add campaign">
+      <template v-slot:activator="{ props }">
+        <v-avatar
+          class="d-flex text-center mx-auto mt-4 item"
+          color="secondary"
+          size="36"
+          v-bind="props"
+          @click="handleAdd"
+        >
+          <v-icon>mdi-plus</v-icon>
+        </v-avatar>
+      </template>
+    </v-tooltip>
+
+    <template v-slot:append>
+      <v-tooltip text="Log out">
+        <template v-slot:activator="{ props }">
+          <v-avatar
+            class="d-flex text-center mx-auto mb-4 item"
+            color="primary"
+            size="36"
+            v-bind="props"
+            @click="handleLogout"
+          >
+            <v-icon>mdi-logout</v-icon>
+          </v-avatar>
+        </template>
+      </v-tooltip>
+    </template>
   </v-navigation-drawer>
-  <v-navigation-drawer width="244">
+  <v-navigation-drawer v-if="current !== null" width="244">
     <v-sheet color="grey-lighten-5 text-center py-3" height="128" width="100%">
       <img class="main-color" src="/main.svg" height="100%" />
     </v-sheet>
@@ -51,15 +78,17 @@
     </v-list>
   </v-navigation-drawer>
 
-  <v-app-bar></v-app-bar>
+  <v-app-bar v-if="current !== null"></v-app-bar>
 
   <router-view></router-view>
 
-  <v-navigation-drawer location="right">
-    <v-list>
-      <v-list-item v-for="n in 5" :key="n" :title="`Item ${n}`" link></v-list-item>
-    </v-list>
-  </v-navigation-drawer>
+  <!--
+    <v-navigation-drawer location="right">
+      <v-list>
+        <v-list-item v-for="n in 5" :key="n" :title="`Item ${n}`" link></v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+  -->
 
   <v-footer height="72" app> </v-footer>
 </template>
@@ -69,14 +98,21 @@ import type { CampaignDTO } from '@/models/campaign'
 import type { UserDTO } from '@/models/user'
 import { useAuthStore } from '@/stores/auth.store'
 import { useCampaignStore } from '@/stores/campaign.store'
-import { computed } from 'vue'
+import { useCommonStore } from '@/stores/common.store'
+import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
+const store = useCommonStore()
 const authStore = useAuthStore()
 const campaignStore = useCampaignStore()
 const router = useRouter()
 const user = computed<UserDTO | null>(() => authStore.currentUser)
 const campaigns = computed<CampaignDTO[]>(() => campaignStore.campaigns)
+const current = computed<CampaignDTO | null>(() => campaignStore.current)
+
+onMounted(async () => {
+  await campaignStore.fetchCampaign(authStore.user?.id ?? 0)
+})
 
 const toProfile = () => {
   router.push('/profile')
@@ -86,11 +122,21 @@ const toVersions = () => {
   router.push('/versions')
 }
 
+const handleLogout = () => {
+  authStore.logout()
+  store.setMessage({ text: 'You successfully logged out', type: 'success' })
+  router.push('/')
+}
+
 const handleAdd = () => {}
+
+const handleSelect = (campaign: CampaignDTO) => {
+  campaignStore.select(campaign)
+}
 </script>
 
 <style lang="scss">
-.profile {
+.item {
   transition-duration: 0.4s;
   cursor: pointer;
 

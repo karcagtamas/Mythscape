@@ -22,5 +22,8 @@ export const useCampaignStore = defineStore('campaign', {
 
       this.campaigns = response.data ?? []
     },
+    select(campaign: CampaignDTO) {
+      this.current = campaign
+    },
   },
 })
