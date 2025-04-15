@@ -3,20 +3,25 @@ package eu.karcags.mythscape.controllers
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import eu.karcags.mythscape.ConfigKey
-import eu.karcags.mythscape.dtos.LoginDTO
-import eu.karcags.mythscape.dtos.RegisterDTO
-import eu.karcags.mythscape.dtos.TokenDTO
+import eu.karcags.mythscape.dtos.auth.LoginDTO
+import eu.karcags.mythscape.dtos.auth.RefreshDTO
+import eu.karcags.mythscape.dtos.auth.RegisterDTO
+import eu.karcags.mythscape.dtos.auth.TokenDTO
 import eu.karcags.mythscape.dtos.dto
+import eu.karcags.mythscape.repositories.RefreshTokenRepository
 import eu.karcags.mythscape.repositories.UserRepository
 import eu.karcags.mythscape.utils.*
 import io.ktor.http.*
+import io.ktor.server.config.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.datetime.*
+import kotlinx.datetime.TimeZone
 import org.mindrot.jbcrypt.BCrypt
 import java.util.*
 
-fun Route.authenticationController(userRepository: UserRepository) {
+fun Route.authenticationController(userRepository: UserRepository, refreshTokenRepository: RefreshTokenRepository) {
     route("/auth") {
         post("/login") {
             val data = call.receive<LoginDTO>()
@@ -27,15 +32,12 @@ fun Route.authenticationController(userRepository: UserRepository) {
                 throw ServerException.Unauthorized("Incorrect password was provided.")
             }
 
-            val token = JWT.create()
-                .withAudience(environment.config.getStringProperty(ConfigKey.JWT_AUDIENCE))
-                .withIssuer(environment.config.getStringProperty(ConfigKey.JWT_ISSUER))
-                .withClaim("userId", user.id.value)
-                .withClaim("username", data.username)
-                .withExpiresAt(Date(System.currentTimeMillis() + environment.config.getIntProperty(ConfigKey.JWT_EXPIRATION) * 1000))
-                .sign(Algorithm.HMAC256(environment.config.getStringProperty(ConfigKey.JWT_SECRET)))
+            val token = createToken(environment.config, user.id.value, data.username)
 
-            call.respond(TokenDTO(token, user.dto()).wrap())
+            val clientId = UUID.randomUUID().toString()
+            val refreshToken = generateRefreshToken(refreshTokenRepository, clientId, user.id.value)
+
+            call.respond(TokenDTO(token, user.dto(), refreshToken, clientId).wrap())
         }
 
         post("/register") {
@@ -57,5 +59,47 @@ fun Route.authenticationController(userRepository: UserRepository) {
 
             call.respond(id.wrap(HttpStatusCode.Created))
         }
+
+        post("/refresh") {
+            val data = call.receive<RefreshDTO>()
+
+            val refreshToken = refreshTokenRepository.find(data) ?: throw ServerException.Forbidden("Refresh token is not valid.")
+            val user = userRepository.get(data.userId) ?: throw ServerException.NotFound()
+
+            val token = createToken(environment.config, data.userId, user.username)
+            revokeRefreshToken(refreshTokenRepository, refreshToken.id.value)
+            val newRefreshToken = generateRefreshToken(refreshTokenRepository, data.clientId, data.userId)
+
+            call.respond(TokenDTO(token, user.dto(), newRefreshToken, data.clientId).wrap())
+        }
     }
+}
+
+fun createToken(config: ApplicationConfig, userId: Int, username: String): String {
+    return JWT.create()
+        .withAudience(config.getStringProperty(ConfigKey.JWT_AUDIENCE))
+        .withIssuer(config.getStringProperty(ConfigKey.JWT_ISSUER))
+        .withClaim("userId", userId)
+        .withClaim("username", username)
+        .withExpiresAt(Date(System.currentTimeMillis() + config.getIntProperty(ConfigKey.JWT_EXPIRATION) * 1000))
+        .sign(Algorithm.HMAC256(config.getStringProperty(ConfigKey.JWT_SECRET)))
+}
+
+suspend fun revokeRefreshToken(refreshTokenRepository: RefreshTokenRepository, refreshTokenId: Int) {
+    refreshTokenRepository.update(refreshTokenId) {
+        revoked = current()
+    }
+}
+
+suspend fun generateRefreshToken(refreshTokenRepository: RefreshTokenRepository, clientId: String, userId: Int): String {
+    val token = UUID.randomUUID().toString()
+
+    refreshTokenRepository.create {
+        this.userId = userId
+        this.clientId = clientId
+        this.token = token
+        expiration = current().toInstant(TimeZone.UTC).plus(1, DateTimeUnit.DAY, TimeZone.UTC).toLocalDateTime(TimeZone.UTC)
+    }
+
+    return token
 }

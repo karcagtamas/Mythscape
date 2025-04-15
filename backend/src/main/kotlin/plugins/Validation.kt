@@ -1,8 +1,8 @@
 package eu.karcags.mythscape.plugins
 
 import eu.karcags.mythscape.dtos.CampaignEditDTO
-import eu.karcags.mythscape.dtos.LoginDTO
-import eu.karcags.mythscape.dtos.RegisterDTO
+import eu.karcags.mythscape.dtos.auth.LoginDTO
+import eu.karcags.mythscape.dtos.auth.RegisterDTO
 import io.ktor.server.application.*
 import io.ktor.server.plugins.requestvalidation.*
 

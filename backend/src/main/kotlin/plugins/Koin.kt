@@ -1,8 +1,10 @@
 package eu.karcags.mythscape.plugins
 
 import eu.karcags.mythscape.repositories.CampaignRepository
+import eu.karcags.mythscape.repositories.RefreshTokenRepository
 import eu.karcags.mythscape.repositories.UserRepository
 import eu.karcags.mythscape.repositories.impl.UserRepositoryImpl
+import eu.karcags.mythscape.repositories.impl.RefreshTokenRepositoryImpl
 import eu.karcags.mythscape.repositories.impl.CampaignRepositoryImpl
 import io.ktor.server.application.*
 import org.koin.core.module.dsl.bind
@@ -12,6 +14,7 @@ import org.koin.ktor.plugin.Koin
 import org.koin.logger.slf4jLogger
 
 val koinModule = module {
+    singleOf(::RefreshTokenRepositoryImpl) { bind<RefreshTokenRepository>() }
     singleOf(::UserRepositoryImpl) { bind<UserRepository>() }
     singleOf(::CampaignRepositoryImpl) { bind<CampaignRepository>() }
 }
