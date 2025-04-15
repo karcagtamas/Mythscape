@@ -13,4 +13,12 @@ export interface RegisterDTO {
 
 export interface TokenDTO {
   token: string
+  refreshToken: string
+  clientId: string
+}
+
+export interface RefreshDTO {
+  refreshToken: string
+  clientId: string
+  userId: string
 }

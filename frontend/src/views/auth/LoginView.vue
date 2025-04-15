@@ -108,7 +108,7 @@ const handleSubmit = async () => {
     .success('You successfully logged in')
     .build()
     .execute()
-  authStore.login(result.result?.data ?? { token: '' })
+  authStore.login(result.result?.data ?? { token: '', clientId: '', refreshToken: '' })
   await authStore.fetchUser()
   commonStore.setMessage(result.message)
   router.push('/app/dashboard')

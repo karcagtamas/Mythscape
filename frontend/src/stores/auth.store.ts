@@ -8,21 +8,27 @@ import { defineStore } from 'pinia'
 interface AuthState {
   user: UserDTO | null
   token: string
+  clientId: string
+  refreshToken: string
 }
 
 export const useAuthStore = defineStore('auth', {
   state: (): AuthState => ({
     user: JSON.parse(localStorage.getItem('user') ?? 'null') || null,
     token: localStorage.getItem('token') || '',
+    clientId: localStorage.getItem('clientId') || '',
+    refreshToken: localStorage.getItem('refreshToken') || '',
   }),
   getters: {
     currentUser: (state) => state.user,
     loggedIn: (state) => !!state.token,
   },
   actions: {
-    login(token: TokenDTO) {
-      this.setToken(token.token)
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token.token}`
+    login(dto: TokenDTO) {
+      this.setToken(dto.token)
+      this.setClientId(dto.clientId)
+      this.setRefreshToken(dto.refreshToken)
+      axios.defaults.headers.common['Authorization'] = `Bearer ${dto.token}`
     },
     async fetchUser() {
       try {
@@ -42,10 +48,20 @@ export const useAuthStore = defineStore('auth', {
       this.token = payload
       localStorage.setItem('token', payload)
     },
+    setClientId(payload: string) {
+      this.clientId = payload
+      localStorage.setItem('clientId', payload)
+    },
+    setRefreshToken(payload: string) {
+      this.refreshToken = payload
+      localStorage.setItem('refreshToken', payload)
+    },
     logout() {
       this.$reset()
       delete axios.defaults.headers.common['Authorization']
       localStorage.removeItem('token')
+      localStorage.removeItem('clientId')
+      localStorage.removeItem('refreshToken')
       localStorage.removeItem('user')
     },
   },
