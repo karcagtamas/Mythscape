@@ -8,8 +8,8 @@ import org.jetbrains.exposed.sql.kotlin.datetime.datetime
 
 object RefreshTokens : IntIdTable("refresh_tokens") {
     val userId = integer("user_id")
-    val clientId = varchar("client_id", 32)
-    val token = varchar("token", 32)
+    val clientId = varchar("client_id", 40)
+    val token = varchar("token", 40)
     val expiration = datetime("expiration")
     val revoked = datetime("revoked").nullable()
 }
