@@ -15,3 +15,11 @@ export const registerConfig = (): RequestConfig => {
     queryParams: [],
   }
 }
+
+export const logoutConfig = (): RequestConfig => {
+  return {
+    type: 'post',
+    pathSegments: ['auth', 'logout'],
+    queryParams: [],
+  }
+}

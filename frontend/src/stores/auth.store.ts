@@ -1,7 +1,8 @@
 import type { TokenDTO } from '@/models/auth'
 import type { UserDTO } from '@/models/user'
+import { logoutConfig } from '@/requests/auth.request'
 import { currentUserConfig } from '@/requests/user.request'
-import { get } from '@/utils/requests'
+import { get, post } from '@/utils/requests'
 import axios from 'axios'
 import { defineStore } from 'pinia'
 
@@ -63,7 +64,8 @@ export const useAuthStore = defineStore('auth', {
       this.userId = payload
       localStorage.setItem('userId', payload.toString())
     },
-    logout() {
+    async logout() {
+      await post<void, unknown>(logoutConfig(), { userId: this.userId, clientId: this.clientId })
       this.$reset()
       delete axios.defaults.headers.common['Authorization']
       localStorage.removeItem('token')

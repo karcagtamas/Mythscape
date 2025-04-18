@@ -8,6 +8,7 @@ import eu.karcags.mythscape.utils.current
 import eu.karcags.mythscape.utils.suspendTransaction
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.update
 
 class RefreshTokenRepositoryImpl : RepositoryImpl<RefreshToken>(), RefreshTokenRepository {
     override fun entityClass(): IntEntityClass<RefreshToken> = RefreshToken
@@ -22,5 +23,13 @@ class RefreshTokenRepositoryImpl : RepositoryImpl<RefreshToken>(), RefreshTokenR
                     (RefreshTokens.revoked.isNull())
         }
             .firstOrNull()
+    }
+
+    override suspend fun revokeAll(userId: Int, clientId: String): Unit = suspendTransaction {
+        RefreshToken.find { (RefreshTokens.clientId eq clientId) and (RefreshTokens.userId eq userId) }
+            .forUpdate()
+            .forEach {
+                it.revoked = current()
+            }
     }
 }
