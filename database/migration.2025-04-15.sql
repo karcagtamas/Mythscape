@@ -5,7 +5,7 @@ CREATE TABLE refresh_tokens
     client_id  VARCHAR(40) NOT NULL,
     token      VARCHAR(40) NOT NULL,
     expiration DATE        NOT NULL,
-    revoked    DATE        NOT NULL,
+    revoked    DATE        NULL,
     UNIQUE (user_id, client_id, token)
 );
 
