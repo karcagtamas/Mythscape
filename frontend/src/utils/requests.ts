@@ -1,8 +1,9 @@
-import axios, { type AxiosResponse } from 'axios'
+import { type AxiosResponse } from 'axios'
 import { ref } from 'vue'
 import { API_URL } from './constants'
 import type { ServerResponse } from '@/models/response'
 import { useCommonStore } from '@/stores/common.store'
+import axios from '@/plugins/axios'
 
 type QueryParams = {
   [key: string]: string | number | boolean | string[] | number[]

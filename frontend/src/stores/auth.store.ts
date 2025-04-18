@@ -10,6 +10,7 @@ interface AuthState {
   token: string
   clientId: string
   refreshToken: string
+  userId: number
 }
 
 export const useAuthStore = defineStore('auth', {
@@ -18,6 +19,7 @@ export const useAuthStore = defineStore('auth', {
     token: localStorage.getItem('token') || '',
     clientId: localStorage.getItem('clientId') || '',
     refreshToken: localStorage.getItem('refreshToken') || '',
+    userId: JSON.parse(localStorage.getItem('userId') ?? '0'),
   }),
   getters: {
     currentUser: (state) => state.user,
@@ -28,6 +30,7 @@ export const useAuthStore = defineStore('auth', {
       this.setToken(dto.token)
       this.setClientId(dto.clientId)
       this.setRefreshToken(dto.refreshToken)
+      this.setUserId(dto.user.id)
       axios.defaults.headers.common['Authorization'] = `Bearer ${dto.token}`
     },
     async fetchUser() {
@@ -56,12 +59,17 @@ export const useAuthStore = defineStore('auth', {
       this.refreshToken = payload
       localStorage.setItem('refreshToken', payload)
     },
+    setUserId(payload: number) {
+      this.userId = payload
+      localStorage.setItem('userId', payload.toString())
+    },
     logout() {
       this.$reset()
       delete axios.defaults.headers.common['Authorization']
       localStorage.removeItem('token')
       localStorage.removeItem('clientId')
       localStorage.removeItem('refreshToken')
+      localStorage.removeItem('userId')
       localStorage.removeItem('user')
     },
   },

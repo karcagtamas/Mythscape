@@ -108,10 +108,12 @@ const handleSubmit = async () => {
     .success('You successfully logged in')
     .build()
     .execute()
-  authStore.login(result.result?.data ?? { token: '', clientId: '', refreshToken: '' })
-  await authStore.fetchUser()
-  commonStore.setMessage(result.message)
-  router.push('/app/dashboard')
+  if (result.result?.data) {
+    authStore.login(result.result?.data)
+    await authStore.fetchUser()
+    commonStore.setMessage(result.message)
+    router.push('/app/dashboard')
+  }
 }
 </script>
 
