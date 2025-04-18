@@ -1,4 +1,4 @@
-export const SERVER_URL = 'http://localhost:8080'
+export const SERVER_URL = import.meta.env.VITE_APP_URL
 export const API_URL = `${SERVER_URL}/api`
 
 export type Version = {
@@ -6,6 +6,7 @@ export type Version = {
   date: Date
   changes: string[]
 }
+
 export const VERSIONS: Version[] = [
   {
     release: '1.0.0',
