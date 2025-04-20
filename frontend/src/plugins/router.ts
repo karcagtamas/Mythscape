@@ -8,6 +8,11 @@ import { useAuthStore } from '@/stores/auth.store'
 import VersionsView from '@/views/VersionsView.vue'
 import AppBaseView from '@/views/frame/AppBaseView.vue'
 import BaseView from '@/views/frame/BaseView.vue'
+import CampaignDataView from '@/views/campaigns/CampaignDataView.vue'
+import CampaignBaseView from '@/views/campaigns/CampaignBaseView.vue'
+import CampaignSettingsView from '@/views/campaigns/CampaignSettingsView.vue'
+import CampaignNotesView from '@/views/campaigns/CampaignNotesView.vue'
+import CampaignNoteView from '@/views/campaigns/notes/CampaignNoteView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,6 +28,40 @@ const router = createRouter({
           name: 'dashboard',
           component: DashboardView,
           meta: { requiresAuth: true },
+        },
+        {
+          path: 'campaigns/:campaignId',
+          name: 'campaign',
+          component: CampaignBaseView,
+          meta: { requiresAuth: true },
+          children: [
+            {
+              path: '',
+              name: 'campaign-data',
+              component: CampaignDataView,
+              meta: { requiresAuth: true },
+            },
+            {
+              path: 'settings',
+              name: 'campaign-settings',
+              component: CampaignSettingsView,
+              meta: { requiresAuth: true },
+            },
+            {
+              path: 'notes',
+              name: 'campaign-notes',
+              component: CampaignNotesView,
+              meta: { requiresAuth: true },
+              children: [
+                {
+                  path: 'editor/:noteId',
+                  name: 'note-editor',
+                  component: CampaignNoteView,
+                  meta: { requiresAuth: true },
+                },
+              ],
+            },
+          ],
         },
       ],
       redirect: 'app/dashboard',

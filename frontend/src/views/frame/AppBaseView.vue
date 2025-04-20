@@ -68,27 +68,8 @@
       </v-tooltip>
     </template>
   </v-navigation-drawer>
-  <v-navigation-drawer v-if="current !== null" width="244">
-    <v-sheet color="grey-lighten-5 text-center py-3" height="128" width="100%">
-      <img class="main-color" src="/main.svg" height="100%" />
-    </v-sheet>
-
-    <v-list>
-      <v-list-item v-for="n in 5" :key="n" :title="`Item ${n}`" link></v-list-item>
-    </v-list>
-  </v-navigation-drawer>
-
-  <v-app-bar v-if="current !== null"></v-app-bar>
 
   <router-view></router-view>
-
-  <!--
-    <v-navigation-drawer location="right">
-      <v-list>
-        <v-list-item v-for="n in 5" :key="n" :title="`Item ${n}`" link></v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-  -->
 
   <v-footer height="72" app> </v-footer>
 </template>
@@ -108,7 +89,6 @@ const campaignStore = useCampaignStore()
 const router = useRouter()
 const user = computed<UserDTO | null>(() => authStore.currentUser)
 const campaigns = computed<CampaignDTO[]>(() => campaignStore.campaigns)
-const current = computed<CampaignDTO | null>(() => campaignStore.current)
 
 onMounted(async () => {
   await campaignStore.fetchCampaign(authStore.user?.id ?? 0)
@@ -132,6 +112,7 @@ const handleAdd = () => {}
 
 const handleSelect = (campaign: CampaignDTO) => {
   campaignStore.select(campaign)
+  router.push(`/app/campaigns/${campaign.id}`)
 }
 </script>
 
