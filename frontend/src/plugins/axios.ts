@@ -2,6 +2,7 @@ import type { TokenDTO } from '@/models/auth'
 import type { ServerResponse } from '@/models/response'
 import { useAuthStore } from '@/stores/auth.store'
 import axios from 'axios'
+import { useRouter } from 'vue-router'
 
 const api = axios.create({
   baseURL: 'http://localhost:8080/api',
@@ -32,6 +33,10 @@ const refreshToken = async () => {
     return response.data.data.token
   }
 
+  await authStore.logout()
+  const router = useRouter()
+  router.replace('/auth/login')
+
   return ''
 }
 
@@ -44,8 +49,11 @@ api.interceptors.response.use(
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true
       const newToken = await refreshToken()
-      axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`
-      return api(originalRequest)
+
+      if (newToken) {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`
+        return api(originalRequest)
+      }
     }
     return Promise.reject(error)
   },

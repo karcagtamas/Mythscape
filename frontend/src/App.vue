@@ -1,7 +1,12 @@
 <template>
   <v-app>
     <v-main>
-      <v-snackbar v-model="show" :timeout="timeout" :color="message?.type" location="top right">
+      <v-snackbar
+        :model-value="show"
+        :timeout="timeout"
+        :color="message?.type"
+        location="top right"
+      >
         {{ message?.text }}
       </v-snackbar>
       <router-view />
