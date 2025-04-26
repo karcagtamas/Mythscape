@@ -1,0 +1,21 @@
+package eu.karcags.mythscape.dtos.campaigns
+
+import eu.karcags.mythscape.db.CampaignTag
+import kotlinx.datetime.LocalDateTime
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class CampaignTagDTO(
+    val id: Int,
+    val caption: String,
+    val color: String,
+    val creation: LocalDateTime,
+)
+
+fun CampaignTag.dto(): CampaignTagDTO {
+    return CampaignTagDTO(id.value, caption, color, creation)
+}
+
+fun List<CampaignTag>.dto(): List<CampaignTagDTO> {
+    return map { it.dto() }
+}

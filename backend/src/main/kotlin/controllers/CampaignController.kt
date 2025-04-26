@@ -1,7 +1,7 @@
 package eu.karcags.mythscape.controllers
 
-import eu.karcags.mythscape.dtos.CampaignEditDTO
-import eu.karcags.mythscape.dtos.dto
+import eu.karcags.mythscape.dtos.campaigns.CampaignEditDTO
+import eu.karcags.mythscape.dtos.campaigns.dto
 import eu.karcags.mythscape.repositories.CampaignRepository
 import eu.karcags.mythscape.utils.*
 import io.ktor.http.*
@@ -22,6 +22,18 @@ fun Route.campaignController(repository: CampaignRepository) {
             val id = call.parameters["id"]?.toIntOrNull().requireNonNull()
 
             call.respond(repository.get(id) { it.dto() }.required().wrap())
+        }
+
+        get("/{id}/tags") {
+            val id = call.parameters["id"]?.toIntOrNull().requireNonNull()
+
+            call.respond(repository.getTags(id) { it.dto() }.wrap())
+        }
+
+        get("/{id}/members") {
+            val id = call.parameters["id"]?.toIntOrNull().requireNonNull()
+
+            call.respond(repository.getMembers(id) { it.dto() }.wrap())
         }
 
         post {

@@ -1,10 +1,9 @@
 package eu.karcags.mythscape.controllers
 
-import eu.karcags.mythscape.dtos.dto
+import eu.karcags.mythscape.dtos.campaigns.dto
 import eu.karcags.mythscape.repositories.UserRepository
 import eu.karcags.mythscape.utils.*
 import io.ktor.server.auth.*
-import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Route.userController(repository: UserRepository) {
