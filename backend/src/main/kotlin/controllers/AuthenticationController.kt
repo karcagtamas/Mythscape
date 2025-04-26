@@ -3,8 +3,12 @@ package eu.karcags.mythscape.controllers
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import eu.karcags.mythscape.ConfigKey
-import eu.karcags.mythscape.dtos.auth.*
-import eu.karcags.mythscape.dtos.campaigns.dto
+import eu.karcags.mythscape.dtos.auth.LoginDTO
+import eu.karcags.mythscape.dtos.auth.LogoutDTO
+import eu.karcags.mythscape.dtos.auth.RefreshDTO
+import eu.karcags.mythscape.dtos.auth.RegisterDTO
+import eu.karcags.mythscape.dtos.auth.TokenDTO
+import eu.karcags.mythscape.dtos.dto
 import eu.karcags.mythscape.repositories.RefreshTokenRepository
 import eu.karcags.mythscape.repositories.UserRepository
 import eu.karcags.mythscape.utils.*
