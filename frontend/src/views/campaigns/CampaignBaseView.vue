@@ -21,9 +21,13 @@
     </v-list>
   </v-navigation-drawer>
 
-  <v-app-bar v-if="current !== null"></v-app-bar>
+  <div class="page-frame">
+    <v-app-bar color="primary" v-if="current !== null" rounded density="compact">
+      <v-app-bar-title> {{ current.title }} ({{ current.name }}) </v-app-bar-title>
+    </v-app-bar>
 
-  <router-view></router-view>
+    <router-view></router-view>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -55,3 +59,13 @@ const handlePageSelect = (selection: string[]) => {
   }
 }
 </script>
+
+<style lang="scss">
+.page-frame {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1rem;
+  gap: 1rem;
+}
+</style>

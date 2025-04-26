@@ -110,8 +110,8 @@ const handleLogout = () => {
 
 const handleAdd = () => {}
 
-const handleSelect = (campaign: CampaignDTO) => {
-  campaignStore.select(campaign)
+const handleSelect = async (campaign: CampaignDTO) => {
+  await campaignStore.select(campaign)
   router.push(`/app/campaigns/${campaign.id}`)
 }
 </script>

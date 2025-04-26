@@ -7,3 +7,19 @@ export const userCampaignsConfig = (userId: number): RequestConfig => {
     queryParams: [],
   }
 }
+
+export const campaignTagsConfig = (campaignId: number): RequestConfig => {
+  return {
+    type: 'get',
+    pathSegments: ['campaigns', campaignId.toString(), 'tags'],
+    queryParams: [],
+  }
+}
+
+export const campaignMembersConfig = (campaignId: number): RequestConfig => {
+  return {
+    type: 'get',
+    pathSegments: ['campaigns', campaignId.toString(), 'members'],
+    queryParams: [],
+  }
+}
