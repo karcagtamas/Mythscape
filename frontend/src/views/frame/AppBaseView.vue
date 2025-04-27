@@ -26,13 +26,15 @@
     <v-divider v-if="campaigns.length" class="mx-3 my-5"></v-divider>
     <v-tooltip v-for="campaign in campaigns" :key="campaign.id" :text="campaign.name">
       <template v-slot:activator="{ props }">
-        <v-avatar
-          class="d-block text-center mx-auto mb-6 mt-6 item"
+        <TextAvatar
+          class="d-flex text-center mx-auto mb-6 mt-6 item"
           color="grey-lighten-1"
+          :value="campaign.title"
           size="28"
+          :text-size="14"
           v-bind="props"
           @click="() => handleSelect(campaign)"
-        ></v-avatar>
+        ></TextAvatar>
       </template>
     </v-tooltip>
 
@@ -75,6 +77,7 @@
 </template>
 
 <script setup lang="ts">
+import TextAvatar from '@/components/TextAvatar.vue'
 import type { CampaignDTO } from '@/models/campaign'
 import type { UserDTO } from '@/models/user'
 import { useAuthStore } from '@/stores/auth.store'
