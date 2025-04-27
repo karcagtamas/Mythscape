@@ -31,3 +31,11 @@ export const campaignMembersConfig = (campaignId: number): RequestConfig => {
     queryParams: [],
   }
 }
+
+export const campaignNotesConfig = (campaignId: number): RequestConfig => {
+  return {
+    type: 'get',
+    pathSegments: ['campaigns', campaignId.toString(), 'notes'],
+    queryParams: [],
+  }
+}

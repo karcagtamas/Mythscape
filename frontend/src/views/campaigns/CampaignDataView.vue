@@ -46,10 +46,11 @@ import ColorTag from '@/components/ColorTag.vue'
 import TextAvatar from '@/components/TextAvatar.vue'
 import { useCampaignStore } from '@/stores/campaign.store'
 import { computed } from 'vue'
+import type { CampaignDTO, CampaignMemberDTO, CampaignTagDTO } from '@/models/campaign'
 
 const campaignStore = useCampaignStore()
 
-const campaign = computed(() => campaignStore.current)
-const tags = computed(() => campaignStore.tags)
-const members = computed(() => campaignStore.members)
+const campaign = computed<CampaignDTO | null>(() => campaignStore.current)
+const tags = computed<CampaignTagDTO[]>(() => campaignStore.tags)
+const members = computed<CampaignMemberDTO[]>(() => campaignStore.members)
 </script>

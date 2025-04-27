@@ -27,6 +27,18 @@
     <v-tooltip v-for="campaign in campaigns" :key="campaign.id" :text="campaign.name">
       <template v-slot:activator="{ props }">
         <TextAvatar
+          v-if="selectedCampaign?.id === campaign.id"
+          class="d-flex text-center mx-auto mb-6 mt-6 item"
+          color="primary"
+          :value="campaign.title"
+          size="36"
+          :text-size="16"
+          v-bind="props"
+          @click="() => handleSelect(campaign)"
+        ></TextAvatar>
+
+        <TextAvatar
+          v-else
           class="d-flex text-center mx-auto mb-6 mt-6 item"
           color="grey-lighten-1"
           :value="campaign.title"
@@ -92,6 +104,7 @@ const campaignStore = useCampaignStore()
 const router = useRouter()
 const user = computed<UserDTO | null>(() => authStore.currentUser)
 const campaigns = computed<CampaignDTO[]>(() => campaignStore.campaigns)
+const selectedCampaign = computed<CampaignDTO | null>(() => campaignStore.current)
 
 onMounted(async () => {
   await campaignStore.fetchCampaigns(authStore.user?.id ?? 0)
