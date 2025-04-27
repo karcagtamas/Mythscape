@@ -1,5 +1,6 @@
 import { type CampaignTagDTO, type CampaignDTO, type CampaignMemberDTO } from '@/models/campaign'
 import {
+  campaignConfig,
   campaignMembersConfig,
   campaignTagsConfig,
   userCampaignsConfig,
@@ -28,7 +29,7 @@ export const useCampaignStore = defineStore('campaign', {
     entries: (state) => state.campaigns,
   },
   actions: {
-    async fetchCampaign(userId: number) {
+    async fetchCampaigns(userId: number) {
       const response = await get<CampaignDTO[]>(userCampaignsConfig(userId))
 
       this.campaigns = response.data ?? []
@@ -42,6 +43,13 @@ export const useCampaignStore = defineStore('campaign', {
       const response = await get<CampaignMemberDTO[]>(campaignMembersConfig(campaignId))
 
       this.members = response.data ?? []
+    },
+    async selectById(campaignId: number) {
+      const response = await get<CampaignDTO | null>(campaignConfig(campaignId))
+
+      if (response.data) {
+        await this.select(response.data)
+      }
     },
     async select(campaign: CampaignDTO) {
       this.current = campaign

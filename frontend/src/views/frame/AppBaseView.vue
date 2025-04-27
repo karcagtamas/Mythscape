@@ -94,7 +94,7 @@ const user = computed<UserDTO | null>(() => authStore.currentUser)
 const campaigns = computed<CampaignDTO[]>(() => campaignStore.campaigns)
 
 onMounted(async () => {
-  await campaignStore.fetchCampaign(authStore.user?.id ?? 0)
+  await campaignStore.fetchCampaigns(authStore.user?.id ?? 0)
 })
 
 const toProfile = () => {

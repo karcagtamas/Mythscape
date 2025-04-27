@@ -33,8 +33,8 @@
 <script setup lang="ts">
 import type { CampaignDTO } from '@/models/campaign'
 import { useCampaignStore } from '@/stores/campaign.store'
-import { computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 type Page = { key: string; title: string; icon: string; path: string }
 
@@ -46,6 +46,12 @@ const pages: Page[] = [
 
 const campaignStore = useCampaignStore()
 const router = useRouter()
+const route = useRoute()
+const id = route.params.campaignId
+
+onMounted(async () => {
+  await campaignStore.selectById(+id)
+})
 
 const current = computed<CampaignDTO | null>(() => campaignStore.current)
 const selectedPage = computed<string[]>(() => [campaignStore.page])

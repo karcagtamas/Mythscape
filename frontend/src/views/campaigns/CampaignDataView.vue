@@ -45,14 +45,9 @@ import DateDataRow from '@/components/DateDataRow.vue'
 import ColorTag from '@/components/ColorTag.vue'
 import TextAvatar from '@/components/TextAvatar.vue'
 import { useCampaignStore } from '@/stores/campaign.store'
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
 
 const campaignStore = useCampaignStore()
-
-onMounted(async () => {
-  await campaignStore.fetchTags(campaignStore.current?.id ?? 0)
-  await campaignStore.fetchMembers(campaignStore.current?.id ?? 0)
-})
 
 const campaign = computed(() => campaignStore.current)
 const tags = computed(() => campaignStore.tags)

@@ -8,6 +8,14 @@ export const userCampaignsConfig = (userId: number): RequestConfig => {
   }
 }
 
+export const campaignConfig = (campaignId: number): RequestConfig => {
+  return {
+    type: 'get',
+    pathSegments: ['campaigns', campaignId.toString()],
+    queryParams: [],
+  }
+}
+
 export const campaignTagsConfig = (campaignId: number): RequestConfig => {
   return {
     type: 'get',
