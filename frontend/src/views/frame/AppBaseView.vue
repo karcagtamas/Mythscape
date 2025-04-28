@@ -52,19 +52,18 @@
 
     <v-divider class="mx-3 my-5"></v-divider>
 
-    <v-tooltip text="Add campaign">
-      <template v-slot:activator="{ props }">
+    <CampaignDialog mode="create">
+      <template v-slot:default="{ props: activatorProps }">
         <v-avatar
           class="d-flex text-center mx-auto mt-4 item"
           color="secondary"
           size="36"
-          v-bind="props"
-          @click="handleAdd"
+          v-bind="activatorProps"
         >
           <v-icon>mdi-plus</v-icon>
         </v-avatar>
       </template>
-    </v-tooltip>
+    </CampaignDialog>
 
     <template v-slot:append>
       <v-tooltip text="Log out">
@@ -90,6 +89,7 @@
 
 <script setup lang="ts">
 import TextAvatar from '@/components/TextAvatar.vue'
+import CampaignDialog from '@/components/campaigns/CampaignDialog.vue'
 import type { CampaignDTO } from '@/models/campaign'
 import type { UserDTO } from '@/models/user'
 import { useAuthStore } from '@/stores/auth.store'
