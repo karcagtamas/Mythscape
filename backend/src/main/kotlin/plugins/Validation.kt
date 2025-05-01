@@ -49,6 +49,8 @@ fun Application.configureValidation() {
             Validation.start(it)
                 .notEmpty("name") { name }
                 .maxLength("name", 40) { name }
+                .notEmpty("title") { title }
+                .maxLength("title", 120) { title }
                 .validate()
         }
     }

@@ -38,5 +38,6 @@ fun List<Campaign>.dto(): List<CampaignDTO> {
 @Serializable
 data class CampaignEditDTO(
     val name: String,
+    val title: String,
     val description: String?,
 )

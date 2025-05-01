@@ -52,7 +52,7 @@
 
     <v-divider class="mx-3 my-5"></v-divider>
 
-    <CampaignDialog mode="create">
+    <CampaignDialog mode="create" @save="handleAdd">
       <template v-slot:default="{ props: activatorProps }">
         <v-avatar
           class="d-flex text-center mx-auto mt-4 item"
@@ -124,7 +124,9 @@ const handleLogout = () => {
   router.push('/')
 }
 
-const handleAdd = () => {}
+const handleAdd = async (id: number) => {
+  await campaignStore.fetchCampaigns(authStore.userId)
+}
 
 const handleSelect = async (campaign: CampaignDTO) => {
   await campaignStore.select(campaign)

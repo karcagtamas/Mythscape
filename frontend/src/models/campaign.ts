@@ -11,6 +11,12 @@ export interface CampaignDTO {
   lastUpdate: Date
 }
 
+export interface CampaignEditDTO {
+  name: string
+  title: string
+  description: string | null
+}
+
 export interface CampaignTagDTO {
   id: number
   caption: string

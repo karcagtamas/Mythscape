@@ -8,11 +8,17 @@
       <v-card>
         <v-card-title class="text-primary">{{ props.title }}</v-card-title>
         <v-card-text>
-          <slot></slot>
+          <slot :isActive="isActive"></slot>
         </v-card-text>
         <v-card-actions>
           <v-btn @click="isActive.value = false">{{ closeCaption }}</v-btn>
-          <v-btn v-if="submitCaption" color="primary">{{ submitCaption }}</v-btn>
+          <v-btn
+            v-if="submitCaption"
+            color="primary"
+            :disabled="props.submitDisabled"
+            @click="emit('submit', isActive)"
+            >{{ submitCaption }}</v-btn
+          >
         </v-card-actions>
       </v-card>
     </template>
@@ -20,14 +26,20 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, type Ref } from 'vue'
 
 type Props = {
   title: string
   mode: 'info' | 'confirm' | 'editor'
+  submitDisabled: boolean
 }
 
 const props = defineProps<Props>()
+const emit = defineEmits({
+  submit(isActive: Ref<boolean, boolean>): boolean {
+    return true
+  },
+})
 
 const closeCaption = computed<string>(() => {
   if (props.mode === 'editor') {

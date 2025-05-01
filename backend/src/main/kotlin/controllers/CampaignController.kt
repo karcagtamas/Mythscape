@@ -42,6 +42,7 @@ fun Route.campaignController(repository: CampaignRepository) {
 
             val id = repository.create {
                 name = dto.name
+                title = dto.title
                 description = dto.description
                 creation = current()
                 lastUpdate = current()

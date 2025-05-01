@@ -16,6 +16,14 @@ export const campaignConfig = (campaignId: number): RequestConfig => {
   }
 }
 
+export const campaignEditConfig = (): RequestConfig => {
+  return {
+    type: 'post',
+    pathSegments: ['campaigns'],
+    queryParams: [],
+  }
+}
+
 export const campaignTagsConfig = (campaignId: number): RequestConfig => {
   return {
     type: 'get',
