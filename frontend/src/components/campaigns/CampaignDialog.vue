@@ -2,8 +2,9 @@
   <DialogBase
     :title="title"
     mode="editor"
-    :submit-disabled="!valid && !v$.$dirty"
+    :submit-disabled="!valid || !v$.$anyDirty"
     @submit="handleSubmit"
+    @cancel="reset"
   >
     <template v-slot:activator="{ props }">
       <slot :props="props"></slot>
@@ -47,6 +48,7 @@ import { AsyncExecutorBuilder } from '@/utils/snackbars'
 import type { ServerResponse } from '@/models/response'
 import { campaignEditConfig } from '@/requests/campaign.request'
 import { post, useAPI } from '@/utils/requests'
+import { useCommonStore } from '@/stores/common.store'
 
 type Props = {
   mode: 'create' | 'edit'
@@ -64,6 +66,7 @@ const title = computed<string>(() =>
 )
 
 const { doRequest } = useAPI()
+const commonStore = useCommonStore()
 
 const nameField = ref('')
 const titleField = ref('')
@@ -73,7 +76,7 @@ const valid = ref(false)
 const rules = {
   name: { required, maxLength: maxLength(40) },
   title: { required, maxLength: maxLength(120) },
-  description: { required },
+  description: {},
 }
 
 const v$ = useVuelidate(rules, {
@@ -96,6 +99,13 @@ const titleFieldErrors = computed(() => {
   ])
 })
 
+const reset = () => {
+  v$.value.$reset()
+  nameField.value = ''
+  titleField.value = ''
+  descriptionField.value = ''
+}
+
 const handleSubmit = async (isActive: Ref<boolean, boolean>) => {
   v$.value.$validate()
 
@@ -116,10 +126,8 @@ const handleSubmit = async (isActive: Ref<boolean, boolean>) => {
   if (result.result?.data) {
     emit('save', result.result.data)
     isActive.value = false
-    v$.value.$reset()
-    nameField.value = ''
-    titleField.value = ''
-    descriptionField.value = ''
+    commonStore.setMessage(result.message)
+    reset()
   }
 }
 </script>

@@ -19,7 +19,7 @@ import { computed, ref } from 'vue'
 import { useCommonStore } from './stores/common.store'
 const store = useCommonStore()
 
-const timeout = ref(100)
+const timeout = ref(1000)
 
 const message = computed(() => store.message)
 const show = computed(() => store.message !== null)

@@ -11,7 +11,7 @@
           <slot :isActive="isActive"></slot>
         </v-card-text>
         <v-card-actions>
-          <v-btn @click="isActive.value = false">{{ closeCaption }}</v-btn>
+          <v-btn @click="handleClose(isActive)">{{ closeCaption }}</v-btn>
           <v-btn
             v-if="submitCaption"
             color="primary"
@@ -39,6 +39,9 @@ const emit = defineEmits({
   submit(isActive: Ref<boolean, boolean>): boolean {
     return true
   },
+  cancel(): boolean {
+    return true
+  },
 })
 
 const closeCaption = computed<string>(() => {
@@ -64,4 +67,9 @@ const submitCaption = computed<string>(() => {
 
   return ''
 })
+
+const handleClose = (isActive: Ref<boolean, boolean>) => {
+  emit('cancel')
+  isActive.value = false
+}
 </script>
