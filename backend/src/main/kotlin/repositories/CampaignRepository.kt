@@ -11,4 +11,8 @@ interface CampaignRepository : Repository<Campaign> {
     suspend fun <U> getTags(campaignId: Int, mapper: (CampaignTag) -> U): List<U>
 
     suspend fun <U> getMembers(campaignId: Int, mapper: (CampaignMember) -> U): List<U>
+
+    suspend fun createTag(fn: CampaignTag.() -> Unit): Int
+
+    suspend fun deleteTag(tagId: Int)
 }

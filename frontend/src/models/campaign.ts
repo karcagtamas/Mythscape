@@ -24,6 +24,11 @@ export interface CampaignTagDTO {
   creation: Date
 }
 
+export interface CampaignTagEditDTO {
+  caption: string
+  color: string
+}
+
 export interface CampaignMemberDTO {
   id: number
   name: string

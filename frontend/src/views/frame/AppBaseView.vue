@@ -124,6 +124,7 @@ const handleLogout = () => {
   router.push('/')
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const handleAdd = async (id: number) => {
   await campaignStore.fetchCampaigns(authStore.userId)
 }

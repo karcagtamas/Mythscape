@@ -17,21 +17,19 @@
           type="text"
           density="compact"
           variant="solo"
-          v-model="nameField"
-          :error-messages="nameFieldErrors"
-          @blur="v$.name.$touch()"
+          v-model="captionField"
+          :error-messages="captionFieldErrors"
+          @blur="v$.caption.$touch()"
         ></v-text-field>
         <v-text-field
-          label="Title"
+          label="Color"
           type="text"
           density="compact"
           variant="solo"
-          v-model="titleField"
-          :error-messages="titleFieldErrors"
-          @blur="v$.title.$touch()"
+          v-model="colorField"
+          :error-messages="colorFieldErrors"
+          @blur="v$.color.$touch()"
         ></v-text-field>
-        <v-textarea label="Description" density="compact" variant="solo" v-model="descriptionField">
-        </v-textarea>
       </v-form>
     </template>
   </DialogBase>
@@ -43,15 +41,16 @@ import DialogBase from '../DialogBase.vue'
 import { computed, ref, type Ref } from 'vue'
 import { maxLength, required } from '@vuelidate/validators'
 import { collectErrors } from '@/utils/validation.helper'
-import type { CampaignEditDTO } from '@/models/campaign'
+import type { CampaignTagEditDTO } from '@/models/campaign'
 import { AsyncExecutorBuilder } from '@/utils/snackbars'
 import type { ServerResponse } from '@/models/response'
-import { campaignCreateConfig } from '@/requests/campaign.request'
+import { campaignTagCreateConfig } from '@/requests/campaign.request'
 import { post, useAPI } from '@/utils/requests'
 import { useCommonStore } from '@/stores/common.store'
 
 type Props = {
   mode: 'create' | 'edit'
+  campaignId: number
 }
 
 const props = defineProps<Props>()
@@ -62,49 +61,42 @@ const emit = defineEmits({
   },
 })
 
-const title = computed<string>(() =>
-  props.mode === 'create' ? 'Create Campaign' : 'Edit Campaign',
-)
+const title = computed<string>(() => (props.mode === 'create' ? 'Create Tag' : 'Edit Tag'))
 
 const { doRequest } = useAPI()
 const commonStore = useCommonStore()
 
-const nameField = ref('')
-const titleField = ref('')
-const descriptionField = ref('')
+const captionField = ref('')
+const colorField = ref('')
 const valid = ref(false)
 
 const rules = {
-  name: { required, maxLength: maxLength(40) },
-  title: { required, maxLength: maxLength(120) },
-  description: {},
+  caption: { required, maxLength: maxLength(40) },
+  color: { required },
 }
 
 const v$ = useVuelidate(rules, {
-  name: nameField,
-  title: titleField,
-  description: descriptionField,
+  caption: captionField,
+  color: colorField,
 })
 
-const nameFieldErrors = computed(() => {
-  return collectErrors('Name', v$.value.name.$dirty, [
-    { rule: v$.value.name.required, message: '{attr} is required' },
-    { rule: v$.value.name.maxLength, message: '{attr} maximum length is 40' },
+const captionFieldErrors = computed(() => {
+  return collectErrors('Caption', v$.value.caption.$dirty, [
+    { rule: v$.value.caption.required, message: '{attr} is required' },
+    { rule: v$.value.caption.maxLength, message: '{attr} maximum length is 40' },
   ])
 })
 
-const titleFieldErrors = computed(() => {
-  return collectErrors('Title', v$.value.title.$dirty, [
-    { rule: v$.value.title.required, message: '{attr} is required' },
-    { rule: v$.value.title.maxLength, message: '{attr} maximum length is 120' },
+const colorFieldErrors = computed(() => {
+  return collectErrors('Color', v$.value.color.$dirty, [
+    { rule: v$.value.color.required, message: '{attr} is required' },
   ])
 })
 
 const reset = () => {
   v$.value.$reset()
-  nameField.value = ''
-  titleField.value = ''
-  descriptionField.value = ''
+  captionField.value = ''
+  colorField.value = ''
 }
 
 const handleSubmit = async (isActive: Ref<boolean, boolean>) => {
@@ -114,14 +106,18 @@ const handleSubmit = async (isActive: Ref<boolean, boolean>) => {
     return
   }
 
-  const dto: CampaignEditDTO = {
-    name: nameField.value,
-    title: titleField.value,
-    description: descriptionField.value,
+  const dto: CampaignTagEditDTO = {
+    caption: captionField.value,
+    color: colorField.value,
   }
+
   const result = await AsyncExecutorBuilder.asyncExecutorBuilder<ServerResponse<number>>()
-    .action(() => doRequest(() => post<number, CampaignEditDTO>(campaignCreateConfig(), dto)))
-    .success('Campaign has been created successfully')
+    .action(() =>
+      doRequest(() =>
+        post<number, CampaignTagEditDTO>(campaignTagCreateConfig(props.campaignId), dto),
+      ),
+    )
+    .success('Tag has been created successfully')
     .build()
     .execute()
   if (result.result?.data) {

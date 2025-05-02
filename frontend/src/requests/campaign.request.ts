@@ -16,7 +16,7 @@ export const campaignConfig = (campaignId: number): RequestConfig => {
   }
 }
 
-export const campaignEditConfig = (): RequestConfig => {
+export const campaignCreateConfig = (): RequestConfig => {
   return {
     type: 'post',
     pathSegments: ['campaigns'],
@@ -28,6 +28,22 @@ export const campaignTagsConfig = (campaignId: number): RequestConfig => {
   return {
     type: 'get',
     pathSegments: ['campaigns', campaignId.toString(), 'tags'],
+    queryParams: [],
+  }
+}
+
+export const campaignTagCreateConfig = (campaignId: number): RequestConfig => {
+  return {
+    type: 'post',
+    pathSegments: ['campaigns', campaignId.toString(), 'tags'],
+    queryParams: [],
+  }
+}
+
+export const campaignTagDeleteConfig = (campaignId: number, tagId: number): RequestConfig => {
+  return {
+    type: 'delete',
+    pathSegments: ['campaigns', campaignId.toString(), 'tags', tagId.toString()],
     queryParams: [],
   }
 }

@@ -24,4 +24,16 @@ class CampaignRepositoryImpl : RepositoryImpl<Campaign>(), CampaignRepository {
     override suspend fun <U> getMembers(campaignId: Int, mapper: (CampaignMember) -> U): List<U> = suspendTransaction {
         CampaignMember.find { CampaignMembers.campaign eq campaignId }.toList().map { mapper(it) }
     }
+
+    override suspend fun createTag(fn: CampaignTag.() -> Unit): Int = suspendTransaction {
+        val result = CampaignTag.new {
+            this.apply(fn)
+        }
+
+        result.id.value
+    }
+
+    override suspend fun deleteTag(tagId: Int) {
+        CampaignTag.findById(tagId)?.delete()
+    }
 }

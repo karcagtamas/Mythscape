@@ -1,6 +1,7 @@
 package eu.karcags.mythscape.controllers
 
 import eu.karcags.mythscape.dtos.campaigns.CampaignEditDTO
+import eu.karcags.mythscape.dtos.campaigns.CampaignTagEditDTO
 import eu.karcags.mythscape.dtos.campaigns.dto
 import eu.karcags.mythscape.repositories.CampaignRepository
 import eu.karcags.mythscape.utils.*
@@ -69,6 +70,30 @@ fun Route.campaignController(repository: CampaignRepository) {
             val id = call.parameters["id"]?.toIntOrNull().requireNonNull()
 
             repository.delete(id)
+
+            call.respond(success())
+        }
+
+        post("/{id}/tags") {
+            val id = call.parameters["id"]?.toIntOrNull().requireNonNull()
+            val dto = call.receive<CampaignTagEditDTO>()
+
+            val campaign = repository.get(id).required()
+
+            val tagId = repository.createTag {
+                caption = dto.caption
+                color = dto.color
+                creation = current()
+                this.campaign = campaign
+            }
+
+            call.respond(tagId.wrap(HttpStatusCode.Created))
+        }
+
+        delete("/{id}/tags/{tagId}") {
+            val tagId = call.parameters["tagId"]?.toIntOrNull().requireNonNull()
+
+            repository.deleteTag(tagId)
 
             call.respond(success())
         }

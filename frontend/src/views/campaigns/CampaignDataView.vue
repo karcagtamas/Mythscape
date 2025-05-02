@@ -1,15 +1,32 @@
 <template>
   <ContentBlock caption="Description"> {{ campaign?.description }} </ContentBlock>
   <ContentBlock caption="Tags">
-    <ColorTag
-      v-for="tag in tags"
-      :key="tag.id"
-      :caption="tag.caption"
-      :color="tag.color"
-    ></ColorTag>
+    <div class="tags">
+      <ColorTag
+        v-for="tag in tags"
+        :key="tag.id"
+        :caption="tag.caption"
+        :color="tag.color"
+      ></ColorTag>
+    </div>
 
     <template v-slot:actions>
-      <v-btn prepend-icon="mdi-plus" variant="outlined" color="secondary">Append</v-btn>
+      <CampaignTagDialog
+        v-if="campaign?.id"
+        mode="create"
+        :campaign-id="campaign.id"
+        @save="handleTagAdd"
+      >
+        <template v-slot:default="{ props: activatorProps }">
+          <v-btn
+            prepend-icon="mdi-plus"
+            variant="outlined"
+            color="secondary"
+            v-bind="activatorProps"
+            >Append</v-btn
+          >
+        </template>
+      </CampaignTagDialog>
     </template>
   </ContentBlock>
   <ContentBlock caption="Members">
@@ -44,6 +61,7 @@ import DataRow from '@/components/DataRow.vue'
 import DateDataRow from '@/components/DateDataRow.vue'
 import ColorTag from '@/components/ColorTag.vue'
 import TextAvatar from '@/components/TextAvatar.vue'
+import CampaignTagDialog from '@/components/campaigns/CampaignTagDialog.vue'
 import { useCampaignStore } from '@/stores/campaign.store'
 import { computed } from 'vue'
 import type { CampaignDTO, CampaignMemberDTO, CampaignTagDTO } from '@/models/campaign'
@@ -53,4 +71,18 @@ const campaignStore = useCampaignStore()
 const campaign = computed<CampaignDTO | null>(() => campaignStore.current)
 const tags = computed<CampaignTagDTO[]>(() => campaignStore.tags)
 const members = computed<CampaignMemberDTO[]>(() => campaignStore.members)
+
+const handleTagAdd = () => {
+  if (campaign.value?.id) {
+    campaignStore.fetchTags(campaign.value.id)
+  }
+}
 </script>
+
+<style lang="scss">
+.tags {
+  display: flex;
+  flex-direction: row;
+  gap: 0.4rem;
+}
+</style>

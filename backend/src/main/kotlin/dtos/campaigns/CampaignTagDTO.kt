@@ -19,3 +19,9 @@ fun CampaignTag.dto(): CampaignTagDTO {
 fun List<CampaignTag>.dto(): List<CampaignTagDTO> {
     return map { it.dto() }
 }
+
+@Serializable
+data class CampaignTagEditDTO(
+    val caption: String,
+    val color: String,
+)
