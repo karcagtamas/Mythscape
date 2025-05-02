@@ -7,6 +7,8 @@
         :key="tag.id"
         :caption="tag.caption"
         :color="tag.color"
+        closable
+        @close="handleTagDelete(tag.id)"
       ></ColorTag>
     </div>
 
@@ -65,8 +67,15 @@ import CampaignTagDialog from '@/components/campaigns/CampaignTagDialog.vue'
 import { useCampaignStore } from '@/stores/campaign.store'
 import { computed } from 'vue'
 import type { CampaignDTO, CampaignMemberDTO, CampaignTagDTO } from '@/models/campaign'
+import { AsyncExecutorBuilder } from '@/utils/snackbars'
+import type { ServerResponse } from '@/models/response'
+import { del, useAPI } from '@/utils/requests'
+import { useCommonStore } from '@/stores/common.store'
+import { campaignTagDeleteConfig } from '@/requests/campaign.request'
 
 const campaignStore = useCampaignStore()
+const { doRequest } = useAPI()
+const commonStore = useCommonStore()
 
 const campaign = computed<CampaignDTO | null>(() => campaignStore.current)
 const tags = computed<CampaignTagDTO[]>(() => campaignStore.tags)
@@ -75,6 +84,21 @@ const members = computed<CampaignMemberDTO[]>(() => campaignStore.members)
 const handleTagAdd = () => {
   if (campaign.value?.id) {
     campaignStore.fetchTags(campaign.value.id)
+  }
+}
+
+const handleTagDelete = async (tagId: number) => {
+  if (campaign.value?.id) {
+    const campaignId = campaign.value.id
+    const result = await AsyncExecutorBuilder.asyncExecutorBuilder<ServerResponse<void>>()
+      .action(() => doRequest(() => del<void>(campaignTagDeleteConfig(campaignId, tagId))))
+      .success('Tag has been created successfully')
+      .build()
+      .execute()
+    if (result.result?.data) {
+      commonStore.setMessage(result.message)
+      campaignStore.fetchTags(campaignId)
+    }
   }
 }
 </script>

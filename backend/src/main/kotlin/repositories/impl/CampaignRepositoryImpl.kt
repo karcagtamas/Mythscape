@@ -33,7 +33,7 @@ class CampaignRepositoryImpl : RepositoryImpl<Campaign>(), CampaignRepository {
         result.id.value
     }
 
-    override suspend fun deleteTag(tagId: Int) {
+    override suspend fun deleteTag(tagId: Int): Unit = suspendTransaction {
         CampaignTag.findById(tagId)?.delete()
     }
 }
