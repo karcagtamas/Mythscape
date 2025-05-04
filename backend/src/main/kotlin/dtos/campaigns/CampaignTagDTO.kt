@@ -12,12 +12,12 @@ data class CampaignTagDTO(
     val creation: LocalDateTime,
 )
 
-fun CampaignTag.dto(): CampaignTagDTO {
+fun CampaignTag.campaignTagDTO(): CampaignTagDTO {
     return CampaignTagDTO(id.value, caption, color, creation)
 }
 
-fun List<CampaignTag>.dto(): List<CampaignTagDTO> {
-    return map { it.dto() }
+fun List<CampaignTag>.campaignTagListDTO(): List<CampaignTagDTO> {
+    return map { it.campaignTagDTO() }
 }
 
 @Serializable

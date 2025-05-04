@@ -31,4 +31,7 @@ class Campaign(id: EntityID<Int>) : IntEntity(id) {
     var lastUpdate by Campaigns.lastUpdate
     val members by CampaignMember referrersOn CampaignMembers.campaign
     val tags by CampaignTag referrersOn CampaignTags.campaign
+    val folders by Folder referrersOn Folders.campaign
+    val notes by Note referrersOn Notes.campaign
+    val sessions by Session referrersOn Sessions.campaign
 }

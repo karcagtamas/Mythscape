@@ -25,4 +25,5 @@ class NoteCategory(id: EntityID<Int>) : IntEntity(id) {
     var creator by User referencedOn NoteCategories.creator
     var lastUpdate by NoteCategories.lastUpdate
     var lastUpdater by User referencedOn NoteCategories.lastUpdater
+    var color by NoteCategories.color
 }

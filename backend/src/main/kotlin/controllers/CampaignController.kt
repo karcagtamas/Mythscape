@@ -2,7 +2,9 @@ package eu.karcags.mythscape.controllers
 
 import eu.karcags.mythscape.dtos.campaigns.CampaignEditDTO
 import eu.karcags.mythscape.dtos.campaigns.CampaignTagEditDTO
-import eu.karcags.mythscape.dtos.campaigns.dto
+import eu.karcags.mythscape.dtos.campaigns.campaignDTO
+import eu.karcags.mythscape.dtos.campaigns.campaignTagDTO
+import eu.karcags.mythscape.dtos.campaigns.campaignMemberDTO
 import eu.karcags.mythscape.repositories.CampaignRepository
 import eu.karcags.mythscape.utils.*
 import io.ktor.http.*
@@ -16,25 +18,25 @@ fun Route.campaignController(repository: CampaignRepository) {
         get("/user/{userId}") {
             val userId = call.parameters["userId"]?.toIntOrNull().requireNonNull()
 
-            call.respond(repository.byUserId(userId) { it.dto() }.wrap())
+            call.respond(repository.byUserId(userId) { it.campaignDTO() }.wrap())
         }
 
         get("/{id}") {
             val id = call.parameters["id"]?.toIntOrNull().requireNonNull()
 
-            call.respond(repository.get(id) { it.dto() }.required().wrap())
+            call.respond(repository.get(id) { it.campaignDTO() }.required().wrap())
         }
 
         get("/{id}/tags") {
             val id = call.parameters["id"]?.toIntOrNull().requireNonNull()
 
-            call.respond(repository.getTags(id) { it.dto() }.wrap())
+            call.respond(repository.getTags(id) { it.campaignTagDTO() }.wrap())
         }
 
         get("/{id}/members") {
             val id = call.parameters["id"]?.toIntOrNull().requireNonNull()
 
-            call.respond(repository.getMembers(id) { it.dto() }.wrap())
+            call.respond(repository.getMembers(id) { it.campaignMemberDTO() }.wrap())
         }
 
         post {

@@ -12,11 +12,10 @@ object Notes : IntIdTable("notes") {
     val name = varchar("name", 120)
     val creator = reference("creator_id", Users)
     val campaign = reference("campaign_id", Campaigns, onDelete = ReferenceOption.CASCADE)
-    val category = reference("category_id", NoteCategories, onDelete = ReferenceOption.SET_NULL).nullable()
-    val session = reference("session_id", Sessions, onDelete = ReferenceOption.SET_NULL).nullable()
+    val folder = reference("folder_id", Folders, onDelete = ReferenceOption.CASCADE).nullable()
     val content = text("content")
     val creation = datetime("creation").default(current())
-    val lastUpdate = datetime("lastUpdate").default(current())
+    val lastUpdate = datetime("last_update").default(current())
 }
 
 class Note(id: EntityID<Int>) : IntEntity(id) {
@@ -25,8 +24,7 @@ class Note(id: EntityID<Int>) : IntEntity(id) {
     var name by Notes.name
     var creator by User referencedOn Notes.creator
     var campaign by Campaign referencedOn Notes.campaign
-    var category by NoteCategory optionalReferencedOn Notes.category
-    var session by Session optionalReferencedOn Notes.session
+    var folder by Folder optionalReferencedOn Notes.folder
     var content by Notes.content
     var creation by Notes.creation
     var lastUpdate by Notes.lastUpdate

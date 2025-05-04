@@ -16,7 +16,7 @@ data class CampaignMemberDTO(
     val isDM: Boolean,
 )
 
-fun CampaignMember.dto(): CampaignMemberDTO {
+fun CampaignMember.campaignMemberDTO(): CampaignMemberDTO {
     return CampaignMemberDTO(
         id.value,
         name,
@@ -27,6 +27,6 @@ fun CampaignMember.dto(): CampaignMemberDTO {
     )
 }
 
-fun List<CampaignMember>.dto(): List<CampaignMemberDTO> {
-    return map { it.dto() }
+fun List<CampaignMember>.campaignMemberListDTO(): List<CampaignMemberDTO> {
+    return map { it.campaignMemberDTO() }
 }

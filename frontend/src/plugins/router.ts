@@ -13,7 +13,6 @@ import CampaignBaseView from '@/views/campaigns/CampaignBaseView.vue'
 import CampaignSettingsView from '@/views/campaigns/CampaignSettingsView.vue'
 import CampaignNotesView from '@/views/campaigns/CampaignNotesView.vue'
 import CampaignNoteView from '@/views/campaigns/notes/CampaignNoteView.vue'
-import { useCampaignStore } from '@/stores/campaign.store'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

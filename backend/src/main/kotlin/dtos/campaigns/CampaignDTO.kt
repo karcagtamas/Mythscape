@@ -18,7 +18,7 @@ data class CampaignDTO(
     val lastUpdate: LocalDateTime
 )
 
-fun Campaign.dto(): CampaignDTO {
+fun Campaign.campaignDTO(): CampaignDTO {
     return CampaignDTO(
         id.value,
         name,
@@ -31,8 +31,8 @@ fun Campaign.dto(): CampaignDTO {
     )
 }
 
-fun List<Campaign>.dto(): List<CampaignDTO> {
-    return map { it.dto() }
+fun List<Campaign>.campaignListDTO(): List<CampaignDTO> {
+    return map { it.campaignDTO() }
 }
 
 @Serializable
