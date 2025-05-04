@@ -5,6 +5,7 @@ import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
+import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.kotlin.datetime.datetime
 
 object Campaigns : IntIdTable("campaigns") {
@@ -13,7 +14,7 @@ object Campaigns : IntIdTable("campaigns") {
     val title = varchar("title", 120)
     val imageId = integer("image_id").nullable()
     val description = text("description").nullable()
-    val creator = reference("creator_id", Users)
+    val creator = reference("creator_id", Users, onDelete = ReferenceOption.CASCADE)
     val creation = datetime("creation").default(current())
     val lastUpdate = datetime("last_update").default(current())
 }

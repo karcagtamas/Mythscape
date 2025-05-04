@@ -59,6 +59,7 @@ fun Route.campaignController(repository: CampaignRepository) {
 
             repository.update(id) {
                 name = dto.name
+                title = dto.title
                 description = dto.description
                 lastUpdate = current()
             }

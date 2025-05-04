@@ -92,10 +92,10 @@ const handleTagDelete = async (tagId: number) => {
     const campaignId = campaign.value.id
     const result = await AsyncExecutorBuilder.asyncExecutorBuilder<ServerResponse<void>>()
       .action(() => doRequest(() => del<void>(campaignTagDeleteConfig(campaignId, tagId))))
-      .success('Tag has been created successfully')
+      .success('Tag has been deleted successfully')
       .build()
       .execute()
-    if (result.result?.data) {
+    if (result.result?.success) {
       commonStore.setMessage(result.message)
       campaignStore.fetchTags(campaignId)
     }

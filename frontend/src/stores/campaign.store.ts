@@ -58,6 +58,12 @@ export const useCampaignStore = defineStore('campaign', {
       await this.fetchTags(campaign.id)
       await this.fetchMembers(campaign.id)
     },
+    deselect() {
+      this.current = null
+      this.page = 'data'
+      this.tags = []
+      this.members = []
+    },
     setPage(key: string) {
       this.page = key
     },
