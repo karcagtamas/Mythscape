@@ -33,6 +33,10 @@ export const useCampaignStore = defineStore('campaign', {
       const response = await get<CampaignDTO[]>(userCampaignsConfig(userId))
 
       this.campaigns = response.data ?? []
+
+      if (this.current) {
+        this.current = this.campaigns.find((c) => c.id === this.current?.id) ?? null
+      }
     },
     async fetchTags(campaignId: number) {
       const response = await get<CampaignTagDTO[]>(campaignTagsConfig(campaignId))
@@ -44,16 +48,16 @@ export const useCampaignStore = defineStore('campaign', {
 
       this.members = response.data ?? []
     },
-    async selectById(campaignId: number) {
+    async selectById(campaignId: number, page: string = 'data') {
       const response = await get<CampaignDTO | null>(campaignConfig(campaignId))
 
       if (response.data) {
-        await this.select(response.data)
+        await this.select(response.data, page)
       }
     },
-    async select(campaign: CampaignDTO) {
+    async select(campaign: CampaignDTO, page: string = 'data') {
       this.current = campaign
-      this.page = 'data'
+      this.page = page
 
       await this.fetchTags(campaign.id)
       await this.fetchMembers(campaign.id)

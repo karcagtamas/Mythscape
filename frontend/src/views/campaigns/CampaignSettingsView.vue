@@ -1,7 +1,7 @@
 <template>
   <ContentBlock caption="Danger Zone">
     <div class="danger-zone-actions">
-      <CampaignDialog mode="edit" @save="handleEdit">
+      <CampaignDialog v-if="campaign" :campaign="campaign" @save="handleEdit">
         <template v-slot:default="{ props: activatorProps }">
           <v-btn prepend-icon="mdi-pencil" color="warning" v-bind="activatorProps">Edit</v-btn>
         </template>
@@ -25,6 +25,7 @@ import { useCampaignStore } from '@/stores/campaign.store'
 import { useCommonStore } from '@/stores/common.store'
 import { del, useAPI } from '@/utils/requests'
 import { AsyncExecutorBuilder } from '@/utils/snackbars'
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
 const commonStore = useCommonStore()
@@ -32,6 +33,8 @@ const { doRequest } = useAPI()
 const authStore = useAuthStore()
 const campaignStore = useCampaignStore()
 const router = useRouter()
+
+const campaign = computed(() => campaignStore.current)
 
 const handleEdit = async () => {
   await campaignStore.fetchCampaigns(authStore.userId)

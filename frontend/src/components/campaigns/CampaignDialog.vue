@@ -40,31 +40,27 @@
 <script setup lang="ts">
 import useVuelidate from '@vuelidate/core'
 import DialogBase from '../DialogBase.vue'
-import { computed, ref, type Ref } from 'vue'
+import { computed, onMounted, ref, type Ref } from 'vue'
 import { maxLength, required } from '@vuelidate/validators'
 import { collectErrors } from '@/utils/validation.helper'
-import type { CampaignEditDTO } from '@/models/campaign'
+import type { CampaignDTO, CampaignEditDTO } from '@/models/campaign'
 import { AsyncExecutorBuilder } from '@/utils/snackbars'
 import type { ServerResponse } from '@/models/response'
-import { campaignCreateConfig } from '@/requests/campaign.request'
-import { post, useAPI } from '@/utils/requests'
+import { campaignCreateConfig, campaignEditConfig } from '@/requests/campaign.request'
+import { post, put, useAPI } from '@/utils/requests'
 import { useCommonStore } from '@/stores/common.store'
 
 type Props = {
-  mode: 'create' | 'edit'
+  campaign: CampaignDTO | null
 }
 
 const props = defineProps<Props>()
 const emit = defineEmits({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  save(id: number): boolean {
+  save(id: number | null): boolean {
     return true
   },
 })
-
-const title = computed<string>(() =>
-  props.mode === 'create' ? 'Create Campaign' : 'Edit Campaign',
-)
 
 const { doRequest } = useAPI()
 const commonStore = useCommonStore()
@@ -73,6 +69,18 @@ const nameField = ref('')
 const titleField = ref('')
 const descriptionField = ref('')
 const valid = ref(false)
+
+const isEdit = computed<boolean>(() => props.campaign !== null)
+
+const title = computed<string>(() => (!isEdit.value ? 'Create Campaign' : 'Edit Campaign'))
+
+onMounted(async () => {
+  if (isEdit.value && props.campaign) {
+    nameField.value = props.campaign.name
+    titleField.value = props.campaign.title
+    descriptionField.value = props.campaign.description ?? ''
+  }
+})
 
 const rules = {
   name: { required, maxLength: maxLength(40) },
@@ -102,9 +110,12 @@ const titleFieldErrors = computed(() => {
 
 const reset = () => {
   v$.value.$reset()
-  nameField.value = ''
-  titleField.value = ''
-  descriptionField.value = ''
+
+  if (!isEdit.value) {
+    nameField.value = ''
+    titleField.value = ''
+    descriptionField.value = ''
+  }
 }
 
 const handleSubmit = async (isActive: Ref<boolean, boolean>) => {
@@ -119,13 +130,21 @@ const handleSubmit = async (isActive: Ref<boolean, boolean>) => {
     title: titleField.value,
     description: descriptionField.value,
   }
-  const result = await AsyncExecutorBuilder.asyncExecutorBuilder<ServerResponse<number>>()
-    .action(() => doRequest(() => post<number, CampaignEditDTO>(campaignCreateConfig(), dto)))
-    .success('Campaign has been created successfully')
-    .build()
-    .execute()
-  if (result.result?.data) {
-    emit('save', result.result.data)
+  const result = !isEdit.value
+    ? await AsyncExecutorBuilder.asyncExecutorBuilder<ServerResponse<number>>()
+        .action(() => doRequest(() => post<number, CampaignEditDTO>(campaignCreateConfig(), dto)))
+        .success('Campaign has been created successfully')
+        .build()
+        .execute()
+    : await AsyncExecutorBuilder.asyncExecutorBuilder<ServerResponse<void>>()
+        .action(() =>
+          doRequest(() => put<void, CampaignEditDTO>(campaignEditConfig(props.campaign!.id), dto)),
+        )
+        .success('Campaign has been edited successfully')
+        .build()
+        .execute()
+  if (result.result?.success) {
+    emit('save', result.result.data ?? null)
     isActive.value = false
     commonStore.setMessage(result.message)
     reset()

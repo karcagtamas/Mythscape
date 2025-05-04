@@ -50,7 +50,7 @@ const route = useRoute()
 const id = route.params.campaignId
 
 onMounted(async () => {
-  await campaignStore.selectById(+id)
+  await campaignStore.selectById(+id, route.meta.page as string)
 })
 
 const current = computed<CampaignDTO | null>(() => campaignStore.current)

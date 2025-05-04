@@ -52,7 +52,7 @@
 
     <v-divider class="mx-3 my-5"></v-divider>
 
-    <CampaignDialog mode="create" @save="handleAdd">
+    <CampaignDialog :campaign="null" @save="handleAdd">
       <template v-slot:default="{ props: activatorProps }">
         <v-avatar
           class="d-flex text-center mx-auto mt-4 item"
@@ -125,7 +125,7 @@ const handleLogout = () => {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const handleAdd = async (id: number) => {
+const handleAdd = async (id: number | null) => {
   await campaignStore.fetchCampaigns(authStore.userId)
 }
 
