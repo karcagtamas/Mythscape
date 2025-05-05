@@ -3,10 +3,14 @@ package eu.karcags.mythscape.plugins
 import eu.karcags.mythscape.controllers.authenticationController
 import eu.karcags.mythscape.controllers.campaignController
 import eu.karcags.mythscape.controllers.fileController
+import eu.karcags.mythscape.controllers.noteController
+import eu.karcags.mythscape.controllers.sessionController
 import eu.karcags.mythscape.controllers.userController
 import eu.karcags.mythscape.repositories.CampaignRepository
 import eu.karcags.mythscape.repositories.FileRepository
+import eu.karcags.mythscape.repositories.NoteRepository
 import eu.karcags.mythscape.repositories.RefreshTokenRepository
+import eu.karcags.mythscape.repositories.SessionRepository
 import eu.karcags.mythscape.repositories.UserRepository
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -20,6 +24,8 @@ fun Application.configureRouting() {
     val userRepository by inject<UserRepository>()
     val campaignRepository by inject<CampaignRepository>()
     val fileRepository by inject<FileRepository>()
+    val noteRepository by inject<NoteRepository>()
+    val sessionRepository by inject<SessionRepository>()
 
     routing {
         swaggerUI(path = "openapi")
@@ -32,6 +38,8 @@ fun Application.configureRouting() {
                 userController(userRepository)
                 campaignController(campaignRepository)
                 fileController(fileRepository)
+                noteController(noteRepository)
+                sessionController(sessionRepository)
             }
         }
     }

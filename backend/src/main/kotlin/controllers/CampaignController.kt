@@ -5,6 +5,7 @@ import eu.karcags.mythscape.dtos.campaigns.CampaignTagEditDTO
 import eu.karcags.mythscape.dtos.campaigns.campaignDTO
 import eu.karcags.mythscape.dtos.campaigns.campaignTagDTO
 import eu.karcags.mythscape.dtos.campaigns.campaignMemberDTO
+import eu.karcags.mythscape.dtos.campaigns.noteTreeDTO
 import eu.karcags.mythscape.repositories.CampaignRepository
 import eu.karcags.mythscape.utils.*
 import io.ktor.http.*
@@ -37,6 +38,12 @@ fun Route.campaignController(repository: CampaignRepository) {
             val id = call.parameters["id"]?.toIntOrNull().requireNonNull()
 
             call.respond(repository.getMembers(id) { it.campaignMemberDTO() }.wrap())
+        }
+
+        get("/{id}/notes") {
+            val id = call.parameters["id"]?.toIntOrNull().requireNonNull()
+
+            call.respond(repository.get(id) { it.noteTreeDTO() }.required().wrap())
         }
 
         post {
