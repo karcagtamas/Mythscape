@@ -1,11 +1,11 @@
-package eu.karcags.mythscape.dtos.campaigns
+package eu.karcags.mythscape.dtos.notes
 
 import eu.karcags.mythscape.db.Note
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CampaignNoteDTO(
+data class NoteDTO(
     val id: Int,
     val name: String,
     val folderId: Int?,
@@ -13,8 +13,8 @@ data class CampaignNoteDTO(
     val lastUpdate: LocalDateTime,
 )
 
-fun Note.noteDTO(): CampaignNoteDTO {
-    return CampaignNoteDTO(
+fun Note.noteDTO(): NoteDTO {
+    return NoteDTO(
         id.value,
         name,
         folder?.id?.value,
@@ -23,6 +23,6 @@ fun Note.noteDTO(): CampaignNoteDTO {
     )
 }
 
-fun List<Note>.noteListDTO(): List<CampaignNoteDTO> {
+fun List<Note>.noteListDTO(): List<NoteDTO> {
     return map { it.noteDTO() }
 }

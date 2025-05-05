@@ -1,6 +1,6 @@
 package eu.karcags.mythscape.controllers
 
-import eu.karcags.mythscape.dtos.campaigns.noteDataDTO
+import eu.karcags.mythscape.dtos.notes.noteDataDTO
 import eu.karcags.mythscape.repositories.NoteRepository
 import eu.karcags.mythscape.utils.requireNonNull
 import eu.karcags.mythscape.utils.required

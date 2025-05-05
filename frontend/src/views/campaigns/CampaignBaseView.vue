@@ -26,7 +26,7 @@
       <v-app-bar-title> {{ current.title }} ({{ current.name }}) </v-app-bar-title>
     </v-app-bar>
 
-    <router-view></router-view>
+    <router-view v-if="current"></router-view>
   </div>
 </template>
 

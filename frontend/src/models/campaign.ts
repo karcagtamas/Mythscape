@@ -37,7 +37,3 @@ export interface CampaignMemberDTO {
   creation: Date
   isDM: boolean
 }
-
-export interface CampaignNoteDTO {
-  id: number
-}

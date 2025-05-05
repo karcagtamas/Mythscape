@@ -1,4 +1,4 @@
-package eu.karcags.mythscape.dtos.campaigns
+package eu.karcags.mythscape.dtos.notes
 
 import eu.karcags.mythscape.db.NoteCategory
 import kotlinx.datetime.LocalDateTime

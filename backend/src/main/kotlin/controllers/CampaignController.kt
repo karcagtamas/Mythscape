@@ -5,7 +5,7 @@ import eu.karcags.mythscape.dtos.campaigns.CampaignTagEditDTO
 import eu.karcags.mythscape.dtos.campaigns.campaignDTO
 import eu.karcags.mythscape.dtos.campaigns.campaignTagDTO
 import eu.karcags.mythscape.dtos.campaigns.campaignMemberDTO
-import eu.karcags.mythscape.dtos.campaigns.noteTreeDTO
+import eu.karcags.mythscape.dtos.notes.noteTreeDTO
 import eu.karcags.mythscape.repositories.CampaignRepository
 import eu.karcags.mythscape.utils.*
 import io.ktor.http.*

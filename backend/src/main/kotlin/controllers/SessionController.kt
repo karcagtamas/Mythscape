@@ -1,6 +1,6 @@
 package eu.karcags.mythscape.controllers
 
-import eu.karcags.mythscape.dtos.campaigns.sessionDTO
+import eu.karcags.mythscape.dtos.sessions.sessionDTO
 import eu.karcags.mythscape.repositories.SessionRepository
 import eu.karcags.mythscape.utils.requireNonNull
 import eu.karcags.mythscape.utils.required
