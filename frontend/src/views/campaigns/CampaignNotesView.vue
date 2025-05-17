@@ -1,10 +1,11 @@
 <template>
   <v-navigation-drawer location="right" width="244">
-    <v-list v-if="!loading" :lines="false" density="compact" nav color="primary" selectable>
-      <template v-slot:prepend="{ item }">
-        <v-icon>{{ item.icon }}</v-icon>
-      </template>
-    </v-list>
+    <NoteTreeList
+      v-if="tree.length"
+      :tree="tree"
+      :active="activatedNote"
+      @activated="handleActivate"
+    ></NoteTreeList>
     <v-progress-circular v-else color="primary" indeterminate></v-progress-circular>
   </v-navigation-drawer>
 
@@ -12,17 +13,21 @@
 </template>
 
 <script setup lang="ts">
-import type { NoteTreeDTO } from '@/models/note'
+import type { NoteTreeDTO, NoteTreeKey } from '@/models/note'
 import { useCampaignStore } from '@/stores/campaign.store'
 import { useNotesStore } from '@/stores/notes.store'
 import { computed, onMounted, ref } from 'vue'
+import NoteTreeList from '@/components/campaigns/NoteTreeList.vue'
+import { useRouter } from 'vue-router'
 
 const loading = ref(false)
 
 const campaignStore = useCampaignStore()
 const notesStore = useNotesStore()
-const notes = computed<NoteTreeDTO>(() => notesStore.notes)
-//const selectedNote = computed<CampaignNoteDTO | null>(() => notesStore.selected)
+const router = useRouter()
+
+const tree = computed<NoteTreeDTO[]>(() => notesStore.tree)
+const activatedNote = computed<NoteTreeKey | null>(() => notesStore.selected)
 
 onMounted(() => {
   if (campaignStore.current?.id) {
@@ -31,4 +36,10 @@ onMounted(() => {
     loading.value = false
   }
 })
+
+const handleActivate = (key: NoteTreeKey | null) => {
+  notesStore.select(key)
+  console.log(key)
+  router.push(`/app/campaigns/${campaignStore.current?.id}/notes/${key?.id}`)
+}
 </script>

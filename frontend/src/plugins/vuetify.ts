@@ -6,6 +6,7 @@ import '@/styles/main.scss'
 import { createVuetify, type ThemeDefinition } from 'vuetify'
 import { en, fr, hu } from 'vuetify/locale'
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
+import { VTreeview } from 'vuetify/labs/VTreeview'
 
 const myLightTheme: ThemeDefinition = {
   dark: false,
@@ -40,5 +41,8 @@ export default createVuetify({
     sets: {
       mdi,
     },
+  },
+  components: {
+    VTreeview,
   },
 })

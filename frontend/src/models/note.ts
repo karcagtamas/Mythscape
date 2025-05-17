@@ -29,8 +29,13 @@ export interface FolderDTO {
   lastUpdate: Date
 }
 
+export interface NoteTreeKey {
+  type: 'FOLDER' | 'NOTE'
+  id: number
+}
+
 export interface NoteTreeDTO {
-  campaignId: number
-  notes: NoteDTO[]
-  folders: FolderDTO[]
+  key: NoteTreeKey
+  name: string
+  children: NoteTreeDTO[]
 }

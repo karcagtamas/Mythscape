@@ -54,7 +54,13 @@ const router = createRouter({
               meta: { requiresAuth: true, page: 'notes' },
               children: [
                 {
-                  path: 'editor/:noteId',
+                  path: ':noteId',
+                  name: 'note',
+                  component: CampaignNoteView,
+                  meta: { requiresAuth: true, page: 'notes' },
+                },
+                {
+                  path: ':noteId/editor',
                   name: 'note-editor',
                   component: CampaignNoteView,
                   meta: { requiresAuth: true, page: 'notes' },

@@ -1,34 +1,26 @@
-import type { NoteDTO, NoteTreeDTO } from '@/models/note'
+import type { NoteTreeDTO, NoteTreeKey } from '@/models/note'
 import { campaignNotesConfig } from '@/requests/campaign.request'
 import { get } from '@/utils/requests'
 import { defineStore } from 'pinia'
 
 interface NoteState {
-  notes: NoteTreeDTO
-  selected: NoteDTO | null
+  tree: NoteTreeDTO[]
+  selected: NoteTreeKey | null
 }
 
 export const useNotesStore = defineStore('notes', {
   state: (): NoteState => ({
-    notes: {
-      campaignId: 0,
-      folders: [],
-      notes: [],
-    },
+    tree: [],
     selected: null,
   }),
   getters: {},
   actions: {
     async fetchNotes(campaignId: number) {
-      const response = await get<NoteTreeDTO>(campaignNotesConfig(campaignId))
+      const response = await get<NoteTreeDTO[]>(campaignNotesConfig(campaignId))
 
-      this.notes = response.data ?? {
-        campaignId: campaignId,
-        folders: [],
-        notes: [],
-      }
+      this.tree = response.data ?? []
     },
-    async select(note: NoteDTO) {
+    async select(note: NoteTreeKey | null) {
       this.selected = note
     },
   },
