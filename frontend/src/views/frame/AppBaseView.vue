@@ -83,8 +83,6 @@
   </v-navigation-drawer>
 
   <router-view></router-view>
-
-  <v-footer height="72" app> </v-footer>
 </template>
 
 <script setup lang="ts">

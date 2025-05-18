@@ -5,13 +5,15 @@ import { defineStore } from 'pinia'
 
 interface NoteState {
   tree: NoteTreeDTO[]
-  selected: NoteTreeKey | null
+  active: NoteTreeKey | null
+  opened: number[]
 }
 
 export const useNotesStore = defineStore('notes', {
   state: (): NoteState => ({
     tree: [],
-    selected: null,
+    active: null,
+    opened: [],
   }),
   getters: {},
   actions: {
@@ -21,7 +23,15 @@ export const useNotesStore = defineStore('notes', {
       this.tree = response.data ?? []
     },
     async select(note: NoteTreeKey | null) {
-      this.selected = note
+      this.active = note
+
+      if (note !== null) {
+        const alreadyOpened = this.opened.find((k) => k === note.id)
+
+        if (alreadyOpened === undefined) {
+          this.opened = [...this.opened, note.id]
+        }
+      }
     },
   },
 })

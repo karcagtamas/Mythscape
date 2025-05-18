@@ -71,7 +71,8 @@ const handlePageSelect = (selection: string[]) => {
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 1rem;
+  padding: 0.8rem;
   gap: 1rem;
+  overflow: hidden;
 }
 </style>

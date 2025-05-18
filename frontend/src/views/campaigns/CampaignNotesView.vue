@@ -3,43 +3,70 @@
     <NoteTreeList
       v-if="tree.length"
       :tree="tree"
-      :active="activatedNote"
+      :active="activateNote"
       @activated="handleActivate"
     ></NoteTreeList>
     <v-progress-circular v-else color="primary" indeterminate></v-progress-circular>
   </v-navigation-drawer>
 
-  <div></div>
+  <v-card v-if="opened.length" class="note-editor-frame">
+    <v-tabs color="secondary" density="compact" show-arrows v-model="current">
+      <v-tab v-for="item in opened" v-bind:key="item" :value="item"> Note {{ item }} </v-tab>
+    </v-tabs>
+
+    <vue-monaco-editor
+      v-if="current"
+      v-model="code"
+      :options="MONACO_EDITOR_OPTIONS"
+      @mount="handleMount"
+    ></vue-monaco-editor>
+  </v-card>
 </template>
 
 <script setup lang="ts">
 import type { NoteTreeDTO, NoteTreeKey } from '@/models/note'
 import { useCampaignStore } from '@/stores/campaign.store'
 import { useNotesStore } from '@/stores/notes.store'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, shallowRef } from 'vue'
 import NoteTreeList from '@/components/campaigns/NoteTreeList.vue'
-import { useRouter } from 'vue-router'
+
+const MONACO_EDITOR_OPTIONS = {
+  automaticLayout: true,
+  formatOnType: true,
+  formatOnPaste: true,
+}
 
 const loading = ref(false)
+const current = ref<number | null>(0)
+const code = ref('// some code...')
+const editor = shallowRef()
 
 const campaignStore = useCampaignStore()
 const notesStore = useNotesStore()
-const router = useRouter()
 
 const tree = computed<NoteTreeDTO[]>(() => notesStore.tree)
-const activatedNote = computed<NoteTreeKey | null>(() => notesStore.selected)
+const activateNote = computed<NoteTreeKey | null>(() => notesStore.active)
+const opened = computed<number[]>(() => notesStore.opened)
 
-onMounted(() => {
+onMounted(async () => {
   if (campaignStore.current?.id) {
     loading.value = true
-    notesStore.fetchNotes(campaignStore.current.id)
+    await notesStore.fetchNotes(campaignStore.current.id)
     loading.value = false
   }
 })
 
 const handleActivate = (key: NoteTreeKey | null) => {
   notesStore.select(key)
-  console.log(key)
-  router.push(`/app/campaigns/${campaignStore.current?.id}/notes/${key?.id}`)
+  current.value = key?.id ?? null
 }
+
+const handleMount = (editorInstance) => (editor.value = editorInstance)
 </script>
+
+<style lang="scss">
+.note-editor-frame {
+  flex: 1;
+  overflow: hidden;
+}
+</style>

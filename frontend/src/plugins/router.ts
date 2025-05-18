@@ -12,7 +12,6 @@ import CampaignDataView from '@/views/campaigns/CampaignDataView.vue'
 import CampaignBaseView from '@/views/campaigns/CampaignBaseView.vue'
 import CampaignSettingsView from '@/views/campaigns/CampaignSettingsView.vue'
 import CampaignNotesView from '@/views/campaigns/CampaignNotesView.vue'
-import CampaignNoteView from '@/views/campaigns/notes/CampaignNoteView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -52,20 +51,6 @@ const router = createRouter({
               name: 'campaign-notes',
               component: CampaignNotesView,
               meta: { requiresAuth: true, page: 'notes' },
-              children: [
-                {
-                  path: ':noteId',
-                  name: 'note',
-                  component: CampaignNoteView,
-                  meta: { requiresAuth: true, page: 'notes' },
-                },
-                {
-                  path: ':noteId/editor',
-                  name: 'note-editor',
-                  component: CampaignNoteView,
-                  meta: { requiresAuth: true, page: 'notes' },
-                },
-              ],
             },
           ],
         },

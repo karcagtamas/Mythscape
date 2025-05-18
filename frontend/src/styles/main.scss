@@ -6,3 +6,10 @@ img.main-color {
     color: rgb(var(--v-theme-primary)) !important;
     fill: rgb(var(--v-theme-primary)) !important;
 }
+
+html,
+body,
+#app {
+    max-height: 100vh;
+    overflow: hidden;
+}

@@ -1,6 +1,6 @@
 <template>
-  <v-app>
-    <v-main>
+  <v-app class="application">
+    <v-main class="main">
       <v-snackbar
         :model-value="show"
         :timeout="timeout"
@@ -24,3 +24,16 @@ const timeout = ref(1000)
 const message = computed(() => store.message)
 const show = computed(() => store.message !== null)
 </script>
+
+<style scoped lang="scss">
+.application {
+  max-height: 100vh;
+}
+
+.main {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+</style>
