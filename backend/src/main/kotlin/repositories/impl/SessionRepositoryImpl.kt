@@ -3,7 +3,7 @@ package eu.karcags.mythscape.repositories.impl
 import eu.karcags.mythscape.db.Session
 import eu.karcags.mythscape.db.Sessions
 import eu.karcags.mythscape.repositories.SessionRepository
-import eu.karcags.mythscape.utils.current
+import eu.karcags.mythscape.utils.currentDate
 import eu.karcags.mythscape.utils.suspendTransaction
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.sql.Op
@@ -25,7 +25,7 @@ class SessionRepositoryImpl : RepositoryImpl<Session>(), SessionRepository {
             }
 
             if (!showAll) {
-                operations.add(Sessions.date greaterEq current())
+                operations.add(Sessions.date greaterEq currentDate())
             }
 
             operations.fold((Sessions.id greater 0) as Op<Boolean>) { acc, a ->

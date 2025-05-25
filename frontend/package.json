@@ -17,6 +17,7 @@
     "type-check": "vue-tsc --build"
   },
   "dependencies": {
+    "@date-io/date-fns": "^3.2.1",
     "@guolao/vue-monaco-editor": "^1.5.5",
     "@mdi/font": "^7.4.47",
     "@vuelidate/core": "^2.0.3",

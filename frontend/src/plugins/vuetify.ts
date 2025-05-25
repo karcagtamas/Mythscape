@@ -7,6 +7,8 @@ import { createVuetify, type ThemeDefinition } from 'vuetify'
 import { en, fr, hu } from 'vuetify/locale'
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
 import { VTreeview } from 'vuetify/labs/VTreeview'
+import DateFnsAdapter from '@date-io/date-fns'
+import { enUS } from 'date-fns/locale'
 
 const myLightTheme: ThemeDefinition = {
   dark: false,
@@ -44,5 +46,11 @@ export default createVuetify({
   },
   components: {
     VTreeview,
+  },
+  date: {
+    adapter: DateFnsAdapter,
+    locale: {
+      en: enUS,
+    },
   },
 })
