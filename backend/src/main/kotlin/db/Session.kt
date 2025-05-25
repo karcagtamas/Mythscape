@@ -21,7 +21,7 @@ class Session(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<Session>(Sessions)
 
     var date by Sessions.date
-    val startTime by Sessions.startTime
-    val endTime by Sessions.endTime
+    var startTime by Sessions.startTime
+    var endTime by Sessions.endTime
     var campaign by Campaign referencedOn Sessions.campaign
 }

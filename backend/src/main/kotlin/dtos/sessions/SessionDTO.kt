@@ -16,3 +16,6 @@ fun Session.sessionDTO(): SessionDTO {
         endTime,
     )
 }
+
+@Serializable
+data class SessionEditDTO(val id: Int, val date: LocalDateTime, val startTime: LocalTime, val endTime: LocalTime, val campaignId: Int)

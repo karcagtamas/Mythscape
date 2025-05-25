@@ -39,7 +39,7 @@ fun Application.configureRouting() {
                 campaignController(campaignRepository)
                 fileController(fileRepository)
                 noteController(noteRepository)
-                sessionController(sessionRepository)
+                sessionController(sessionRepository, campaignRepository)
             }
         }
     }
