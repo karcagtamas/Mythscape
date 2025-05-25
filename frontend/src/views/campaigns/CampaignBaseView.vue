@@ -42,6 +42,7 @@ const pages: Page[] = [
   { key: 'data', title: 'Data', icon: 'mdi-home-circle', path: '' },
   { key: 'settings', title: 'Settings', icon: 'mdi-cog', path: '/settings' },
   { key: 'notes', title: 'Notes', icon: 'mdi-note-multiple', path: '/notes' },
+  { key: 'sessions', title: 'Sessions', icon: 'mdi-calendar-multiple', path: '/sessions' },
 ]
 
 const campaignStore = useCampaignStore()

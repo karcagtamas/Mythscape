@@ -13,9 +13,10 @@ import io.ktor.server.routing.route
 fun Route.sessionController(repository: SessionRepository) {
     route("/sessions") {
         get {
-            val campaignId = call.queryParameters["campaignId"]?.toIntOrNull().requireNonNull()
+            val campaignId = call.queryParameters["campaignId"]?.toIntOrNull()
+            val showAll = call.queryParameters["showAll"]?.toBoolean() ?: false
 
-            call.respond(repository.byCampaign(campaignId) { it.sessionDTO() }.wrap())
+            call.respond(repository.query(campaignId, showAll) { it.sessionDTO() }.wrap())
         }
 
         get("/{id}") {

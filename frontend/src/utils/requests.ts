@@ -5,9 +5,10 @@ import type { ServerResponse } from '@/models/response'
 import { useCommonStore } from '@/stores/common.store'
 import axios from '@/plugins/axios'
 
-type QueryParams = {
-  [key: string]: string | number | boolean | string[] | number[]
-}[]
+type QueryParams = Record<
+  string,
+  string | number | boolean | string[] | number[] | null | undefined
+>
 
 export type RequestConfig = {
   type: 'get' | 'post' | 'put' | 'delete'

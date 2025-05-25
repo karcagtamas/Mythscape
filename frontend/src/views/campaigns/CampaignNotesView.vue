@@ -16,6 +16,8 @@
 
     <vue-monaco-editor
       v-if="current"
+      theme="vs"
+      languge="markdown"
       v-model="code"
       :options="MONACO_EDITOR_OPTIONS"
       @mount="handleMount"
@@ -61,7 +63,7 @@ const handleActivate = (key: NoteTreeKey | null) => {
   current.value = key?.id ?? null
 }
 
-const handleMount = (editorInstance) => (editor.value = editorInstance)
+const handleMount = (editorInstance: unknown) => (editor.value = editorInstance)
 </script>
 
 <style lang="scss">
