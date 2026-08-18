@@ -6,8 +6,11 @@ import eu.karcags.mythscape.dtos.auth.RefreshDTO
 import eu.karcags.mythscape.repositories.RefreshTokenRepository
 import eu.karcags.mythscape.utils.current
 import eu.karcags.mythscape.utils.suspendTransaction
-import org.jetbrains.exposed.dao.IntEntityClass
-import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.v1.core.and
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.greater
+import org.jetbrains.exposed.v1.core.isNull
+import org.jetbrains.exposed.v1.dao.IntEntityClass
 
 class RefreshTokenRepositoryImpl : RepositoryImpl<RefreshToken>(), RefreshTokenRepository {
     override fun entityClass(): IntEntityClass<RefreshToken> = RefreshToken

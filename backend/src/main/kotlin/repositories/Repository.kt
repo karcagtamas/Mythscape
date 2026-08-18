@@ -1,6 +1,6 @@
 package eu.karcags.mythscape.repositories
 
-import org.jetbrains.exposed.dao.IntEntity
+import org.jetbrains.exposed.v1.dao.IntEntity
 
 interface Repository<T : IntEntity> {
     suspend fun all(): List<T>

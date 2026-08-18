@@ -1,7 +1,8 @@
 package eu.karcags.mythscape.utils
 
 import kotlinx.coroutines.Dispatchers
-import org.jetbrains.exposed.sql.Transaction
-import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
+import kotlinx.coroutines.withContext
 
-suspend fun <T> suspendTransaction(block: Transaction.() -> T): T = newSuspendedTransaction(Dispatchers.IO, statement = block)
+suspend fun <T> suspendTransaction(block: suspend () -> T): T = withContext(Dispatchers.IO) {
+    block()
+}

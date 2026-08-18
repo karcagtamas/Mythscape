@@ -5,9 +5,8 @@ import eu.karcags.mythscape.db.Sessions
 import eu.karcags.mythscape.repositories.SessionRepository
 import eu.karcags.mythscape.utils.currentDate
 import eu.karcags.mythscape.utils.suspendTransaction
-import org.jetbrains.exposed.dao.IntEntityClass
-import org.jetbrains.exposed.sql.Op
-import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.v1.core.*
+import org.jetbrains.exposed.v1.dao.IntEntityClass
 
 class SessionRepositoryImpl : RepositoryImpl<Session>(), SessionRepository {
     override fun entityClass(): IntEntityClass<Session> = Session

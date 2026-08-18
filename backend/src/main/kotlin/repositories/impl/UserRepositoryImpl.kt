@@ -4,8 +4,9 @@ import eu.karcags.mythscape.db.User
 import eu.karcags.mythscape.db.Users
 import eu.karcags.mythscape.repositories.UserRepository
 import eu.karcags.mythscape.utils.suspendTransaction
-import org.jetbrains.exposed.dao.IntEntityClass
-import org.jetbrains.exposed.sql.or
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.or
+import org.jetbrains.exposed.v1.dao.IntEntityClass
 
 class UserRepositoryImpl : RepositoryImpl<User>(), UserRepository {
 

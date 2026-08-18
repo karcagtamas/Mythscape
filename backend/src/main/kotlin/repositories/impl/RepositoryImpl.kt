@@ -2,8 +2,8 @@ package eu.karcags.mythscape.repositories.impl
 
 import eu.karcags.mythscape.repositories.Repository
 import eu.karcags.mythscape.utils.suspendTransaction
-import org.jetbrains.exposed.dao.IntEntity
-import org.jetbrains.exposed.dao.IntEntityClass
+import org.jetbrains.exposed.v1.dao.IntEntity
+import org.jetbrains.exposed.v1.dao.IntEntityClass
 
 abstract class RepositoryImpl<T : IntEntity> : Repository<T> {
     override suspend fun all(): List<T> = suspendTransaction {

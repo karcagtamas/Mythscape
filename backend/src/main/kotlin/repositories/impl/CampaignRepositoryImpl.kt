@@ -1,14 +1,10 @@
 package eu.karcags.mythscape.repositories.impl
 
-import eu.karcags.mythscape.db.Campaign
-import eu.karcags.mythscape.db.CampaignMember
-import eu.karcags.mythscape.db.CampaignMembers
-import eu.karcags.mythscape.db.CampaignTag
-import eu.karcags.mythscape.db.CampaignTags
-import eu.karcags.mythscape.db.Campaigns
+import eu.karcags.mythscape.db.*
 import eu.karcags.mythscape.repositories.CampaignRepository
 import eu.karcags.mythscape.utils.suspendTransaction
-import org.jetbrains.exposed.dao.IntEntityClass
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.dao.IntEntityClass
 
 class CampaignRepositoryImpl : RepositoryImpl<Campaign>(), CampaignRepository {
     override fun entityClass(): IntEntityClass<Campaign> = Campaign
