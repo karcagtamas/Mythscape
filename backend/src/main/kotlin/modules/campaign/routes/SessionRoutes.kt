@@ -1,4 +1,4 @@
-package eu.karcags.mythscape.controllers
+package eu.karcags.mythscape.modules.campaign.routes
 
 import eu.karcags.mythscape.dtos.sessions.SessionEditDTO
 import eu.karcags.mythscape.dtos.sessions.sessionDTO
@@ -13,7 +13,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-fun Route.sessionController(repository: SessionRepository, campaignRepository: CampaignRepository) {
+fun Route.sessionRoutes(repository: SessionRepository, campaignRepository: CampaignRepository) {
     route("/sessions") {
         get {
             val campaignId = call.queryParameters["campaignId"]?.toIntOrNull()

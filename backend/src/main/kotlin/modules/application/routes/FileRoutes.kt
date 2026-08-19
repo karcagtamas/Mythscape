@@ -1,4 +1,4 @@
-package eu.karcags.mythscape.controllers
+package eu.karcags.mythscape.modules.application.routes
 
 import eu.karcags.mythscape.repositories.FileRepository
 import eu.karcags.mythscape.utils.requireNonNull
@@ -7,7 +7,7 @@ import io.ktor.http.ContentType
 import io.ktor.server.response.respondBytes
 import io.ktor.server.routing.*
 
-fun Route.fileController(repository: FileRepository) {
+fun Route.fileRoutes(repository: FileRepository) {
     route("/files") {
         get("/{id}") {
             val id = call.parameters["id"]?.toIntOrNull().requireNonNull()

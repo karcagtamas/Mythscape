@@ -1,5 +1,5 @@
 package eu.karcags.mythscape.repositories
 
-import eu.karcags.mythscape.db.Note
+import eu.karcags.mythscape.modules.note.dao.NoteEntity
 
-interface NoteRepository : Repository<Note>
+interface NoteRepository : Repository<NoteEntity>

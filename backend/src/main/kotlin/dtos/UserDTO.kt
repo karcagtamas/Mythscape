@@ -1,6 +1,6 @@
 package eu.karcags.mythscape.dtos
 
-import eu.karcags.mythscape.db.User
+import eu.karcags.mythscape.modules.application.dao.UserEntity
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -11,10 +11,10 @@ data class UserDTO(
     val email: String,
 )
 
-fun User.dto(): UserDTO {
+fun UserEntity.dto(): UserDTO {
     return UserDTO(id.value, name, username, email)
 }
 
-fun List<User>.dto(): List<UserDTO> {
+fun List<UserEntity>.dto(): List<UserDTO> {
     return map { it.dto() }
 }

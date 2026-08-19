@@ -1,6 +1,9 @@
 package eu.karcags.mythscape
 
+import eu.karcags.mythscape.modules.application.ApplicationModule
 import eu.karcags.mythscape.plugins.*
+import eu.karcags.mythscape.utils.AppModule
+import eu.karcags.mythscape.utils.ModuleRegistry
 import eu.karcags.mythscape.utils.getBooleanProperty
 import eu.karcags.mythscape.utils.getIntProperty
 import eu.karcags.mythscape.utils.getStringProperty
@@ -14,6 +17,8 @@ import io.ktor.server.plugins.calllogging.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.request.*
+import org.koin.core.context.loadKoinModules
+import org.koin.ktor.ext.getKoin
 import org.slf4j.event.Level
 import java.io.File
 import java.security.KeyStore
@@ -56,9 +61,13 @@ fun Application.mainModule() {
         json()
     }
 
+    val registry = getKoin().get<ModuleRegistry>()
+    registry.registerAll(this)
+    loadKoinModules(registry.modules())
+
     configureErrorHandling()
     configureValidation()
-    configureRouting()
+    configureRouting(registry)
 
     val allowedClient = environment.config.getStringProperty(ConfigKey.CORS_CLIENT, "localhost")
     install(CORS) {

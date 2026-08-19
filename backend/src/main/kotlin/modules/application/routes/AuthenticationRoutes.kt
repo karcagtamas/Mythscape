@@ -1,4 +1,4 @@
-package eu.karcags.mythscape.controllers
+package eu.karcags.mythscape.modules.application.routes
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
@@ -22,7 +22,7 @@ import kotlinx.datetime.TimeZone
 import org.mindrot.jbcrypt.BCrypt
 import java.util.*
 
-fun Route.authenticationController(userRepository: UserRepository, refreshTokenRepository: RefreshTokenRepository) {
+fun Route.authenticationRoutes(userRepository: UserRepository, refreshTokenRepository: RefreshTokenRepository) {
     route("/auth") {
         post("/login") {
             val data = call.receive<LoginDTO>()

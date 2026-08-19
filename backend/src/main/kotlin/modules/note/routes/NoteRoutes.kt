@@ -1,4 +1,4 @@
-package eu.karcags.mythscape.controllers
+package eu.karcags.mythscape.modules.note.routes
 
 import eu.karcags.mythscape.dtos.notes.noteDataDTO
 import eu.karcags.mythscape.repositories.NoteRepository
@@ -10,7 +10,7 @@ import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import io.ktor.server.routing.route
 
-fun Route.noteController(repository: NoteRepository) {
+fun Route.noteRoutes(repository: NoteRepository) {
     route("/notes") {
         get("/{id}") {
             val id = call.parameters["id"]?.toIntOrNull().requireNonNull()

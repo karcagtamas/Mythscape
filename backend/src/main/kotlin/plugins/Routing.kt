@@ -1,17 +1,12 @@
 package eu.karcags.mythscape.plugins
 
-import eu.karcags.mythscape.controllers.authenticationController
-import eu.karcags.mythscape.controllers.campaignController
-import eu.karcags.mythscape.controllers.fileController
-import eu.karcags.mythscape.controllers.noteController
-import eu.karcags.mythscape.controllers.sessionController
-import eu.karcags.mythscape.controllers.userController
+import eu.karcags.mythscape.modules.campaign.routes.campaignRoutes
+import eu.karcags.mythscape.modules.note.routes.noteRoutes
+import eu.karcags.mythscape.modules.campaign.routes.sessionRoutes
 import eu.karcags.mythscape.repositories.CampaignRepository
-import eu.karcags.mythscape.repositories.FileRepository
 import eu.karcags.mythscape.repositories.NoteRepository
-import eu.karcags.mythscape.repositories.RefreshTokenRepository
 import eu.karcags.mythscape.repositories.SessionRepository
-import eu.karcags.mythscape.repositories.UserRepository
+import eu.karcags.mythscape.utils.ModuleRegistry
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.plugins.openapi.*
@@ -19,11 +14,8 @@ import io.ktor.server.plugins.swagger.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
-fun Application.configureRouting() {
-    val refreshTokenRepository by inject<RefreshTokenRepository>()
-    val userRepository by inject<UserRepository>()
+fun Application.configureRouting(registry: ModuleRegistry) {
     val campaignRepository by inject<CampaignRepository>()
-    val fileRepository by inject<FileRepository>()
     val noteRepository by inject<NoteRepository>()
     val sessionRepository by inject<SessionRepository>()
 
@@ -32,14 +24,14 @@ fun Application.configureRouting() {
         openAPI(path = "openapi")
 
         route("/api") {
-            authenticationController(userRepository, refreshTokenRepository)
+            registry.openRoutesForAll(this)
 
             authenticate("auth-jwt") {
-                userController(userRepository)
-                campaignController(campaignRepository)
-                fileController(fileRepository)
-                noteController(noteRepository)
-                sessionController(sessionRepository, campaignRepository)
+                campaignRoutes(campaignRepository)
+                noteRoutes(noteRepository)
+                sessionRoutes(sessionRepository, campaignRepository)
+
+                registry.protectedRoutesForAll(this@route)
             }
         }
     }

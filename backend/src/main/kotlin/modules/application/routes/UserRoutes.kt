@@ -1,4 +1,4 @@
-package eu.karcags.mythscape.controllers
+package eu.karcags.mythscape.modules.application.routes
 
 import eu.karcags.mythscape.dtos.dto
 import eu.karcags.mythscape.repositories.UserRepository
@@ -12,7 +12,7 @@ import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import io.ktor.server.routing.route
 
-fun Route.userController(repository: UserRepository) {
+fun Route.userRoutes(repository: UserRepository) {
     route("/users") {
         get {
             call.respond(repository.all().dto().wrap())

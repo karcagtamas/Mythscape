@@ -1,4 +1,4 @@
-package eu.karcags.mythscape.controllers
+package eu.karcags.mythscape.modules.campaign.routes
 
 import eu.karcags.mythscape.dtos.campaigns.*
 import eu.karcags.mythscape.dtos.notes.treeDTO
@@ -10,7 +10,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-fun Route.campaignController(repository: CampaignRepository) {
+fun Route.campaignRoutes(repository: CampaignRepository) {
     route("/campaigns") {
         get("/user/{userId}") {
             val userId = call.parameters["userId"]?.toIntOrNull().requireNonNull()

@@ -1,6 +1,6 @@
 package eu.karcags.mythscape.dtos.notes
 
-import eu.karcags.mythscape.db.Folder
+import eu.karcags.mythscape.modules.note.dao.FolderEntity
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
@@ -16,7 +16,7 @@ data class FolderDTO(
     val lastUpdate: LocalDateTime,
 )
 
-fun Folder.folderDTO(): FolderDTO {
+fun FolderEntity.folderDTO(): FolderDTO {
     return FolderDTO(
         id.value,
         name,
@@ -29,6 +29,6 @@ fun Folder.folderDTO(): FolderDTO {
     )
 }
 
-fun List<Folder>.folderListDTO(): List<FolderDTO> {
+fun List<FolderEntity>.folderListDTO(): List<FolderDTO> {
     return map { it.folderDTO() }
 }

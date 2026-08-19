@@ -1,6 +1,6 @@
 package eu.karcags.mythscape.dtos.sessions
 
-import eu.karcags.mythscape.db.Session
+import eu.karcags.mythscape.modules.campaign.dao.SessionEntity
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.serialization.Serializable
@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SessionDTO(val id: Int, val date: LocalDate, val startTime: LocalTime, val endTime: LocalTime)
 
-fun Session.sessionDTO(): SessionDTO {
+fun SessionEntity.sessionDTO(): SessionDTO {
     return SessionDTO(
         id.value,
         date,

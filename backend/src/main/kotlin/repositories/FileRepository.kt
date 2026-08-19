@@ -1,5 +1,5 @@
 package eu.karcags.mythscape.repositories
 
-import eu.karcags.mythscape.db.File
+import eu.karcags.mythscape.modules.application.dao.FileEntity
 
-interface FileRepository : Repository<File>
+interface FileRepository : Repository<FileEntity>

@@ -1,6 +1,6 @@
 package eu.karcags.mythscape.dtos.notes
 
-import eu.karcags.mythscape.db.Note
+import eu.karcags.mythscape.modules.note.dao.NoteEntity
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
@@ -13,7 +13,7 @@ data class NoteDTO(
     val lastUpdate: LocalDateTime,
 )
 
-fun Note.noteDTO(): NoteDTO {
+fun NoteEntity.noteDTO(): NoteDTO {
     return NoteDTO(
         id.value,
         name,
@@ -23,6 +23,6 @@ fun Note.noteDTO(): NoteDTO {
     )
 }
 
-fun List<Note>.noteListDTO(): List<NoteDTO> {
+fun List<NoteEntity>.noteListDTO(): List<NoteDTO> {
     return map { it.noteDTO() }
 }
