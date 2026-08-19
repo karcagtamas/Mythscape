@@ -1,0 +1,22 @@
+services:
+  postgres:
+    container_name: mythscape_postgres
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: mythscape
+      POSTGRES_PASSWORD: Abc123456%
+      POSTGRES_DB: mythscapedb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - myth_network
+
+volumes:
+  postgres_data:
+
+networks:
+  myth_network:
+    driver: bridge

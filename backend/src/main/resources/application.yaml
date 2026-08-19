@@ -22,7 +22,7 @@ ssl:
 database:
   user: "mythscape"
   password: "mythscape"
-  url: "jdbc:postgresql://localhost:5433/mythscape"
+  url: "jdbc:postgresql://localhost:5433/mythscapedb"
 
 jwt:
   secret: "mythscape0123456789mythscape"
