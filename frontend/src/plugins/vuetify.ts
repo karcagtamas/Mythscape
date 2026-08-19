@@ -6,9 +6,9 @@ import '@/styles/main.scss'
 import { createVuetify, type ThemeDefinition } from 'vuetify'
 import { en, fr, hu } from 'vuetify/locale'
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
-import { VTreeview } from 'vuetify/labs/VTreeview'
 import DateFnsAdapter from '@date-io/date-fns'
 import { enUS } from 'date-fns/locale'
+import { VTreeview } from 'vuetify/components'
 
 const myLightTheme: ThemeDefinition = {
   dark: false,
