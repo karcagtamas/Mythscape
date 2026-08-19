@@ -3,14 +3,12 @@ package eu.karcags.mythscape.modules.application.routes
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import eu.karcags.mythscape.ConfigKey
-import eu.karcags.mythscape.dtos.auth.LoginDTO
-import eu.karcags.mythscape.dtos.auth.LogoutDTO
-import eu.karcags.mythscape.dtos.auth.RefreshDTO
-import eu.karcags.mythscape.dtos.auth.RegisterDTO
-import eu.karcags.mythscape.dtos.auth.TokenDTO
+import eu.karcags.mythscape.dtos.auth.*
 import eu.karcags.mythscape.dtos.dto
-import eu.karcags.mythscape.repositories.RefreshTokenRepository
-import eu.karcags.mythscape.repositories.UserRepository
+import eu.karcags.mythscape.modules.application.dao.RefreshTokenEntity
+import eu.karcags.mythscape.modules.application.dao.UserEntity
+import eu.karcags.mythscape.modules.application.services.UserService
+import eu.karcags.mythscape.modules.application.services.RefreshTokenService
 import eu.karcags.mythscape.utils.*
 import io.ktor.http.*
 import io.ktor.server.config.*
@@ -22,12 +20,17 @@ import kotlinx.datetime.TimeZone
 import org.mindrot.jbcrypt.BCrypt
 import java.util.*
 
-fun Route.authenticationRoutes(userRepository: UserRepository, refreshTokenRepository: RefreshTokenRepository) {
+fun Route.authenticationRoutes(
+    refreshTokenService: RefreshTokenService,
+    userService: UserService,
+) {
     route("/auth") {
         post("/login") {
             val data = call.receive<LoginDTO>()
 
-            val user = userRepository.findByUsername(data.username) ?: throw ServerException.Unauthorized("User not found with username: ${data.username}")
+            val user = dbQuery {
+                userService.getByName(data.username)
+            } ?: throw ServerException.Unauthorized("User not found with username: ${data.username}")
 
             if (!BCrypt.checkpw(data.password, user.password)) {
                 throw ServerException.Unauthorized("Incorrect password was provided.")
@@ -36,48 +39,61 @@ fun Route.authenticationRoutes(userRepository: UserRepository, refreshTokenRepos
             val token = createToken(environment.config, user.id.value, data.username)
 
             val clientId = UUID.randomUUID().toString()
-            val refreshToken = generateRefreshToken(refreshTokenRepository, clientId, user.id.value)
+            val refreshToken = generateRefreshToken(clientId, user.id.value)
 
-            call.respond(TokenDTO(token, user.dto(), refreshToken, clientId).wrap())
+            call.wrapped(TokenDTO(token, user.dto(), refreshToken, clientId))
         }
 
         post("/register") {
             val data = call.receive<RegisterDTO>()
 
-            if (userRepository.existsByUsernameOrEmail(data.username, data.email)) {
+            val existsByUsernameOrEmail = dbQuery {
+                userService.existsByUsernameOrEmail(data.username, data.email)
+            }
+
+            if (existsByUsernameOrEmail) {
                 throw ServerException("Username or email already exists.", HttpStatusCode.BadRequest)
             }
 
             val hashedPassword = BCrypt.hashpw(data.password, BCrypt.gensalt())
 
-            val id = userRepository.create {
-                username = data.username
-                email = data.email
-                password = hashedPassword
-                name = data.fullname
-                register = current()
+            val user = dbQuery {
+                UserEntity.new {
+                    username = data.username
+                    email = data.email
+                    password = hashedPassword
+                    name = data.fullname
+                    register = current()
+                }
             }
 
-            call.respond(id.wrap(HttpStatusCode.Created))
+            call.wrapped(user.id, HttpStatusCode.Created)
         }
 
         post("/refresh") {
             val data = call.receive<RefreshDTO>()
 
-            val refreshToken = refreshTokenRepository.find(data) ?: throw ServerException.Forbidden("Refresh token is not valid.")
-            val user = userRepository.get(data.userId) ?: throw ServerException.NotFound()
+            val refreshToken = dbQuery {
+                refreshTokenService.find(data) ?: throw ServerException.Forbidden("Refresh token is not valid.")
+            }
+
+            val user = dbQuery {
+                UserEntity.findById(data.userId)
+            }.required()
 
             val token = createToken(environment.config, data.userId, user.username)
-            revokeRefreshToken(refreshTokenRepository, refreshToken.id.value)
-            val newRefreshToken = generateRefreshToken(refreshTokenRepository, data.clientId, data.userId)
+            revokeRefreshToken(refreshToken.id.value)
+            val newRefreshToken = generateRefreshToken(data.clientId, data.userId)
 
-            call.respond(TokenDTO(token, user.dto(), newRefreshToken, data.clientId).wrap())
+            call.wrapped(TokenDTO(token, user.dto(), newRefreshToken, data.clientId))
         }
 
         post("/logout") {
             val data = call.receive<LogoutDTO>()
-            refreshTokenRepository.revokeAll(data.userId, data.clientId)
-            call.respond(success())
+            dbQuery {
+                refreshTokenService.revokeAll(data.userId, data.clientId)
+            }
+            call.success()
         }
     }
 }
@@ -92,20 +108,28 @@ fun createToken(config: ApplicationConfig, userId: Int, username: String): Strin
         .sign(Algorithm.HMAC256(config.getStringProperty(ConfigKey.JWT_SECRET)))
 }
 
-suspend fun revokeRefreshToken(refreshTokenRepository: RefreshTokenRepository, refreshTokenId: Int) {
-    refreshTokenRepository.update(refreshTokenId) {
-        revoked = current()
+suspend fun revokeRefreshToken(refreshTokenId: Int) {
+    dbQuery {
+        RefreshTokenEntity.findByIdAndUpdate(refreshTokenId) {
+            it.revoked = current()
+        }
     }
 }
 
-suspend fun generateRefreshToken(refreshTokenRepository: RefreshTokenRepository, clientId: String, userId: Int): String {
+suspend fun generateRefreshToken(
+    clientId: String,
+    userId: Int
+): String {
     val token = UUID.randomUUID().toString()
 
-    refreshTokenRepository.create {
-        this.userId = userId
-        this.clientId = clientId
-        this.token = token
-        expiration = current().toInstant(TimeZone.UTC).plus(1, DateTimeUnit.DAY, TimeZone.UTC).toLocalDateTime(TimeZone.UTC)
+    dbQuery {
+        RefreshTokenEntity.new {
+            this.userId = userId
+            this.clientId = clientId
+            this.token = token
+            expiration =
+                current().toInstant(TimeZone.UTC).plus(1, DateTimeUnit.DAY, TimeZone.UTC).toLocalDateTime(TimeZone.UTC)
+        }
     }
 
     return token

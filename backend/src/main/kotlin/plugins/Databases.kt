@@ -12,5 +12,6 @@ fun Application.configureDatabases() {
         config.getStringProperty(ConfigKey.DATABASE_URL),
         user = config.getStringProperty(ConfigKey.DATABASE_USER),
         password = config.getStringProperty(ConfigKey.DATABASE_PASSWORD),
+        driver = config.getStringProperty(ConfigKey.DATABASE_DRIVER),
     )
 }

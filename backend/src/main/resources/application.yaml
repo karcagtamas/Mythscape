@@ -21,8 +21,9 @@ ssl:
 
 database:
   user: "mythscape"
-  password: "mythscape"
-  url: "jdbc:postgresql://localhost:5433/mythscapedb"
+  password: "Abc123456%"
+  url: "jdbc:postgresql://localhost:5432/mythscapedb"
+  driver: "org.postgresql.Driver"
 
 jwt:
   secret: "mythscape0123456789mythscape"

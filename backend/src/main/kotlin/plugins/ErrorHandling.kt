@@ -16,15 +16,15 @@ fun Application.configureErrorHandling() {
             when (cause) {
                 is ServerException -> {
                     @Suppress("USELESS_CAST")
-                    call.respond((cause as ServerException).failure())
+                    call.respond(cause.statusCode, (cause as ServerException).failure())
                 }
 
                 is RequestValidationException -> {
-                    call.respond(Failure(HttpStatusCode.BadRequest.value, cause.errorData()))
+                    call.respond(HttpStatusCode.BadRequest, Failure(HttpStatusCode.BadRequest.value, cause.errorData()))
                 }
 
                 else -> {
-                    call.respond(cause.failure())
+                    call.respond(HttpStatusCode.InternalServerError, cause.failure())
                 }
             }
         }

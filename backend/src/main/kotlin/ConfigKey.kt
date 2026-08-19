@@ -4,6 +4,7 @@ enum class ConfigKey(val key: String) {
     DATABASE_USER("database.user"),
     DATABASE_PASSWORD("database.password"),
     DATABASE_URL("database.url"),
+    DATABASE_DRIVER("database.driver"),
     SERVER_HOST("server.host"),
     SERVER_PORT("server.port"),
     SSL_USE("ssl.use"),

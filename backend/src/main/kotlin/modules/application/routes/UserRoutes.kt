@@ -1,33 +1,34 @@
 package eu.karcags.mythscape.modules.application.routes
 
 import eu.karcags.mythscape.dtos.dto
-import eu.karcags.mythscape.repositories.UserRepository
-import eu.karcags.mythscape.utils.UserPrincipal
-import eu.karcags.mythscape.utils.requireNonNull
-import eu.karcags.mythscape.utils.required
-import eu.karcags.mythscape.utils.wrap
-import io.ktor.server.auth.principal
-import io.ktor.server.response.respond
-import io.ktor.server.routing.Route
-import io.ktor.server.routing.get
-import io.ktor.server.routing.route
+import eu.karcags.mythscape.modules.application.dao.UserEntity
+import eu.karcags.mythscape.utils.*
+import io.ktor.server.auth.*
+import io.ktor.server.routing.*
 
-fun Route.userRoutes(repository: UserRepository) {
+fun Route.userRoutes() {
     route("/users") {
         get {
-            call.respond(repository.all().dto().wrap())
+            val users = dbQuery {
+                UserEntity.all().map {
+                    it.dto()
+                }
+            }
+
+            call.wrapped(users)
         }
 
         get("/{id}") {
-            val userId = call.parameters["id"]?.toIntOrNull().requireNonNull()
+            val id = call.parameters["id"]?.toIntOrNull().requireNonNull()
+            val user = dbQuery { UserEntity.findById(id).required().dto() }
 
-            call.respond(repository.get(userId).required().dto().wrap())
+            call.wrapped(user)
         }
 
         get("/current") {
             val principal = call.principal<UserPrincipal>()
 
-            call.respond(principal.required().user.dto().wrap())
+            call.wrapped(principal.required().user.dto())
         }
     }
 }
