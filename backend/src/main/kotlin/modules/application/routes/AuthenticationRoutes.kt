@@ -67,7 +67,7 @@ fun Route.authenticationRoutes(
                 }
             }
 
-            call.wrapped(user.id, HttpStatusCode.Created)
+            call.wrapped(user.id.value, HttpStatusCode.Created)
         }
 
         post("/refresh") {
