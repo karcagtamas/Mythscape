@@ -1,35 +1,53 @@
-@import './base.css';
+@import url('https://googleapis.com');
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
-}
-
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --surface: 0 0% 98%;
+    --text: 224 71% 4%;
+    --primary: 0 96% 22%;
+    --secondary: 211 96% 22%;
+    --accent: 73 96% 22%;
+    --border: 220 13% 91%;
   }
-}
 
-@media (min-width: 1024px) {
+  .dark {
+    --background: 224 71% 4%;
+    --surface: 224 47% 7%;
+    --text: 210 40% 98%;
+    --primary: 0 96% 35%;
+    --secondary: 211 96% 45%;
+    --accent: 73 96% 40%;
+    --border: 217 32% 14%;
+  }
+
   body {
-    display: flex;
-    place-items: center;
+    @apply bg-background text-text font-sans antialiased min-h-screen;
+    margin: 0;
+    line-height: 1.5;
   }
 
   #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    display: block;
   }
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-background;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-border rounded hover:bg-slate-500/30;
 }
