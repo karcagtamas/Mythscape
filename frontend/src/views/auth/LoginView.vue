@@ -1,124 +1,107 @@
 <template>
-  <v-card elevation="4" class="block">
-    <v-card-title class="text-h5 text-primary font-weight-bold">Login</v-card-title>
-    <v-card-text>
-      <v-form v-model="valid">
-        <v-text-field
-          label="User Name"
-          type="text"
-          density="compact"
-          variant="solo"
-          v-model="username"
-          prepend-inner-icon="mdi-account"
-          :error-messages="usernameErrors"
-          @blur="v$.username.$touch()"
-        ></v-text-field>
-        <v-text-field
-          label="Password"
-          :type="visisblePassword ? 'text' : 'password'"
-          density="compact"
-          variant="solo"
-          v-model="password"
-          :append-inner-icon="visisblePassword ? 'mdi-eye-off' : 'mdi-eye'"
-          prepend-inner-icon="mdi-lock-outline"
-          @click:append-inner="visisblePassword = !visisblePassword"
-          :error-messages="passwordErrors"
-          @blur="v$.password.$touch()"
-        ></v-text-field>
-        <v-btn elevation="2" raised block color="primary" @click="handleSubmit" :disabled="!valid"
-          >Login</v-btn
-        >
-      </v-form>
-    </v-card-text>
-    <v-divider></v-divider>
-    <v-card-text>
-      <v-card variant="tonal">
-        <v-card-title></v-card-title>
-        <v-card-subtitle> If you does not have any account yet:</v-card-subtitle>
-        <v-card-actions class="justify-end">
-          <v-btn
-            variant="text"
-            color="secondary"
-            append-icon="mdi-chevron-right"
-            @click="$router.push({ path: '/auth/register' })"
-            >To Register</v-btn
-          >
-        </v-card-actions>
-      </v-card>
-    </v-card-text>
-  </v-card>
+  <div class="w-full max-w-[400px] p-6 rounded-xl bg-surface border border-border shadow-2xl backdrop-blur">
+    <h2 class="text-xl font-bold tracking-wider text-primary uppercase mb-6">Login</h2>
+
+    <form @submit="onSubmit" class="space-y-4 font-sans text-sm">
+      <!-- Username field -->
+      <div>
+        <div class="relative flex items-center">
+          <User class="absolute left-3 w-4 h-4 text-slate-500" />
+          <input v-model="username" v-bind="usernameAttrs" type="text" placeholder="User Name"
+            class="w-full pl-10 pr-4 py-2 rounded bg-background border border-border focus:border-primary focus:outline-none transition text-slate-200"
+            :class="{ 'border-rose-500/50 focus:border-rose-500': errors.username }" />
+        </div>
+        <p v-if="errors.username" class="text-[11px] font-mono text-rose-400 mt-1 pl-1">{{ errors.username }}</p>
+      </div>
+
+      <!-- Password field -->
+      <div>
+        <div class="relative flex items-center">
+          <Lock class="absolute left-3 w-4 h-4 text-slate-500" />
+          <input v-model="password" v-bind="passwordAttrs" :type="visiblePassword ? 'text' : 'password'"
+            placeholder="Password"
+            class="w-full pl-10 pr-10 py-2 rounded bg-background border border-border focus:border-primary focus:outline-none transition text-slate-200"
+            :class="{ 'border-rose-500/50 focus:border-rose-500': errors.password }" />
+          <button type="button" @click="visiblePassword = !visiblePassword"
+            class="absolute right-3 text-slate-500 hover:text-slate-300 transition">
+            <EyeOff v-if="visiblePassword" class="w-4 h-4" />
+            <Eye v-else class="w-4 h-4" />
+          </button>
+        </div>
+        <p v-if="errors.password" class="text-[11px] font-mono text-rose-400 mt-1 pl-1">{{ errors.password }}</p>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" :disabled="!meta.valid || isSubmitting"
+        class="w-full py-2 rounded bg-primary text-white font-medium hover:bg-primary/90 transition text-sm uppercase tracking-wide disabled:opacity-40 disabled:cursor-not-allowed shadow-md shadow-primary/10 mt-2">
+        <span v-if="isSubmitting">Authenticating...</span>
+        <span v-else>Login</span>
+      </button>
+    </form>
+
+    <!-- Navigation Footer -->
+    <div class="mt-6 pt-4 border-t border-border flex flex-col gap-2 bg-background/30 rounded p-3">
+      <p class="text-xs text-slate-400">If you do not have an account yet:</p>
+      <button @click="router.push('/auth/register')"
+        class="text-xs text-secondary hover:underline self-end flex items-center gap-0.5">
+        To Register <span>➔</span>
+      </button>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { useAuthStore } from '@/stores/auth.store'
 import type { LoginDTO, TokenDTO } from '../../models/auth'
-import useVuelidate from '@vuelidate/core'
-import { required } from '@vuelidate/validators'
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCommonStore } from '@/stores/common.store'
-import { AsyncExecutorBuilder } from '@/utils/snackbars'
-import { post, useAPI } from '@/utils/requests'
-import { loginConfig } from '@/requests/auth.request'
 import type { ServerResponse } from '@/models/response'
+import { toTypedSchema } from '@vee-validate/zod'
+import * as zod from 'zod'
+import { useApi } from '@/plugins/api'
+import { useForm } from 'vee-validate'
 
-const commonStore = useCommonStore()
-const authStore = useAuthStore()
-const { doRequest } = useAPI()
 const router = useRouter()
+const authStore = useAuthStore()
+const commonStore = useCommonStore()
 
-const username = ref('')
-const password = ref('')
-const valid = ref(false)
-const visisblePassword = ref(false)
+const visiblePassword = ref(false)
 
-const rules = {
-  username: { required },
-  password: { required },
-}
+const loginSchema = toTypedSchema(
+  zod.object({
+    username: zod.string().min(1, 'User Name is required'),
+    password: zod.string().min(1, 'Password is required'),
+  })
+)
 
-const v$ = useVuelidate(rules, { username, password })
-
-const usernameErrors = computed(() => {
-  if (!v$.value.username.$dirty) {
-    return []
-  }
-
-  return v$.value.username.required.$invalid ? ['User Name is required'] : []
+const { errors, defineField, handleSubmit, meta, isSubmitting } = useForm({
+  validationSchema: loginSchema,
 })
 
-const passwordErrors = computed(() => {
-  if (!v$.value.password.$dirty) {
-    return []
+const [username, usernameAttrs] = defineField('username', { validateOnBlur: true })
+const [password, passwordAttrs] = defineField('password', { validateOnBlur: true })
+
+const onSubmit = handleSubmit(async (values) => {
+  const dto: LoginDTO = {
+    username: values.username,
+    password: values.password,
   }
 
-  return v$.value.password.required.$invalid ? ['Password is required'] : []
-})
+  // Execute type-safe POST via useApi
+  const { data, error } = await useApi('/auth/login')
+    .post(dto)
+    .json<ServerResponse<TokenDTO>>()
 
-const handleSubmit = async () => {
-  v$.value.$validate()
-
-  if (v$.value.$invalid) {
-    return
-  }
-
-  const dto: LoginDTO = { username: username.value, password: password.value }
-  const result = await AsyncExecutorBuilder.asyncExecutorBuilder<ServerResponse<TokenDTO>>()
-    .action(() => doRequest(() => post<TokenDTO, LoginDTO>(loginConfig(), dto)))
-    .success('You successfully logged in')
-    .build()
-    .execute()
-  if (result.result?.data) {
-    authStore.login(result.result?.data)
+  if (!error.value && data.value?.data) {
+    // Populate your updated, Axios-free auth store pipelines
+    authStore.login(data.value.data)
     await authStore.fetchUser()
-    commonStore.setMessage(result.message)
-    router.push('/app/dashboard')
-  }
-}
-</script>
 
-<style lang="scss" scoped>
-.block {
-  width: min(50%, 400px);
-}
-</style>
+    commonStore.setMessage({ text: 'You successfully logged in', type: 'success' })
+    router.push('/app/dashboard')
+  } else {
+    commonStore.setMessage({ text: 'Invalid credentials or connection dropped.', type: 'error' })
+  }
+})
+</script>

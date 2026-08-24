@@ -1,9 +1,6 @@
 import type { TokenDTO } from '@/models/auth'
 import type { UserDTO } from '@/models/user'
-import { logoutConfig } from '@/requests/auth.request'
-import { currentUserConfig } from '@/requests/user.request'
-import { get, post } from '@/utils/requests'
-import axios from 'axios'
+import { useApi } from '@/plugins/api'
 import { defineStore } from 'pinia'
 
 interface AuthState {
@@ -16,7 +13,7 @@ interface AuthState {
 
 export const useAuthStore = defineStore('auth', {
   state: (): AuthState => ({
-    user: JSON.parse(localStorage.getItem('user') ?? 'null') || null,
+    user: JSON.parse(localStorage.getItem('user') ?? 'null'),
     token: localStorage.getItem('token') || '',
     clientId: localStorage.getItem('clientId') || '',
     refreshToken: localStorage.getItem('refreshToken') || '',
@@ -32,16 +29,16 @@ export const useAuthStore = defineStore('auth', {
       this.setClientId(dto.clientId)
       this.setRefreshToken(dto.refreshToken)
       this.setUserId(dto.user.id)
-      axios.defaults.headers.common['Authorization'] = `Bearer ${dto.token}`
+
+      if (dto.user) {
+        this.setUser(dto.user)
+      }
     },
     async fetchUser() {
-      try {
-        const response = await get<UserDTO>(currentUserConfig())
-        if (response.data) {
-          this.setUser(response.data)
-        }
-      } catch (err) {
-        console.error(err)
+      const { data, error } = await useApi('/users/current').get().json<UserDTO>()
+
+      if (!error.value && data.value) {
+        this.setUser(data.value)
       }
     },
     setUser(payload: UserDTO) {
@@ -65,14 +62,21 @@ export const useAuthStore = defineStore('auth', {
       localStorage.setItem('userId', payload.toString())
     },
     async logout() {
-      await post<void, unknown>(logoutConfig(), { userId: this.userId, clientId: this.clientId })
-      this.$reset()
-      delete axios.defaults.headers.common['Authorization']
-      localStorage.removeItem('token')
-      localStorage.removeItem('clientId')
-      localStorage.removeItem('refreshToken')
-      localStorage.removeItem('userId')
-      localStorage.removeItem('user')
+      try {
+        await useApi('/auth/logout').post({
+          userId: this.userId,
+          clientId: this.clientId,
+        })
+      } catch (err) {
+        console.error('[Auth Store] Server logout route trace failed:', err)
+      } finally {
+        this.$reset()
+        localStorage.removeItem('token')
+        localStorage.removeItem('clientId')
+        localStorage.removeItem('refreshToken')
+        localStorage.removeItem('userId')
+        localStorage.removeItem('user')
+      }
     },
   },
 })

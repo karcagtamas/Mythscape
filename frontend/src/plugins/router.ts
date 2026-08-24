@@ -17,6 +17,7 @@ import CampaignSessionsView from '@/views/campaigns/CampaignSessionsView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    /*
     {
       path: '/app',
       name: 'app',
@@ -64,6 +65,7 @@ const router = createRouter({
       ],
       redirect: 'app/dashboard',
     },
+    */
     {
       path: '/',
       name: 'index',

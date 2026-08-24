@@ -41,16 +41,3 @@ const alertStyles = computed(() => {
   }
 })
 </script>
-
-<style scoped lang="scss">
-.application {
-  max-height: 100vh;
-}
-
-.main {
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-</style>

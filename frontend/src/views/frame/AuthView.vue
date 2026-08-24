@@ -1,34 +1,11 @@
 <template>
-  <div id="auth-frame">
-    <div>
-      <v-toolbar color="primary" density="compact" rounded outlined elevation="4">
-        <v-toolbar-title>Mythscape</v-toolbar-title>
-      </v-toolbar>
-    </div>
-    <div class="center">
+  <div class="h-screen w-screen p-4 flex flex-col gap-4 overflow-hidden bg-background">
+    <header
+      class="h-10 px-4 flex items-center bg-primary text-white text-sm font-semibold tracking-wider uppercase rounded border border-primary/20 shadow-lg shrink-0">
+      <span>Mythscape</span>
+    </header>
+    <main class="flex-1 min-h-0 flex flex-col items-center justify-center relative">
       <router-view />
-    </div>
+    </main>
   </div>
 </template>
-
-<style scoped lang="scss">
-@mixin flex() {
-  display: flex;
-  flex-direction: column;
-}
-
-#auth-frame {
-  padding: 1rem;
-  gap: 1rem;
-  height: 100%;
-  overflow: hidden;
-  @include flex();
-
-  .center {
-    @include flex();
-    flex: 1;
-    align-items: center;
-    justify-content: center;
-  }
-}
-</style>
