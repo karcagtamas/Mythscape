@@ -10,7 +10,7 @@ local.properties
 captures
 .externalNativeBuild
 .cxx
-*.xcodeproj/*
+*.xco deproj/*
 !*.xcodeproj/project.pbxproj
 !*.xcodeproj/xcshareddata/
 !*.xcodeproj/project.xcworkspace/
@@ -19,4 +19,4 @@ captures
 node_modules/
 
 docs
-logs/*.log
+**/logs/*.log
