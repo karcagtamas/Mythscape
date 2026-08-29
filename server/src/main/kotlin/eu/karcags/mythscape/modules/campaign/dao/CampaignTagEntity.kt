@@ -1,5 +1,6 @@
 package eu.karcags.mythscape.modules.campaign.dao
 
+import eu.karcags.mythscape.dtos.campaigns.CampaignTagDTO
 import eu.karcags.mythscape.modules.campaign.db.CampaignTagsTable
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.dao.IntEntity
@@ -12,4 +13,8 @@ class CampaignTagEntity(id: EntityID<Int>) : IntEntity(id) {
     var caption by CampaignTagsTable.caption
     var color by CampaignTagsTable.color
     var creation by CampaignTagsTable.creation
+
+    fun dto(): CampaignTagDTO {
+        return CampaignTagDTO(id.value, caption, color, creation)
+    }
 }

@@ -1,5 +1,6 @@
 package eu.karcags.mythscape.modules.application.dao
 
+import eu.karcags.mythscape.dtos.UserDTO
 import eu.karcags.mythscape.modules.application.db.UsersTable
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.dao.IntEntity
@@ -13,4 +14,8 @@ class UserEntity(id: EntityID<Int>) : IntEntity(id) {
     var email by UsersTable.email
     var password by UsersTable.password
     var register by UsersTable.register
+
+    fun dto(): UserDTO {
+        return UserDTO(id.value, name, username, email)
+    }
 }

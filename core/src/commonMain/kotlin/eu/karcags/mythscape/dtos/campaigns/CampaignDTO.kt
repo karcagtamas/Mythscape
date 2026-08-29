@@ -1,8 +1,6 @@
 package eu.karcags.mythscape.dtos.campaigns
 
-import eu.karcags.mythscape.modules.campaign.dao.CampaignEntity
 import eu.karcags.mythscape.dtos.UserDTO
-import eu.karcags.mythscape.dtos.dto
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
@@ -17,23 +15,6 @@ data class CampaignDTO(
     val creation: LocalDateTime,
     val lastUpdate: LocalDateTime
 )
-
-fun CampaignEntity.campaignDTO(): CampaignDTO {
-    return CampaignDTO(
-        id.value,
-        name,
-        title,
-        imageId,
-        description,
-        creator.dto(),
-        creation,
-        lastUpdate,
-    )
-}
-
-fun List<CampaignEntity>.campaignListDTO(): List<CampaignDTO> {
-    return map { it.campaignDTO() }
-}
 
 @Serializable
 data class CampaignEditDTO(

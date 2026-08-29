@@ -1,5 +1,7 @@
 package eu.karcags.mythscape.modules.note.dao
 
+import eu.karcags.mythscape.dtos.notes.FolderDTO
+import eu.karcags.mythscape.dtos.notes.NoteTreeDTO
 import eu.karcags.mythscape.modules.campaign.dao.CampaignEntity
 import eu.karcags.mythscape.modules.campaign.dao.SessionEntity
 import eu.karcags.mythscape.modules.note.db.FoldersTable
@@ -20,4 +22,25 @@ class FolderEntity(id: EntityID<Int>) : IntEntity(id) {
     var lastUpdate by FoldersTable.lastUpdate
     val notes by NoteEntity optionalReferrersOn NotesTable.folder
     val folders by FolderEntity optionalReferrersOn FoldersTable.parent
+
+    fun dto(): FolderDTO {
+        return FolderDTO(
+            id.value,
+            name,
+            folders.map { it.dto() },
+            notes.map { it.dto() },
+            category?.id?.value,
+            session?.id?.value,
+            creation,
+            lastUpdate,
+        )
+    }
+
+    fun treeDTO(): NoteTreeDTO {
+        return NoteTreeDTO(
+            NoteTreeDTO.Key(NoteTreeDTO.Key.Type.FOLDER, id.value),
+            name,
+            folders.map { folder -> folder.treeDTO() } + notes.map { note -> note.treeDTO() }
+        )
+    }
 }

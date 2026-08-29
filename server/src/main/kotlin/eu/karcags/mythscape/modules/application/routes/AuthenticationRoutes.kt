@@ -4,16 +4,14 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import eu.karcags.mythscape.ConfigKey
 import eu.karcags.mythscape.dtos.auth.*
-import eu.karcags.mythscape.dtos.dto
 import eu.karcags.mythscape.modules.application.dao.RefreshTokenEntity
 import eu.karcags.mythscape.modules.application.dao.UserEntity
-import eu.karcags.mythscape.modules.application.services.UserService
 import eu.karcags.mythscape.modules.application.services.RefreshTokenService
+import eu.karcags.mythscape.modules.application.services.UserService
 import eu.karcags.mythscape.utils.*
 import io.ktor.http.*
 import io.ktor.server.config.*
 import io.ktor.server.request.*
-import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.datetime.*
 import kotlinx.datetime.TimeZone

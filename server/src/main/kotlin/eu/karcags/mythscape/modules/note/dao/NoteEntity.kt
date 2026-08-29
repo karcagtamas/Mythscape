@@ -1,5 +1,8 @@
 package eu.karcags.mythscape.modules.note.dao
 
+import eu.karcags.mythscape.dtos.notes.NoteDTO
+import eu.karcags.mythscape.dtos.notes.NoteDataDTO
+import eu.karcags.mythscape.dtos.notes.NoteTreeDTO
 import eu.karcags.mythscape.modules.note.db.NotesTable
 import eu.karcags.mythscape.modules.application.dao.UserEntity
 import eu.karcags.mythscape.modules.campaign.dao.CampaignEntity
@@ -17,4 +20,26 @@ class NoteEntity(id: EntityID<Int>) : IntEntity(id) {
     var content by NotesTable.content
     var creation by NotesTable.creation
     var lastUpdate by NotesTable.lastUpdate
+
+    fun dataDTO(): NoteDataDTO {
+        return NoteDataDTO(id.value, content)
+    }
+
+    fun dto(): NoteDTO {
+        return NoteDTO(
+            id.value,
+            name,
+            folder?.id?.value,
+            creation,
+            lastUpdate,
+        )
+    }
+
+    fun treeDTO(): NoteTreeDTO {
+        return NoteTreeDTO(
+            NoteTreeDTO.Key(NoteTreeDTO.Key.Type.NOTE, id.value),
+            name,
+            null,
+        )
+    }
 }

@@ -1,5 +1,6 @@
 package eu.karcags.mythscape.modules.campaign.dao
 
+import eu.karcags.mythscape.dtos.sessions.SessionDTO
 import eu.karcags.mythscape.modules.campaign.db.SessionsTable
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.dao.IntEntity
@@ -12,4 +13,13 @@ class SessionEntity(id: EntityID<Int>) : IntEntity(id) {
     var startTime by SessionsTable.startTime
     var endTime by SessionsTable.endTime
     var campaign by CampaignEntity referencedOn SessionsTable.campaign
+
+    fun dto(): SessionDTO {
+        return SessionDTO(
+            id.value,
+            date,
+            startTime,
+            endTime,
+        )
+    }
 }

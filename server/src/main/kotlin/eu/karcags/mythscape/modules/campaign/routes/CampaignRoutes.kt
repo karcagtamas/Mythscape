@@ -1,7 +1,7 @@
 package eu.karcags.mythscape.modules.campaign.routes
 
-import eu.karcags.mythscape.dtos.campaigns.*
-import eu.karcags.mythscape.dtos.notes.treeDTO
+import eu.karcags.mythscape.dtos.campaigns.CampaignEditDTO
+import eu.karcags.mythscape.dtos.campaigns.CampaignTagEditDTO
 import eu.karcags.mythscape.modules.campaign.dao.CampaignEntity
 import eu.karcags.mythscape.modules.campaign.dao.CampaignMemberEntity
 import eu.karcags.mythscape.modules.campaign.dao.CampaignTagEntity
@@ -23,7 +23,7 @@ fun Route.campaignRoutes() {
             val campaigns = dbQuery {
                 CampaignEntity.find {
                     CampaignsTable.creator eq userId
-                }.toList().map { it.campaignDTO() }
+                }.toList().map { it.dto() }
             }
 
             call.wrapped(campaigns)
@@ -32,7 +32,7 @@ fun Route.campaignRoutes() {
         get("/{id}") {
             val id = call.parameters["id"]?.toIntOrNull().requireNonNull()
 
-            val campaign = dbQuery { CampaignEntity.findById(id).required().campaignDTO() }
+            val campaign = dbQuery { CampaignEntity.findById(id).required().dto() }
 
             call.wrapped(campaign)
         }
@@ -43,7 +43,7 @@ fun Route.campaignRoutes() {
             val tags = dbQuery {
                 CampaignTagEntity.find {
                     CampaignTagsTable.campaign eq id
-                }.toList().map { it.campaignTagDTO() }
+                }.toList().map { it.dto() }
             }
 
             call.wrapped(tags)
@@ -55,7 +55,7 @@ fun Route.campaignRoutes() {
             val members = dbQuery {
                 CampaignMemberEntity.find {
                     CampaignMembersTable.campaign eq id
-                }.toList().map { it.campaignMemberDTO() }
+                }.toList().map { it.dto() }
             }
 
             call.wrapped(members)

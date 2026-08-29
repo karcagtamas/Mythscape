@@ -1,12 +1,9 @@
 package eu.karcags.mythscape.ui.components
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -16,7 +13,6 @@ import mythscape.app.shared.generated.resources.Res
 import mythscape.app.shared.generated.resources.visibility_24
 import mythscape.app.shared.generated.resources.visibility_off_24
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.resources.vectorResource
 
 @Composable
 fun AppTextField(
@@ -32,45 +28,69 @@ fun AppTextField(
 
     Column(
         modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
-            label = { Text(label, color = Color.Gray) },
+            label = { Text(label) },
             leadingIcon = leadingIcon?.let { icon ->
-                { Icon(icon, contentDescription = null, tint = Color.Gray) }
+                {
+                    Icon(
+                        icon,
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp),
+                    )
+                }
             },
             trailingIcon = if (isPassword) {
                 {
-                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                    IconButton(
+                        onClick = { passwordVisible = !passwordVisible },
+                        modifier = Modifier.size(24.dp),
+                    ) {
                         Icon(
                             painterResource(if (passwordVisible) Res.drawable.visibility_24 else Res.drawable.visibility_off_24),
                             contentDescription = null,
-                            tint = Color.Gray
                         )
                     }
                 }
             } else null,
             visualTransformation = if (isPassword && !passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
             isError = errorMessage != null,
+            singleLine = true,
+            shape = MaterialTheme.shapes.medium,
             colors = OutlinedTextFieldDefaults.colors(
-                focusedTextColor = Color.White,
-                unfocusedTextColor = Color.White,
-                focusedBorderColor = Color(0xFF6C0202),
-                unfocusedBorderColor = Color(0xFF455161),
-                errorBorderColor = Color(0xFF9F0000),
-                focusedContainerColor = Color(0xFF0B0C10),
-                unfocusedContainerColor = Color(0xFF0B0C10)
+                focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                errorTextColor = MaterialTheme.colorScheme.error,
+
+                focusedContainerColor = MaterialTheme.colorScheme.background,
+                unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                errorContainerColor = MaterialTheme.colorScheme.background,
+
+                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                errorBorderColor = MaterialTheme.colorScheme.error,
+
+                focusedLabelColor = MaterialTheme.colorScheme.primary,
+                unfocusedLabelColor = MaterialTheme.colorScheme.outline,
+                errorLabelColor = MaterialTheme.colorScheme.error,
+
+                focusedLeadingIconColor = MaterialTheme.colorScheme.outline,
+                unfocusedLeadingIconColor = MaterialTheme.colorScheme.outline,
+                focusedTrailingIconColor = MaterialTheme.colorScheme.outline,
+                unfocusedTrailingIconColor = MaterialTheme.colorScheme.outline,
             ),
             modifier = Modifier.fillMaxWidth(),
         )
 
         if (errorMessage != null) {
             Text(
-                errorMessage,
-                color = Color.Red,
-                fontSize = 11.sp,
-                modifier = Modifier.padding(start = 4.dp, top = 2.dp)
+                text = errorMessage,
+                color = MaterialTheme.colorScheme.error,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(start = 2.dp, top = 1.dp),
             )
         }
     }

@@ -1,7 +1,6 @@
 package eu.karcags.mythscape.modules.campaign.routes
 
 import eu.karcags.mythscape.dtos.sessions.SessionEditDTO
-import eu.karcags.mythscape.dtos.sessions.sessionDTO
 import eu.karcags.mythscape.modules.campaign.dao.CampaignEntity
 import eu.karcags.mythscape.modules.campaign.dao.SessionEntity
 import eu.karcags.mythscape.modules.campaign.db.SessionsTable
@@ -32,7 +31,7 @@ fun Route.sessionRoutes() {
                     operations.fold((SessionsTable.id greater 0) as Op<Boolean>) { acc, a ->
                         acc and a
                     }
-                }.toList().map { it.sessionDTO() }
+                }.toList().map { it.dto() }
             }
 
             call.wrapped(sessions)
@@ -42,7 +41,7 @@ fun Route.sessionRoutes() {
             val id = call.parameters["id"]?.toIntOrNull().requireNonNull()
 
             val session = dbQuery {
-                SessionEntity.findById(id).required().sessionDTO()
+                SessionEntity.findById(id).required().dto()
             }
 
             call.wrapped(session)

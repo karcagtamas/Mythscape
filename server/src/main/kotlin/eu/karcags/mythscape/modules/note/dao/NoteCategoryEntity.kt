@@ -1,5 +1,6 @@
 package eu.karcags.mythscape.modules.note.dao
 
+import eu.karcags.mythscape.dtos.notes.CampaignNoteCategoryDTO
 import eu.karcags.mythscape.modules.note.db.NoteCategoriesTable
 import eu.karcags.mythscape.modules.application.dao.UserEntity
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
@@ -15,4 +16,15 @@ class NoteCategoryEntity(id: EntityID<Int>) : IntEntity(id) {
     var lastUpdate by NoteCategoriesTable.lastUpdate
     var lastUpdater by UserEntity referencedOn NoteCategoriesTable.lastUpdater
     var color by NoteCategoriesTable.color
+
+    fun dto(): CampaignNoteCategoryDTO {
+        return CampaignNoteCategoryDTO(
+            id.value,
+            name,
+            creation,
+            lastUpdate,
+            color,
+        )
+    }
+
 }

@@ -1,5 +1,6 @@
 package eu.karcags.mythscape.modules.campaign.dao
 
+import eu.karcags.mythscape.dtos.campaigns.CampaignMemberDTO
 import eu.karcags.mythscape.modules.campaign.db.CampaignMembersTable
 import eu.karcags.mythscape.modules.application.dao.UserEntity
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
@@ -14,4 +15,15 @@ class CampaignMemberEntity(id: EntityID<Int>) : IntEntity(id) {
     var user by UserEntity optionalReferencedOn CampaignMembersTable.user
     var creation by CampaignMembersTable.creation
     var isDM by CampaignMembersTable.isDM
+
+    fun dto(): CampaignMemberDTO {
+        return CampaignMemberDTO(
+            id.value,
+            name,
+            campaign.id.value,
+            user?.dto(),
+            creation,
+            isDM,
+        )
+    }
 }
