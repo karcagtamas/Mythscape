@@ -3,6 +3,7 @@ package eu.karcags.mythscape.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eu.karcags.mythscape.common.SessionManager
+import eu.karcags.mythscape.dtos.auth.LogoutDTO
 import eu.karcags.mythscape.dtos.auth.RefreshDTO
 import eu.karcags.mythscape.network.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -68,5 +69,19 @@ class AppViewModel(
 
     fun setAuthenticated() {
         _state.value = AppState.AUTHENTICATED
+    }
+
+    fun logout() {
+        viewModelScope.launch {
+            val userId = sessionManager.getUserId()
+            val clientId = sessionManager.getClientId()
+
+            if (userId != 0 && clientId != null) {
+                repository.logout(LogoutDTO(userId, clientId))
+            }
+
+            sessionManager.clearSession()
+            _state.value = AppState.UNAUTHENTICATED
+        }
     }
 }

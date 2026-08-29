@@ -11,10 +11,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import eu.karcags.mythscape.common.SessionManager
+import eu.karcags.mythscape.ui.components.AppButton
+import eu.karcags.mythscape.viewmodel.AppViewModel
 import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun DashboardScreen(sessionManager: SessionManager = koinInject()) {
+fun DashboardScreen(sessionManager: SessionManager = koinInject(), appViewModel: AppViewModel = koinViewModel()) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -23,18 +26,32 @@ fun DashboardScreen(sessionManager: SessionManager = koinInject()) {
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier
+                .width(300.dp),
         ) {
-            Text(
-                text = "Dashboard",
-                color = MaterialTheme.colorScheme.primary,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "Welcome back, Master Chronicler: ${sessionManager.getUsername() ?: "Anonymous"}",
-                color = MaterialTheme.colorScheme.onSurface,
-                fontSize = 13.sp,
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(
+                    text = "Dashboard",
+                    color = MaterialTheme.colorScheme.primary,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Welcome back, Master Chronicler: ${sessionManager.getUsername() ?: "Anonymous"}",
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontSize = 13.sp,
+                )
+            }
+
+            AppButton(
+                text = "Logout",
+                onClick = {
+                    appViewModel.logout()
+                }
             )
         }
     }
