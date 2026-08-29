@@ -2,6 +2,7 @@ package eu.karcags.mythscape.network
 
 import eu.karcags.mythscape.ServerResponse
 import eu.karcags.mythscape.dtos.auth.LoginDTO
+import eu.karcags.mythscape.dtos.auth.RefreshDTO
 import eu.karcags.mythscape.dtos.auth.RegisterDTO
 import eu.karcags.mythscape.dtos.auth.TokenDTO
 import io.ktor.client.HttpClient
@@ -26,7 +27,7 @@ class AuthRepository {
     }
 
     suspend fun login(dto: LoginDTO): ServerResponse<TokenDTO> {
-        val response = client.post("http://localhost:8080/auth/login") {
+        val response = client.post("http://localhost:8080/api/auth/login") {
             contentType(ContentType.Application.Json)
             setBody(dto)
         }
@@ -35,7 +36,16 @@ class AuthRepository {
     }
 
     suspend fun register(dto: RegisterDTO): ServerResponse<Int> {
-        val response = client.post("http://localhost:8080/auth/register") {
+        val response = client.post("http://localhost:8080/api/auth/register") {
+            contentType(ContentType.Application.Json)
+            setBody(dto)
+        }
+
+        return Json.decodeFromString(response.bodyAsText())
+    }
+
+    suspend fun refreshToken(dto: RefreshDTO): ServerResponse<TokenDTO> {
+        val response = client.post("http://localhost:8080/api/auth/refresh") {
             contentType(ContentType.Application.Json)
             setBody(dto)
         }

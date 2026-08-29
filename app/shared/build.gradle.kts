@@ -43,6 +43,8 @@ kotlin {
 
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+
+            implementation(libs.russhwolf.multiplatformSettings)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

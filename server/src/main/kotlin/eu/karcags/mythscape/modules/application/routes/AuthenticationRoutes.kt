@@ -34,12 +34,12 @@ fun Route.authenticationRoutes(
                 throw ServerException.Unauthorized("Incorrect password was provided.")
             }
 
-            val token = createToken(environment.config, user.id.value, data.username)
+            val (token, expiresAt) = createToken(environment.config, user.id.value, data.username)
 
             val clientId = UUID.randomUUID().toString()
             val refreshToken = generateRefreshToken(clientId, user.id.value)
 
-            call.wrapped(TokenDTO(token, user.dto(), refreshToken, clientId))
+            call.wrapped(TokenDTO(token, expiresAt.time, user.dto(), refreshToken, clientId))
         }
 
         post("/register") {
@@ -79,11 +79,11 @@ fun Route.authenticationRoutes(
                 UserEntity.findById(data.userId)
             }.required()
 
-            val token = createToken(environment.config, data.userId, user.username)
+            val (token, expiresAt) = createToken(environment.config, data.userId, user.username)
             revokeRefreshToken(refreshToken.id.value)
             val newRefreshToken = generateRefreshToken(data.clientId, data.userId)
 
-            call.wrapped(TokenDTO(token, user.dto(), newRefreshToken, data.clientId))
+            call.wrapped(TokenDTO(token, expiresAt.time, user.dto(), newRefreshToken, data.clientId))
         }
 
         post("/logout") {
@@ -96,14 +96,17 @@ fun Route.authenticationRoutes(
     }
 }
 
-fun createToken(config: ApplicationConfig, userId: Int, username: String): String {
-    return JWT.create()
+fun createToken(config: ApplicationConfig, userId: Int, username: String): Pair<String, Date> {
+    val expiresAt = Date(System.currentTimeMillis() + config.getIntProperty(ConfigKey.JWT_EXPIRATION) * 1000)
+    val token = JWT.create()
         .withAudience(config.getStringProperty(ConfigKey.JWT_AUDIENCE))
         .withIssuer(config.getStringProperty(ConfigKey.JWT_ISSUER))
         .withClaim("userId", userId)
         .withClaim("username", username)
-        .withExpiresAt(Date(System.currentTimeMillis() + config.getIntProperty(ConfigKey.JWT_EXPIRATION) * 1000))
+        .withExpiresAt(expiresAt)
         .sign(Algorithm.HMAC256(config.getStringProperty(ConfigKey.JWT_SECRET)))
+
+    return Pair(token, expiresAt)
 }
 
 suspend fun revokeRefreshToken(refreshTokenId: Int) {

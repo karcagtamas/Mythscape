@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import eu.karcags.mythscape.common.SessionManager
 import eu.karcags.mythscape.dtos.auth.LoginDTO
 import eu.karcags.mythscape.dtos.auth.RegisterDTO
 import eu.karcags.mythscape.network.AuthRepository
@@ -12,7 +13,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
+class AuthViewModel(
+    private val sessionManager: SessionManager,
+    private val repository: AuthRepository,
+) : ViewModel() {
 
     var username by mutableStateOf("")
     var email by mutableStateOf("")
@@ -49,7 +53,19 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
             try {
                 if (isLogin) {
                     val res = repository.login(LoginDTO(username, password))
-                    res.data?.token?.let { onAuthSuccess(it) }
+
+                    if (res.data != null) {
+                        sessionManager.saveSession(
+                            token = res.data!!.token,
+                            refreshToken = res.data!!.refreshToken,
+                            clientId = res.data!!.clientId,
+                            userId = res.data!!.user.id,
+                            username = res.data!!.user.username,
+                            expiresAt = res.data!!.expiresAt,
+                        )
+
+                        onAuthSuccess(res.data!!.token)
+                    }
                 } else {
                     repository.register(RegisterDTO(username, email, password, passwordConfirm, fullName))
                 }

@@ -29,12 +29,8 @@ suspend fun RoutingCall.success(statusCode: HttpStatusCode = HttpStatusCode.OK) 
     respond(statusCode, Success(null, statusCode.value))
 }
 
-fun <T : Any> T?.wrap(statusCode: HttpStatusCode = HttpStatusCode.OK): Success<T> {
-    return Success(this, statusCode.value)
-}
-
-suspend fun <T : Any> RoutingCall.wrapped(data: T?, statusCode: HttpStatusCode = HttpStatusCode.OK) {
-    respond(statusCode, data.wrap(statusCode))
+suspend inline fun <reified T : Any> RoutingCall.wrapped(data: T?, statusCode: HttpStatusCode = HttpStatusCode.OK) {
+    respond(statusCode, Success(data, statusCode.value))
 }
 
 fun failure(statusCode: HttpStatusCode = HttpStatusCode.InternalServerError): Failure {
