@@ -13,10 +13,18 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
+enum class AuthMode {
+    LOGIN,
+    REGISTER,
+}
+
 class AuthViewModel(
     private val sessionManager: SessionManager,
     private val repository: AuthRepository,
 ) : ViewModel() {
+
+    var mode by mutableStateOf(AuthMode.LOGIN)
+        private set
 
     var username by mutableStateOf("")
     var email by mutableStateOf("")
@@ -30,7 +38,15 @@ class AuthViewModel(
     private val _errors = MutableStateFlow<Map<String, String>>(emptyMap())
     val errors: StateFlow<Map<String, String>> = _errors
 
-    fun submit(isLogin: Boolean, onAuthSuccess: (String) -> Unit) {
+    fun toggleAuthMode() {
+        mode = if (mode == AuthMode.LOGIN) AuthMode.REGISTER else AuthMode.LOGIN
+        _errors.value = emptyMap()
+        password = ""
+        passwordConfirm = ""
+    }
+
+    fun submit(onAuthSuccess: (String) -> Unit) {
+        val isLogin = mode == AuthMode.LOGIN
         val localErrors = mutableMapOf<String, String>()
         if (username.length < 6) localErrors["username"] = "Minimum 6 characters"
         if (password.length < 8) localErrors["password"] = "Minimum 8 characters"
@@ -65,9 +81,16 @@ class AuthViewModel(
                         )
 
                         onAuthSuccess(res.data!!.token)
+                    } else {
+                        _errors.value = mapOf("global" to (res.error?.message ?: "Invalid credentials"))
                     }
                 } else {
-                    repository.register(RegisterDTO(username, email, password, passwordConfirm, fullName))
+                    val res = repository.register(RegisterDTO(username, email, password, passwordConfirm, fullName))
+                    if (res.success) {
+                        toggleAuthMode()
+                    } else {
+                        _errors.value = mapOf("global" to (res.error?.message ?: "Registration failed"))
+                    }
                 }
             } catch (e: Exception) {
                 _errors.value = mapOf("global" to (e.message ?: "Server execution failure"))

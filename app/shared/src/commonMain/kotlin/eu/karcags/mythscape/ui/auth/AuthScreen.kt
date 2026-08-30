@@ -1,11 +1,14 @@
 package eu.karcags.mythscape.ui.auth
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -14,21 +17,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import eu.karcags.mythscape.ui.components.AppButton
 import eu.karcags.mythscape.ui.components.AppTextField
+import eu.karcags.mythscape.viewmodel.AuthMode
 import eu.karcags.mythscape.viewmodel.AuthViewModel
+import mythscape.app.shared.generated.resources.Res
+import mythscape.app.shared.generated.resources.main
+import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
-enum class AuthMode {
-    LOGIN,
-    REGISTER,
-}
 
 @Composable
 fun AuthScreen(
     onAuthSuccess: (token: String) -> Unit,
     viewModel: AuthViewModel = koinViewModel()
 ) {
-    var mode by remember { mutableStateOf(AuthMode.LOGIN) }
-
     val isProcessing by viewModel.isProcessing.collectAsState()
     val errors by viewModel.errors.collectAsState()
 
@@ -48,12 +49,35 @@ fun AuthScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Text(
-                text = if (mode == AuthMode.LOGIN) "LOGIN" else "REGISTER",
+                text = if (viewModel.mode == AuthMode.LOGIN) "LOGIN" else "REGISTER",
                 color = MaterialTheme.colorScheme.primary,
-                fontSize = 16.sp,
+                fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
+            )
+
+            Spacer(
+                modifier = Modifier
+                    .height(4.dp),
+            )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(128.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                Image(
+                    painter = painterResource(Res.drawable.main),
+                    contentDescription = "Mythscape logo",
+                    modifier = Modifier.size(120.dp),
+                )
+            }
+
+            Spacer(
+                modifier = Modifier
+                    .height(4.dp),
             )
 
             AppTextField(
@@ -63,7 +87,7 @@ fun AuthScreen(
                 errorMessage = errors["username"],
             )
 
-            if (mode == AuthMode.REGISTER) {
+            if (viewModel.mode == AuthMode.REGISTER) {
                 AppTextField(
                     value = viewModel.email,
                     onValueChange = { viewModel.email = it },
@@ -80,7 +104,7 @@ fun AuthScreen(
                 errorMessage = errors["password"]
             )
 
-            if (mode == AuthMode.REGISTER) {
+            if (viewModel.mode == AuthMode.REGISTER) {
                 AppTextField(
                     value = viewModel.passwordConfirm,
                     onValueChange = { viewModel.passwordConfirm = it },
@@ -104,20 +128,20 @@ fun AuthScreen(
             Spacer(modifier = Modifier.height(2.dp))
 
             AppButton(
-                text = if (mode == AuthMode.LOGIN) "Login" else "Register",
+                text = if (viewModel.mode == AuthMode.LOGIN) "Login" else "Register",
                 isLoading = isProcessing,
                 onClick = {
-                    viewModel.submit(mode == AuthMode.LOGIN, onAuthSuccess)
+                    viewModel.submit(onAuthSuccess)
                 }
             )
 
             Text(
-                text = if (mode == AuthMode.LOGIN) "Create an account" else "Back to login",
+                text = if (viewModel.mode == AuthMode.LOGIN) "Create an account" else "Back to login",
                 color = MaterialTheme.colorScheme.secondary,
                 fontSize = 12.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth().clickable {
-                    mode = if (mode == AuthMode.LOGIN) AuthMode.REGISTER else AuthMode.LOGIN
+                    viewModel.toggleAuthMode()
                 }
             )
         }
