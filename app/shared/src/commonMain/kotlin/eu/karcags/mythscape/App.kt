@@ -14,7 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import eu.karcags.mythscape.common.appModule
 import eu.karcags.mythscape.theme.AppTheme
 import eu.karcags.mythscape.ui.auth.AuthScreen
-import eu.karcags.mythscape.ui.dashboard.DashboardScreen
+import eu.karcags.mythscape.ui.main.MainWorkspaceScreen
 import eu.karcags.mythscape.viewmodel.AppState
 import eu.karcags.mythscape.viewmodel.AppViewModel
 import org.koin.compose.KoinApplication
@@ -52,7 +52,7 @@ fun App() {
                 }
 
                 AppState.AUTHENTICATED -> {
-                    DashboardScreen()
+                    MainWorkspaceScreen()
                 }
             }
         }
