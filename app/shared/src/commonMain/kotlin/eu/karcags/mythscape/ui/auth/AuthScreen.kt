@@ -114,8 +114,8 @@ fun AuthScreen(
                 )
 
                 AppTextField(
-                    value = viewModel.fullName,
-                    onValueChange = { viewModel.fullName = it },
+                    value = viewModel.fullname,
+                    onValueChange = { viewModel.fullname = it },
                     label = "Full Name",
                     errorMessage = errors["fullName"]
                 )

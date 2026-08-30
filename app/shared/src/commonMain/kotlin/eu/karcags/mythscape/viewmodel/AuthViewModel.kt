@@ -30,7 +30,7 @@ class AuthViewModel(
     var email by mutableStateOf("")
     var password by mutableStateOf("")
     var passwordConfirm by mutableStateOf("")
-    var fullName by mutableStateOf("")
+    var fullname by mutableStateOf("")
 
     private val _isProcessing = MutableStateFlow(false)
     val isProcessing: StateFlow<Boolean> = _isProcessing
@@ -54,7 +54,7 @@ class AuthViewModel(
         if (!isLogin) {
             if (!email.contains("@")) localErrors["email"] = "Invalid e-mail format"
             if (password != passwordConfirm) localErrors["passwordConfirm"] = "Passwords mismatch"
-            if (fullName.isBlank()) localErrors["fullName"] = "Required"
+            if (fullname.isBlank()) localErrors["fullName"] = "Required"
         }
 
         if (localErrors.isNotEmpty()) {
@@ -85,7 +85,7 @@ class AuthViewModel(
                         _errors.value = mapOf("global" to (res.error?.message ?: "Invalid credentials"))
                     }
                 } else {
-                    val res = repository.register(RegisterDTO(username, email, password, passwordConfirm, fullName))
+                    val res = repository.register(RegisterDTO(username, password, passwordConfirm, fullname, email))
                     if (res.success) {
                         toggleAuthMode()
                     } else {
