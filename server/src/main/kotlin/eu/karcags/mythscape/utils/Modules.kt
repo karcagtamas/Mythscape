@@ -4,6 +4,7 @@ import io.ktor.server.application.Application
 import io.ktor.server.application.log
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.application
+import io.ktor.server.routing.route
 import org.koin.core.module.Module
 
 interface AppModule {
@@ -26,17 +27,17 @@ class ModuleRegistry(private val modules: List<AppModule>) {
         }
     }
 
-    fun openRoutesForAll(route: Route) {
+    fun Route.openRoutesForAll() {
         modules.forEach { module ->
-            route.application.log.info("Applying ${module::class.simpleName} open routes")
-            module.run { route.openRoutes() }
+            application.log.info("Applying ${module::class.simpleName} open routes")
+            module.run { openRoutes() }
         }
     }
 
-    fun protectedRoutesForAll(route: Route) {
+    fun Route.protectedRoutesForAll() {
         modules.forEach { module ->
-            route.application.log.info("Applying ${module::class.simpleName} protected routes")
-            module.run { route.protectedRoutes() }
+            application.log.info("Applying ${module::class.simpleName} protected routes")
+            module.run { protectedRoutes() }
         }
     }
 

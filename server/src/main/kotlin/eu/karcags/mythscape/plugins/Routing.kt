@@ -13,10 +13,14 @@ fun Application.configureRouting(registry: ModuleRegistry) {
         openAPI(path = "openapi")
 
         route("/api") {
-            registry.openRoutesForAll(this)
+            registry.run {
+                openRoutesForAll()
+            }
 
             authenticate("auth-jwt") {
-                registry.protectedRoutesForAll(this@route)
+                registry.run {
+                    protectedRoutesForAll()
+                }
             }
         }
     }

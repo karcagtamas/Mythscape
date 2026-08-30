@@ -4,8 +4,10 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import eu.karcags.mythscape.ConfigKey
 import eu.karcags.mythscape.modules.application.dao.UserEntity
+import eu.karcags.mythscape.utils.ServerException
 import eu.karcags.mythscape.utils.UserPrincipal
 import eu.karcags.mythscape.utils.dbQuery
+import eu.karcags.mythscape.utils.failure
 import eu.karcags.mythscape.utils.getStringProperty
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -47,7 +49,9 @@ fun Application.configureAuthentication() {
             }
 
             challenge { _, _ ->
-                call.respond(HttpStatusCode.Unauthorized, "Token is not valid or has expired")
+                call.respond(
+                    ServerException.Unauthorized("Token is not valid or has expired").failure()
+                )
             }
         }
     }

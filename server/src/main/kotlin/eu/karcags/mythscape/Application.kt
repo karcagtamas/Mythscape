@@ -48,20 +48,11 @@ fun main(args: Array<String>) {
 
 fun Application.mainModule() {
     configureKoin()
-    configureAuthentication()
-    configureDatabases()
-
-    install(ContentNegotiation) {
-        json()
-    }
-
     val registry = getKoin().get<ModuleRegistry>()
     registry.registerAll(this)
     loadKoinModules(registry.modules())
 
-    configureErrorHandling()
-    configureValidation()
-    configureRouting(registry)
+    configureDatabases()
 
     val allowedClient = environment.config.getStringProperty(ConfigKey.CORS_CLIENT, "localhost")
     install(CORS) {
@@ -71,8 +62,18 @@ fun Application.mainModule() {
         allowHeader(HttpHeaders.Authorization)
     }
 
+    install(ContentNegotiation) {
+        json()
+    }
+
+    configureAuthentication()
+    configureErrorHandling()
+    configureValidation()
+
     install(CallLogging) {
         level = Level.INFO
         filter { call -> call.request.path().startsWith("/") }
     }
+
+    configureRouting(registry)
 }

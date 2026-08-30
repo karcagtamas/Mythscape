@@ -144,6 +144,10 @@ fun MainWorkspaceScreen(
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 1.sp,
+                        modifier = Modifier
+                            .clickable {
+                                workspaceViewModel.selectDashboard()
+                            }
                     )
                     Text(" | ", color = Color.DarkGray, fontSize = 10.sp)
                     Text(
@@ -183,13 +187,7 @@ fun MainWorkspaceScreen(
                     }
 
                     ScreenFocus.PROFILE -> {
-                        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                            Text(
-                                "USER PROFILE SELECTION OR PROFILE EDIT CARD PANEL",
-                                color = Color.Gray,
-                                fontSize = 12.sp
-                            )
-                        }
+                        ProfileScreen()
                     }
 
                     ScreenFocus.CAMPAIGN_DASHBOARD -> {

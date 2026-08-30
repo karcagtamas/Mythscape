@@ -1,4 +1,4 @@
-package eu.karcags.mythscape.viewmodel
+    package eu.karcags.mythscape.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

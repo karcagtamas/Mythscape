@@ -43,12 +43,12 @@ class AppViewModel(
 
                     if (response.data != null) {
                         sessionManager.saveSession(
-                            response.data!!.token,
-                            response.data!!.refreshToken,
-                            response.data!!.clientId,
-                            response.data!!.user.id,
-                            response.data!!.user.username,
-                            response.data!!.expiresAt,
+                            token = response.data!!.token,
+                            refreshToken = response.data!!.refreshToken,
+                            clientId = response.data!!.clientId,
+                            userId = response.data!!.user.id,
+                            username = response.data!!.user.username,
+                            expiresAt = response.data!!.expiresAt,
                         )
 
                         _state.value = AppState.AUTHENTICATED

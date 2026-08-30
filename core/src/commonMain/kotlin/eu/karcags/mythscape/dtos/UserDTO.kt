@@ -1,5 +1,6 @@
 package eu.karcags.mythscape.dtos
 
+import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -8,4 +9,5 @@ data class UserDTO(
     val name: String,
     val username: String,
     val email: String,
+    val register: LocalDateTime,
 )

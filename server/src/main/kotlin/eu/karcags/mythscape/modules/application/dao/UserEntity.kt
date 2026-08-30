@@ -16,6 +16,6 @@ class UserEntity(id: EntityID<Int>) : IntEntity(id) {
     var register by UsersTable.register
 
     fun dto(): UserDTO {
-        return UserDTO(id.value, name, username, email)
+        return UserDTO(id.value, name, username, email, register)
     }
 }
