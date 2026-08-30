@@ -48,14 +48,13 @@ class WorkspaceViewModel(
 
     fun loadUserCampaigns() {
         val userId = sessionManager.getUserId()
-        val token = sessionManager.getAccessToken()
 
-        if (userId == 0 || token == null) return
+        if (userId == 0) return
 
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val response = campaignRepository.fetchCampaigns(userId, token)
+                val response = campaignRepository.fetchCampaigns(userId)
                 if (response.success && response.data != null) {
                     _campaigns.value = response.data!!
                 }

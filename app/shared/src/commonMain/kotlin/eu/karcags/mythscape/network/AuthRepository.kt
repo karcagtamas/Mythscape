@@ -1,35 +1,16 @@
 package eu.karcags.mythscape.network
 
 import eu.karcags.mythscape.ServerResponse
-import eu.karcags.mythscape.dtos.auth.LoginDTO
-import eu.karcags.mythscape.dtos.auth.LogoutDTO
-import eu.karcags.mythscape.dtos.auth.RefreshDTO
-import eu.karcags.mythscape.dtos.auth.RegisterDTO
-import eu.karcags.mythscape.dtos.auth.TokenDTO
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.cio.CIO
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.request.post
-import io.ktor.client.request.setBody
-import io.ktor.client.statement.bodyAsText
-import io.ktor.http.ContentType
-import io.ktor.http.contentType
-import io.ktor.serialization.kotlinx.json.json
+import eu.karcags.mythscape.dtos.auth.*
+import io.ktor.client.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import kotlinx.serialization.json.Json
 
-class AuthRepository {
-
-    private val client = HttpClient(CIO) {
-        install(ContentNegotiation) {
-            json(Json {
-                ignoreUnknownKeys = true
-            })
-        }
-    }
+class AuthRepository(private val client: HttpClient) {
 
     suspend fun login(dto: LoginDTO): ServerResponse<TokenDTO> {
-        val response = client.post("http://localhost:8080/api/auth/login") {
-            contentType(ContentType.Application.Json)
+        val response = client.post("/api/auth/login") {
             setBody(dto)
         }
 
@@ -37,8 +18,7 @@ class AuthRepository {
     }
 
     suspend fun register(dto: RegisterDTO): ServerResponse<Int> {
-        val response = client.post("http://localhost:8080/api/auth/register") {
-            contentType(ContentType.Application.Json)
+        val response = client.post("/api/auth/register") {
             setBody(dto)
         }
 
@@ -46,8 +26,7 @@ class AuthRepository {
     }
 
     suspend fun refreshToken(dto: RefreshDTO): ServerResponse<TokenDTO> {
-        val response = client.post("http://localhost:8080/api/auth/refresh") {
-            contentType(ContentType.Application.Json)
+        val response = client.post("/api/auth/refresh") {
             setBody(dto)
         }
 
@@ -56,8 +35,7 @@ class AuthRepository {
 
     suspend fun logout(dto: LogoutDTO): Result<Unit> {
         return runCatching {
-            client.post("http://localhost:8080/api/auth/logout") {
-                contentType(ContentType.Application.Json)
+            client.post("/api/auth/logout") {
                 setBody(dto)
             }
         }
