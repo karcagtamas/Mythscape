@@ -1,4 +1,4 @@
-package eu.karcags.mythscape.ui.components
+package eu.karcags.mythscape.ui.components.common
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -18,6 +19,8 @@ fun AppButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     isLoading: Boolean = false,
+    color: Color = MaterialTheme.colorScheme.primary,
+    textColor: Color = MaterialTheme.colorScheme.onPrimary,
 ) {
     Button(
         onClick = onClick,
@@ -25,10 +28,10 @@ fun AppButton(
         shape = MaterialTheme.shapes.medium,
         contentPadding = PaddingValues(vertical = 0.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f),
-            contentColor = MaterialTheme.colorScheme.onPrimary,
-            disabledContentColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f)
+            containerColor = color,
+            disabledContainerColor = color.copy(alpha = 0.4f),
+            contentColor = textColor,
+            disabledContentColor = textColor.copy(alpha = 0.4f),
         ),
         modifier = modifier
             .fillMaxWidth()
@@ -36,7 +39,7 @@ fun AppButton(
     ) {
         if (isLoading) {
             CircularProgressIndicator(
-                color = MaterialTheme.colorScheme.primary,
+                color = color,
                 modifier = Modifier.size(16.dp),
                 strokeWidth = 2.dp,
             )
@@ -45,7 +48,7 @@ fun AppButton(
                 text = text.uppercase(),
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onPrimary,
+                color = textColor,
             )
         }
     }

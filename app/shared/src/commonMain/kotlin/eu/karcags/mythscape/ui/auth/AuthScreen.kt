@@ -15,12 +15,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import eu.karcags.mythscape.ui.components.AppButton
-import eu.karcags.mythscape.ui.components.AppTextField
+import eu.karcags.mythscape.ui.components.common.AppButton
+import eu.karcags.mythscape.ui.components.common.AppTextField
 import eu.karcags.mythscape.viewmodel.AuthMode
 import eu.karcags.mythscape.viewmodel.AuthViewModel
 import mythscape.app.shared.generated.resources.Res
+import mythscape.app.shared.generated.resources.email_24
 import mythscape.app.shared.generated.resources.main
+import mythscape.app.shared.generated.resources.password_24
+import mythscape.app.shared.generated.resources.person_24
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -84,6 +87,7 @@ fun AuthScreen(
                 value = viewModel.username,
                 onValueChange = { viewModel.username = it },
                 label = "Username",
+                leadingIcon = painterResource(Res.drawable.person_24),
                 errorMessage = errors["username"],
             )
 
@@ -92,6 +96,7 @@ fun AuthScreen(
                     value = viewModel.email,
                     onValueChange = { viewModel.email = it },
                     label = "E-mail Address",
+                    leadingIcon = painterResource(Res.drawable.email_24),
                     errorMessage = errors["email"]
                 )
             }
@@ -100,6 +105,7 @@ fun AuthScreen(
                 value = viewModel.password,
                 onValueChange = { viewModel.password = it },
                 label = "Password",
+                leadingIcon = painterResource(Res.drawable.password_24),
                 isPassword = true,
                 errorMessage = errors["password"]
             )
@@ -109,6 +115,7 @@ fun AuthScreen(
                     value = viewModel.passwordConfirm,
                     onValueChange = { viewModel.passwordConfirm = it },
                     label = "Confirm Password",
+                    leadingIcon = painterResource(Res.drawable.password_24),
                     isPassword = true,
                     errorMessage = errors["passwordConfirm"]
                 )

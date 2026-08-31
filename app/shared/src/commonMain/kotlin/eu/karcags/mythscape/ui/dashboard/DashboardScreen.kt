@@ -11,7 +11,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import eu.karcags.mythscape.common.SessionManager
-import eu.karcags.mythscape.ui.components.AppButton
+import eu.karcags.mythscape.ui.components.common.AppButton
 import eu.karcags.mythscape.viewmodel.AppViewModel
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel

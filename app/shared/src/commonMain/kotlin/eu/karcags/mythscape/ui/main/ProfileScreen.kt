@@ -1,9 +1,7 @@
 package eu.karcags.mythscape.ui.main
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,7 +11,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import eu.karcags.mythscape.ui.components.AppButton
+import eu.karcags.mythscape.ui.components.common.AppButton
+import eu.karcags.mythscape.ui.components.common.LoadingBox
+import eu.karcags.mythscape.ui.components.common.PrimaryCard
+import eu.karcags.mythscape.ui.components.common.SecondaryCard
 import eu.karcags.mythscape.viewmodel.ProfileViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -23,41 +24,20 @@ fun ProfileScreen(viewModel: ProfileViewModel = koinViewModel()) {
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .padding(24.dp),
+            .padding(18.dp),
         contentAlignment = Alignment.TopStart,
     ) {
-        if (viewModel.isLoading) {
-            Box(
-                modifier = Modifier
-                    .size(460.dp, 200.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
-            }
-        } else {
+        LoadingBox(
+            isLoading = viewModel.isLoading,
+        ) {
             Column(
                 modifier = Modifier
-                    .width(460.dp),
+                    .fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.surface, shape = MaterialTheme.shapes.medium)
-                        .border(1.dp, MaterialTheme.colorScheme.outline, MaterialTheme.shapes.medium)
-                        .padding(20.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                PrimaryCard(
+                    title = "Chronicler Profile"
                 ) {
-                    Text(
-                        text = "Chronicler Profile",
-                        color = MaterialTheme.colorScheme.primary,
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = 1.sp,
-                    )
-
-                    HorizontalLine()
-
                     ProfileMetaRow(label = "Full Name", value = viewModel.fullname)
                     ProfileMetaRow(label = "Username", value = viewModel.username)
                     ProfileMetaRow(label = "E-mail Address", value = viewModel.email)
@@ -73,25 +53,9 @@ fun ProfileScreen(viewModel: ProfileViewModel = koinViewModel()) {
                     }
                 }
 
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.surface, MaterialTheme.shapes.medium)
-                        .border(1.dp, MaterialTheme.colorScheme.outline, MaterialTheme.shapes.medium)
-                        .padding(20.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                SecondaryCard(
+                    title = "Controls"
                 ) {
-                    Text(
-                        text = "Controls",
-                        color = Color.Gray,
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = 0.5.sp,
-                    )
-
-                    HorizontalLine()
-                    Spacer(modifier = Modifier.height(2.dp))
-
                     Row(
                         modifier = Modifier
                             .fillMaxWidth(),
@@ -140,6 +104,8 @@ fun ProfileScreen(viewModel: ProfileViewModel = koinViewModel()) {
                                 text = "Delete Account",
                                 onClick = {},
                                 enabled = false,
+                                color = MaterialTheme.colorScheme.error,
+                                textColor = MaterialTheme.colorScheme.onError,
                             )
                         }
                     }
@@ -172,11 +138,4 @@ private fun ProfileMetaRow(label: String, value: String) {
             fontWeight = FontWeight.Medium,
         )
     }
-}
-
-@Composable
-private fun HorizontalLine() {
-    Box(
-        modifier = Modifier.fillMaxWidth().height(1.dp).background(MaterialTheme.colorScheme.outline.copy(alpha = 0.4f))
-    )
 }

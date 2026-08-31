@@ -1,10 +1,10 @@
-package eu.karcags.mythscape.ui.components
+package eu.karcags.mythscape.ui.components.common
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -19,7 +19,7 @@ fun AppTextField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
-    leadingIcon: ImageVector? = null,
+    leadingIcon: Painter? = null,
     modifier: Modifier = Modifier,
     isPassword: Boolean = false,
     errorMessage: String? = null,

@@ -1,4 +1,4 @@
-package eu.karcags.mythscape.ui.components
+package eu.karcags.mythscape.ui.components.common
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
