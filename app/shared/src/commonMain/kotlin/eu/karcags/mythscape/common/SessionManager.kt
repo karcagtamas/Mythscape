@@ -34,7 +34,7 @@ class SessionManager {
 
     fun isAccessTokenExpired(): Boolean {
         val expiresAt = settings.getLong("expires_at", 0L)
-        val now = Clock.System.now().epochSeconds
+        val now = Clock.System.now().toEpochMilliseconds()
 
         return now >= expiresAt
     }
