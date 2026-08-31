@@ -73,13 +73,8 @@ fun MainWorkspaceScreen(
                     }
 
                     ScreenFocus.CAMPAIGN_DASHBOARD -> {
-                        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                            Text(
-                                "CAMPAIGN MANAGER SCREEN FOR: ${workspaceViewModel.selectedCampaign?.name}",
-                                color = MaterialTheme.colorScheme.primary,
-                                fontSize = 13.sp,
-                                fontWeight = FontWeight.Bold
-                            )
+                        workspaceViewModel.selectedCampaign?.let {
+                            CampaignDashboardScreen(it.id)
                         }
                     }
                 }

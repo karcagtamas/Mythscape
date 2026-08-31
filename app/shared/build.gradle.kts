@@ -45,6 +45,8 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
 
             implementation(libs.russhwolf.multiplatformSettings)
+
+            implementation(libs.kotlinx.datetime)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

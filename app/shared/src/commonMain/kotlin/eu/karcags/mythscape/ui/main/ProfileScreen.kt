@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import eu.karcags.mythscape.ui.components.common.AppButton
 import eu.karcags.mythscape.ui.components.common.LoadingBox
+import eu.karcags.mythscape.ui.components.common.MetaRow
 import eu.karcags.mythscape.ui.components.common.PrimaryCard
 import eu.karcags.mythscape.ui.components.common.SecondaryCard
 import eu.karcags.mythscape.viewmodel.ProfileViewModel
@@ -38,10 +39,10 @@ fun ProfileScreen(viewModel: ProfileViewModel = koinViewModel()) {
                 PrimaryCard(
                     title = "Chronicler Profile"
                 ) {
-                    ProfileMetaRow(label = "Full Name", value = viewModel.fullname)
-                    ProfileMetaRow(label = "Username", value = viewModel.username)
-                    ProfileMetaRow(label = "E-mail Address", value = viewModel.email)
-                    ProfileMetaRow(label = "Joined", value = viewModel.registration)
+                    MetaRow(label = "Full Name", value = viewModel.fullname)
+                    MetaRow(label = "Username", value = viewModel.username)
+                    MetaRow(label = "E-mail Address", value = viewModel.email)
+                    MetaRow(label = "Joined", value = viewModel.registration)
 
                     viewModel.globalError?.let {
                         Text(
@@ -112,30 +113,5 @@ fun ProfileScreen(viewModel: ProfileViewModel = koinViewModel()) {
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun ProfileMetaRow(label: String, value: String) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(24.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        Text(
-            text = label.uppercase(),
-            color = Color.Gray,
-            fontSize = 10.sp,
-            fontWeight = FontWeight.Bold,
-        )
-
-        Text(
-            text = value,
-            color = MaterialTheme.colorScheme.onSurface,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Medium,
-        )
     }
 }

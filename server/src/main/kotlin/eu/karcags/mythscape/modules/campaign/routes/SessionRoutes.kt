@@ -37,6 +37,30 @@ fun Route.sessionRoutes() {
             call.wrapped(sessions)
         }
 
+        get("/recent") {
+            val campaignId = call.queryParameters["campaignId"]?.toIntOrNull()
+            val number = call.queryParameters["number"]?.toIntOrNull() ?: 3
+
+            val sessions = dbQuery {
+                SessionEntity
+                    .find {
+                        if (campaignId != null) {
+                            SessionsTable.campaign eq campaignId
+                        } else {
+                            Op.TRUE
+                        }
+                    }
+                    .orderBy(
+                        SessionsTable.date to SortOrder.DESC,
+                        SessionsTable.startTime to SortOrder.DESC,
+                    )
+                    .take(number)
+                    .toList().map { it.dto() }
+            }
+
+            call.wrapped(sessions)
+        }
+
         get("/{id}") {
             val id = call.parameters["id"]?.toIntOrNull().requireNonNull()
 

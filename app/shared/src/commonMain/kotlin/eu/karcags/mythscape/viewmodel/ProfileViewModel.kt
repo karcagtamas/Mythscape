@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eu.karcags.mythscape.network.UserRepository
+import eu.karcags.mythscape.utils.formatted
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
@@ -34,7 +35,7 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
                     username = user.username
                     email = user.email
                     fullname = user.name
-                    //registration = user.register
+                    registration = user.register.formatted()
                 } else {
                     globalError = res.error?.message ?: "Failed to resolve profile data."
                 }
