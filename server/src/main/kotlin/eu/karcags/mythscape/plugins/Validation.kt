@@ -1,6 +1,6 @@
 package eu.karcags.mythscape.plugins
 
-import eu.karcags.mythscape.dtos.campaigns.CampaignEditDTO
+import eu.karcags.mythscape.dtos.campaigns.CampaignRequestDTO
 import eu.karcags.mythscape.dtos.auth.LoginDTO
 import eu.karcags.mythscape.dtos.auth.RegisterDTO
 import eu.karcags.mythscape.dtos.campaigns.CampaignTagEditDTO
@@ -46,7 +46,7 @@ fun Application.configureValidation() {
                 .validate()
         }
 
-        validate<CampaignEditDTO> {
+        validate<CampaignRequestDTO> {
             Validation.start(it)
                 .notEmpty("name") { name }
                 .maxLength("name", 40) { name }

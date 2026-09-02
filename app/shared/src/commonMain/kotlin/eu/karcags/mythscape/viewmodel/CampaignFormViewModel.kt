@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
-import eu.karcags.mythscape.dtos.campaigns.CampaignEditDTO
+import eu.karcags.mythscape.dtos.campaigns.CampaignRequestDTO
 import eu.karcags.mythscape.enums.FormState
 import eu.karcags.mythscape.network.CampaignRepository
 import kotlinx.coroutines.launch
@@ -44,7 +44,7 @@ class CampaignFormViewModel(
         }
     }
 
-    fun submit(onSuccess: () -> Unit) {
+    fun submit(onSuccess: (CampaignDTO) -> Unit) {
         if (name.isBlank() || title.isBlank()) {
             fieldError = "Name and title fields are mandatory"
             return
@@ -55,7 +55,7 @@ class CampaignFormViewModel(
 
         viewModelScope.launch {
             try {
-                val dto = CampaignEditDTO(
+                val dto = CampaignRequestDTO(
                     name,
                     title,
                     description,
@@ -67,8 +67,8 @@ class CampaignFormViewModel(
                     repository.createCampaign(dto)
                 }
 
-                if (response.success) {
-                    onSuccess()
+                if (response.success && response.data != null) {
+                    onSuccess(response.data!!)
                 } else {
                     fieldError = response.error?.message ?: "Sever error."
                 }

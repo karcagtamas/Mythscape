@@ -8,7 +8,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import eu.karcags.mythscape.enums.FormState
-import eu.karcags.mythscape.enums.WorkspaceState
+import eu.karcags.mythscape.enums.WorkspaceScreenState
 import eu.karcags.mythscape.ui.components.common.HorizontalLine
 import eu.karcags.mythscape.ui.components.common.VerticalLine
 import eu.karcags.mythscape.ui.components.main.MainBar
@@ -32,9 +32,8 @@ fun MainWorkspaceScreen(
     ) {
 
         WorkspaceBar(
-            activeView = workspaceViewModel.activeView,
+            state = workspaceViewModel.state,
             campaigns = campaigns,
-            selectedCampaign = workspaceViewModel.selectedCampaign,
             onProfileSelect = { workspaceViewModel.selectProfile() },
             onCampaignSelect = { workspaceViewModel.selectCampaign(it) },
             onCampaignCreate = { workspaceViewModel.selectCampaignCreate() },
@@ -49,8 +48,7 @@ fun MainWorkspaceScreen(
                 .fillMaxHeight(),
         ) {
             MainBar(
-                activeView = workspaceViewModel.activeView,
-                selectedCampaign = workspaceViewModel.selectedCampaign,
+                state = workspaceViewModel.state,
                 onAppTitleClick = { workspaceViewModel.selectDashboard() },
                 onVersionClick = {}
             )
@@ -62,51 +60,48 @@ fun MainWorkspaceScreen(
                     .weight(1f)
                     .fillMaxHeight(),
             ) {
-                when (workspaceViewModel.activeView) {
-                    WorkspaceState.DASHBOARD -> {
+                when (workspaceViewModel.state) {
+                    WorkspaceScreenState.Dashboard -> {
                         DashboardScreen()
                     }
 
-                    WorkspaceState.PROFILE -> {
+                    WorkspaceScreenState.Profile -> {
                         ProfileScreen()
                     }
 
-                    WorkspaceState.CAMPAIGN_DASHBOARD -> {
-                        workspaceViewModel.selectedCampaign?.let {
-                            CampaignDashboardScreen(
-                                it.id,
-                                onEdit = { campaign ->
-                                    workspaceViewModel.selectCampaignEdit(campaign)
-                                }
-                            )
-                        }
+                    is WorkspaceScreenState.CampaignDashboard -> {
+                        CampaignDashboardScreen(
+                            (workspaceViewModel.state as WorkspaceScreenState.CampaignDashboard).campaign.id,
+                            onEdit = { campaign ->
+                                workspaceViewModel.selectCampaignEdit(campaign)
+                            }
+                        )
                     }
 
-                    WorkspaceState.CAMPAIGN_CREATE -> {
+                    WorkspaceScreenState.CampaignCreate -> {
                         CampaignFormScreen(
                             mode = FormState.CREATE,
                             onCancel = {
                                 workspaceViewModel.selectDashboard()
                             },
-                            onComplete = {
+                            onComplete = { campaign ->
                                 workspaceViewModel.loadUserCampaigns()
-                                // TODO
-                                // workspaceViewModel.selectCampaign()
+                                workspaceViewModel.selectCampaign(campaign)
                             }
                         )
                     }
 
-                    WorkspaceState.CAMPAIGN_EDIT -> {
+                    is WorkspaceScreenState.CampaignEdit -> {
+                        val campaign = (workspaceViewModel.state as WorkspaceScreenState.CampaignEdit).campaign
                         CampaignFormScreen(
                             mode = FormState.EDIT,
-                            campaign = workspaceViewModel.selectedCampaign,
+                            campaign = campaign,
                             onCancel = {
-                                workspaceViewModel.selectCampaign(workspaceViewModel.selectedCampaign!!)
+                                workspaceViewModel.selectCampaign(campaign)
                             },
-                            onComplete = {
+                            onComplete = { campaign ->
                                 workspaceViewModel.loadUserCampaigns()
-                                // TODO
-                                // workspaceViewModel.selectCampaign()
+                                workspaceViewModel.selectCampaign(campaign)
                             }
                         )
                     }

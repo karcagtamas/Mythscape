@@ -2,7 +2,7 @@ package eu.karcags.mythscape.network
 
 import eu.karcags.mythscape.ServerResponse
 import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
-import eu.karcags.mythscape.dtos.campaigns.CampaignEditDTO
+import eu.karcags.mythscape.dtos.campaigns.CampaignRequestDTO
 import eu.karcags.mythscape.dtos.campaigns.CampaignMemberDTO
 import io.ktor.client.*
 import io.ktor.client.request.*
@@ -20,14 +20,14 @@ class CampaignRepository(private val client: HttpClient) {
         return Json.decodeFromString(response.bodyAsText())
     }
 
-    suspend fun createCampaign(dto: CampaignEditDTO): ServerResponse<Int> {
+    suspend fun createCampaign(dto: CampaignRequestDTO): ServerResponse<CampaignDTO> {
         val response = client.post("/api/campaigns") {
             setBody(dto)
         }
         return Json.decodeFromString(response.bodyAsText())
     }
 
-    suspend fun updateCampaign(id: Int, dto: CampaignEditDTO): ServerResponse<Unit> {
+    suspend fun updateCampaign(id: Int, dto: CampaignRequestDTO): ServerResponse<CampaignDTO> {
         val response = client.put("/api/campaigns/${id}") {
             setBody(dto)
         }

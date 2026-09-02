@@ -1,6 +1,6 @@
 package eu.karcags.mythscape.modules.campaign.routes
 
-import eu.karcags.mythscape.dtos.campaigns.CampaignEditDTO
+import eu.karcags.mythscape.dtos.campaigns.CampaignRequestDTO
 import eu.karcags.mythscape.dtos.campaigns.CampaignTagEditDTO
 import eu.karcags.mythscape.modules.campaign.dao.CampaignEntity
 import eu.karcags.mythscape.modules.campaign.dao.CampaignMemberEntity
@@ -13,6 +13,8 @@ import io.ktor.http.*
 import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
+import org.jetbrains.exposed.v1.core.Op
+import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
 
 fun Route.campaignRoutes() {
@@ -22,7 +24,7 @@ fun Route.campaignRoutes() {
 
             val campaigns = dbQuery {
                 CampaignEntity.find {
-                    CampaignsTable.creator eq userId
+                    (CampaignsTable.creator eq userId) and (CampaignsTable.archived eq Op.TRUE)
                 }.toList().map { it.dto() }
             }
 
@@ -72,11 +74,11 @@ fun Route.campaignRoutes() {
         }
 
         post {
-            val dto = call.receive<CampaignEditDTO>()
+            val dto = call.receive<CampaignRequestDTO>()
             val principal = call.principal<UserPrincipal>().required()
 
-            val campaign = dbQuery {
-                CampaignEntity.new {
+            val data = dbQuery {
+                val entity = CampaignEntity.new {
                     name = dto.name
                     title = dto.title
                     description = dto.description
@@ -84,22 +86,44 @@ fun Route.campaignRoutes() {
                     lastUpdate = current()
                     creator = principal.user
                 }
+
+                CampaignMemberEntity.new {
+                    name = principal.user.name
+                    campaign = entity
+                    user = principal.user
+                    creation = current()
+                    isDM = true
+                }
+
+                entity.dto()
             }
 
-            call.wrapped(campaign.id.value, HttpStatusCode.Created)
+            call.wrapped(data, HttpStatusCode.Created)
         }
 
         put("/{id}") {
             val id = call.parameters["id"]?.toIntOrNull().requireNonNull()
-            val dto = call.receive<CampaignEditDTO>()
+            val dto = call.receive<CampaignRequestDTO>()
 
-            dbQuery {
+            val data = dbQuery {
                 CampaignEntity.findByIdAndUpdate(id) {
                     it.name = dto.name
                     it.title = dto.title
                     it.description = dto.description
                     it.lastUpdate = current()
-                }
+                }.required().dto()
+            }
+
+            call.wrapped(data)
+        }
+
+        put("/{id}/archive") {
+            val id = call.parameters["id"]?.toIntOrNull().requireNonNull()
+
+            dbQuery {
+                CampaignEntity.findByIdAndUpdate(id) {
+                    it.archived = true
+                }.required()
             }
 
             call.success()

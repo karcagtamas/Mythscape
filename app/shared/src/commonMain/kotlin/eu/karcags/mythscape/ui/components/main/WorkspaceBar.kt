@@ -23,13 +23,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
 import eu.karcags.mythscape.ui.components.common.TextAvatar
-import eu.karcags.mythscape.enums.WorkspaceState
+import eu.karcags.mythscape.enums.WorkspaceScreenState
 
 @Composable
 fun WorkspaceBar(
-    activeView: WorkspaceState,
+    state: WorkspaceScreenState,
     campaigns: List<CampaignDTO>,
-    selectedCampaign: CampaignDTO?,
     onProfileSelect: () -> Unit,
     onCampaignSelect: (CampaignDTO) -> Unit,
     onCampaignCreate: () -> Unit,
@@ -51,7 +50,7 @@ fun WorkspaceBar(
             TextAvatar(
                 text = "Profile",
                 size = 32,
-                isSelected = activeView == WorkspaceState.PROFILE,
+                isSelected = state is WorkspaceScreenState.Profile,
                 onClick = { onProfileSelect() }
             )
 
@@ -64,8 +63,8 @@ fun WorkspaceBar(
                 TextAvatar(
                     text = campaign.name,
                     size = 32,
-                    isSelected = activeView == WorkspaceState.CAMPAIGN_DASHBOARD
-                            && selectedCampaign?.id == campaign.id,
+                    isSelected = state is WorkspaceScreenState.CampaignDashboard
+                            && state.campaign.id == campaign.id,
                     onClick = { onCampaignSelect(campaign) },
                 )
             }

@@ -15,4 +15,5 @@ object CampaignsTable : IntIdTable("campaigns") {
     val creator = reference("creator_id", UsersTable, onDelete = ReferenceOption.CASCADE)
     val creation = datetime("creation").default(current())
     val lastUpdate = datetime("last_update").default(current())
+    val archived = bool("archived").default(false)
 }

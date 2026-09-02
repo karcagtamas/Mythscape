@@ -11,13 +11,14 @@ data class CampaignDTO(
     val title: String,
     val imageId: Int?,
     val description: String?,
+    val archived: Boolean,
     val creator: UserDTO,
     val creation: LocalDateTime,
-    val lastUpdate: LocalDateTime
+    val lastUpdate: LocalDateTime,
 )
 
 @Serializable
-data class CampaignEditDTO(
+data class CampaignRequestDTO(
     val name: String,
     val title: String,
     val description: String?,

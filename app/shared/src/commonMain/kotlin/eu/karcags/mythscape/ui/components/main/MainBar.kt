@@ -2,11 +2,7 @@ package eu.karcags.mythscape.ui.components.main
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,13 +12,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
-import eu.karcags.mythscape.enums.WorkspaceState
+import eu.karcags.mythscape.enums.WorkspaceScreenState
 
 @Composable
 fun MainBar(
-    activeView: WorkspaceState,
-    selectedCampaign: CampaignDTO? = null,
+    state: WorkspaceScreenState,
     onAppTitleClick: () -> Unit,
     onVersionClick: () -> Unit,
 ) {
@@ -49,12 +43,12 @@ fun MainBar(
             )
             Text(" | ", color = Color.DarkGray, fontSize = 10.sp)
             Text(
-                text = when (activeView) {
-                    WorkspaceState.DASHBOARD -> "General Feed"
-                    WorkspaceState.PROFILE -> "Profile"
-                    WorkspaceState.CAMPAIGN_DASHBOARD -> "Campaign // ${selectedCampaign?.title}"
-                    WorkspaceState.CAMPAIGN_CREATE -> "Campaign create"
-                    WorkspaceState.CAMPAIGN_EDIT -> "Campaign edit // ${selectedCampaign?.title}"
+                text = when (state) {
+                    is WorkspaceScreenState.Dashboard -> "General Feed"
+                    is WorkspaceScreenState.Profile -> "Profile"
+                    is WorkspaceScreenState.CampaignDashboard -> "Campaign // ${state.campaign.title}"
+                    is WorkspaceScreenState.CampaignCreate -> "Campaign create"
+                    is WorkspaceScreenState.CampaignEdit -> "Campaign edit // ${state.campaign.title}"
                 },
                 color = Color.Gray,
                 fontSize = 10.sp,
@@ -66,6 +60,10 @@ fun MainBar(
             color = Color.DarkGray,
             fontSize = 9.sp,
             fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .clickable {
+                    onVersionClick()
+                }
         )
     }
 }

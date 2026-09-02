@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import eu.karcags.mythscape.common.SessionManager
 import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
 import eu.karcags.mythscape.network.CampaignRepository
-import eu.karcags.mythscape.enums.WorkspaceState
+import eu.karcags.mythscape.enums.WorkspaceScreenState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -24,9 +24,7 @@ class WorkspaceViewModel(
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
-    var activeView by mutableStateOf(WorkspaceState.DASHBOARD)
-        private set
-    var selectedCampaign by mutableStateOf<CampaignDTO?>(null)
+    var state by mutableStateOf<WorkspaceScreenState>(WorkspaceScreenState.Dashboard)
         private set
 
     init {
@@ -34,27 +32,23 @@ class WorkspaceViewModel(
     }
 
     fun selectDashboard() {
-        activeView = WorkspaceState.DASHBOARD
-        selectedCampaign = null
+        updateState(WorkspaceScreenState.Dashboard)
     }
 
     fun selectProfile() {
-        activeView = WorkspaceState.PROFILE
-        selectedCampaign = null
+        updateState(WorkspaceScreenState.Profile)
     }
 
     fun selectCampaign(campaign: CampaignDTO) {
-        selectedCampaign = campaign
-        activeView = WorkspaceState.CAMPAIGN_DASHBOARD
+        updateState(WorkspaceScreenState.CampaignDashboard(campaign))
     }
 
     fun selectCampaignCreate() {
-        activeView = WorkspaceState.CAMPAIGN_CREATE
+        updateState(WorkspaceScreenState.CampaignCreate)
     }
 
     fun selectCampaignEdit(campaign: CampaignDTO) {
-        selectedCampaign = campaign
-        activeView = WorkspaceState.CAMPAIGN_EDIT
+        updateState(WorkspaceScreenState.CampaignEdit(campaign))
     }
 
     fun loadUserCampaigns() {
@@ -75,5 +69,9 @@ class WorkspaceViewModel(
                 _isLoading.value = false
             }
         }
+    }
+
+    private fun updateState(state: WorkspaceScreenState) {
+        this.state = state
     }
 }

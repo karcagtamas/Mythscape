@@ -25,6 +25,7 @@ class CampaignEntity(id: EntityID<Int>) : IntEntity(id) {
     var creator by UserEntity.Companion referencedOn CampaignsTable.creator
     var creation by CampaignsTable.creation
     var lastUpdate by CampaignsTable.lastUpdate
+    var archived by CampaignsTable.archived
     val members by CampaignMemberEntity.Companion referrersOn CampaignMembersTable.campaign
     val tags by CampaignTagEntity.Companion referrersOn CampaignTagsTable.campaign
     val folders by FolderEntity.Companion referrersOn FoldersTable.campaign
@@ -38,6 +39,7 @@ class CampaignEntity(id: EntityID<Int>) : IntEntity(id) {
             title,
             imageId,
             description,
+            archived,
             creator.dto(),
             creation,
             lastUpdate,
