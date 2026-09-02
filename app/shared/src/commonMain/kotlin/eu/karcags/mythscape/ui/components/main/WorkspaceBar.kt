@@ -23,15 +23,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
 import eu.karcags.mythscape.ui.components.common.TextAvatar
-import eu.karcags.mythscape.ui.main.ScreenFocus
+import eu.karcags.mythscape.enums.WorkspaceState
 
 @Composable
 fun WorkspaceBar(
-    activeView: ScreenFocus,
+    activeView: WorkspaceState,
     campaigns: List<CampaignDTO>,
     selectedCampaign: CampaignDTO?,
     onProfileSelect: () -> Unit,
     onCampaignSelect: (CampaignDTO) -> Unit,
+    onCampaignCreate: () -> Unit,
     onLogout: () -> Unit,
 ) {
     Column(
@@ -50,7 +51,7 @@ fun WorkspaceBar(
             TextAvatar(
                 text = "Profile",
                 size = 32,
-                isSelected = activeView == ScreenFocus.PROFILE,
+                isSelected = activeView == WorkspaceState.PROFILE,
                 onClick = { onProfileSelect() }
             )
 
@@ -63,7 +64,7 @@ fun WorkspaceBar(
                 TextAvatar(
                     text = campaign.name,
                     size = 32,
-                    isSelected = activeView == ScreenFocus.CAMPAIGN_DASHBOARD
+                    isSelected = activeView == WorkspaceState.CAMPAIGN_DASHBOARD
                             && selectedCampaign?.id == campaign.id,
                     onClick = { onCampaignSelect(campaign) },
                 )
@@ -81,7 +82,7 @@ fun WorkspaceBar(
                     .clip(MaterialTheme.shapes.small)
                     .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.2f))
                     .border(1.dp, MaterialTheme.colorScheme.primary, MaterialTheme.shapes.small)
-                    .clickable {},
+                    .clickable { onCampaignCreate() },
             ) {
                 Text(
                     text = "+",

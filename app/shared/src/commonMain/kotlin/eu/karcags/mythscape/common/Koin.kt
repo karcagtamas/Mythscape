@@ -9,6 +9,7 @@ import eu.karcags.mythscape.network.UserRepository
 import eu.karcags.mythscape.viewmodel.AppViewModel
 import eu.karcags.mythscape.viewmodel.AuthViewModel
 import eu.karcags.mythscape.viewmodel.CampaignDashboardViewModel
+import eu.karcags.mythscape.viewmodel.CampaignFormViewModel
 import eu.karcags.mythscape.viewmodel.ProfileViewModel
 import eu.karcags.mythscape.viewmodel.WorkspaceViewModel
 import org.koin.core.module.dsl.viewModelOf
@@ -30,4 +31,5 @@ val appModule = module {
     viewModelOf(::WorkspaceViewModel)
     viewModelOf(::ProfileViewModel)
     viewModelOf(::CampaignDashboardViewModel)
+    viewModelOf(::CampaignFormViewModel)
 }

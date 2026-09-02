@@ -1,4 +1,4 @@
-    package eu.karcags.mythscape.viewmodel
+package eu.karcags.mythscape.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import eu.karcags.mythscape.common.SessionManager
 import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
 import eu.karcags.mythscape.network.CampaignRepository
-import eu.karcags.mythscape.ui.main.ScreenFocus
+import eu.karcags.mythscape.enums.WorkspaceState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -24,26 +24,37 @@ class WorkspaceViewModel(
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
-    var activeView by mutableStateOf(ScreenFocus.DASHBOARD)
+    var activeView by mutableStateOf(WorkspaceState.DASHBOARD)
+        private set
     var selectedCampaign by mutableStateOf<CampaignDTO?>(null)
+        private set
 
     init {
         loadUserCampaigns()
     }
 
     fun selectDashboard() {
-        activeView = ScreenFocus.DASHBOARD
+        activeView = WorkspaceState.DASHBOARD
         selectedCampaign = null
     }
 
     fun selectProfile() {
-        activeView = ScreenFocus.PROFILE
+        activeView = WorkspaceState.PROFILE
         selectedCampaign = null
     }
 
     fun selectCampaign(campaign: CampaignDTO) {
         selectedCampaign = campaign
-        activeView = ScreenFocus.CAMPAIGN_DASHBOARD
+        activeView = WorkspaceState.CAMPAIGN_DASHBOARD
+    }
+
+    fun selectCampaignCreate() {
+        activeView = WorkspaceState.CAMPAIGN_CREATE
+    }
+
+    fun selectCampaignEdit(campaign: CampaignDTO) {
+        selectedCampaign = campaign
+        activeView = WorkspaceState.CAMPAIGN_EDIT
     }
 
     fun loadUserCampaigns() {

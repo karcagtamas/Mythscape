@@ -17,11 +17,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
-import eu.karcags.mythscape.ui.main.ScreenFocus
+import eu.karcags.mythscape.enums.WorkspaceState
 
 @Composable
 fun MainBar(
-    activeView: ScreenFocus,
+    activeView: WorkspaceState,
     selectedCampaign: CampaignDTO? = null,
     onAppTitleClick: () -> Unit,
     onVersionClick: () -> Unit,
@@ -50,9 +50,11 @@ fun MainBar(
             Text(" | ", color = Color.DarkGray, fontSize = 10.sp)
             Text(
                 text = when (activeView) {
-                    ScreenFocus.DASHBOARD -> "General Feed"
-                    ScreenFocus.PROFILE -> "Profile"
-                    ScreenFocus.CAMPAIGN_DASHBOARD -> "Campaign // ${selectedCampaign?.title}"
+                    WorkspaceState.DASHBOARD -> "General Feed"
+                    WorkspaceState.PROFILE -> "Profile"
+                    WorkspaceState.CAMPAIGN_DASHBOARD -> "Campaign // ${selectedCampaign?.title}"
+                    WorkspaceState.CAMPAIGN_CREATE -> "Campaign create"
+                    WorkspaceState.CAMPAIGN_EDIT -> "Campaign edit // ${selectedCampaign?.title}"
                 },
                 color = Color.Gray,
                 fontSize = 10.sp,
