@@ -22,6 +22,7 @@ class CampaignDashboardViewModel(
     var recentSessions by mutableStateOf<List<SessionDTO>>(emptyList())
 
     var isLoading by mutableStateOf(false)
+    var isProcessing by mutableStateOf(false)
     var errorMessage by mutableStateOf<String?>(null)
 
     fun initialize(campaignId: Int) {
@@ -48,6 +49,34 @@ class CampaignDashboardViewModel(
                 errorMessage = e.message ?: "Something went wrong"
             } finally {
                 isLoading = false
+            }
+        }
+    }
+
+    fun archive(campaignId: Int, onComplete: () -> Unit) {
+        viewModelScope.launch {
+            isProcessing = true
+            try {
+                val res = campaignRepository.archiveCampaign(campaignId)
+                if (res.success) onComplete()
+            } catch (e: Exception) {
+                errorMessage = e.message ?: "Failed to execute realm archive operation."
+            } finally {
+                isProcessing = false
+            }
+        }
+    }
+
+    fun delete(campaignId: Int, onComplete: () -> Unit) {
+        viewModelScope.launch {
+            isProcessing = true
+            try {
+                val res = campaignRepository.deleteCampaign(campaignId)
+                if (res.success) onComplete()
+            } catch (e: Exception) {
+                errorMessage = e.message ?: "Failed to purge campaign realm from database."
+            } finally {
+                isProcessing = false
             }
         }
     }

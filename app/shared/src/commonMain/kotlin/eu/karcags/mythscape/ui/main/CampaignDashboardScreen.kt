@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
+import eu.karcags.mythscape.ui.components.common.AppButton
 import eu.karcags.mythscape.ui.components.common.LoadingBox
 import eu.karcags.mythscape.ui.components.common.MetaRow
 import eu.karcags.mythscape.ui.components.common.PrimaryCard
@@ -38,6 +39,8 @@ import org.koin.compose.viewmodel.koinViewModel
 fun CampaignDashboardScreen(
     campaignId: Int,
     onEdit: (CampaignDTO) -> Unit,
+    onDelete: (CampaignDTO) -> Unit,
+    onArchive: (CampaignDTO) -> Unit,
     viewModel: CampaignDashboardViewModel = koinViewModel(),
 ) {
     LaunchedEffect(campaignId) {
@@ -80,6 +83,53 @@ fun CampaignDashboardScreen(
                             MetaRow(label = "Created By", value = campaign.creator.name)
                             MetaRow(label = "Launch", value = campaign.creation.formatted())
                             MetaRow(label = "Last Update", value = campaign.lastUpdate.formatted())
+
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            ) {
+                                Box(
+                                    modifier = Modifier.weight(1f),
+                                ) {
+                                    AppButton(
+                                        text = "Edit",
+                                        onClick = {
+                                            onEdit(campaign)
+                                        },
+                                    )
+                                }
+
+                                Box(
+                                    modifier = Modifier.weight(1f),
+                                ) {
+                                    AppButton(
+                                        text = "Delete",
+                                        onClick = {
+                                            viewModel.delete(campaign.id) {
+                                                onDelete(campaign)
+                                            }
+                                        },
+                                        color = MaterialTheme.colorScheme.error,
+                                        textColor = MaterialTheme.colorScheme.onError,
+                                    )
+                                }
+
+                                Box(
+                                    modifier = Modifier.weight(1f),
+                                ) {
+                                    AppButton(
+                                        text = "Archive",
+                                        onClick = {
+                                            viewModel.archive(campaign.id) {
+                                                onArchive(campaign)
+                                            }
+                                        },
+                                        color = MaterialTheme.colorScheme.error,
+                                        textColor = MaterialTheme.colorScheme.onError,
+                                    )
+                                }
+                            }
                         }
                     }
 

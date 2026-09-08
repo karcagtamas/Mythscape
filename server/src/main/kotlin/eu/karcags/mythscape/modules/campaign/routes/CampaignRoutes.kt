@@ -16,6 +16,7 @@ import io.ktor.server.routing.*
 import org.jetbrains.exposed.v1.core.Op
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.neq
 
 fun Route.campaignRoutes() {
     route("/campaigns") {
@@ -24,7 +25,7 @@ fun Route.campaignRoutes() {
 
             val campaigns = dbQuery {
                 CampaignEntity.find {
-                    (CampaignsTable.creator eq userId) and (CampaignsTable.archived eq Op.TRUE)
+                    (CampaignsTable.creator eq userId) and (CampaignsTable.archived neq Op.TRUE)
                 }.toList().map { it.dto() }
             }
 
