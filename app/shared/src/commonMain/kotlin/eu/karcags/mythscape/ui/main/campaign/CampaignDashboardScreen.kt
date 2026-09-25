@@ -1,4 +1,4 @@
-package eu.karcags.mythscape.ui.main
+package eu.karcags.mythscape.ui.main.campaign
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -17,28 +17,29 @@ import androidx.compose.ui.unit.sp
 import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
 import eu.karcags.mythscape.dtos.campaigns.CampaignMemberDTO
 import eu.karcags.mythscape.dtos.sessions.SessionDTO
+import eu.karcags.mythscape.enums.FormState
 import eu.karcags.mythscape.ui.components.common.*
 import eu.karcags.mythscape.ui.components.dialogs.ConfirmDialog
+import eu.karcags.mythscape.ui.components.dialogs.campaign.CampaignFormDialog
 import eu.karcags.mythscape.utils.formatted
 import eu.karcags.mythscape.viewmodel.CampaignDashboardViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun CampaignDashboardScreen(
-    campaignId: Int,
-    onEdit: (CampaignDTO) -> Unit,
-    onDelete: (CampaignDTO) -> Unit,
-    onArchive: (CampaignDTO) -> Unit,
+    campaign: CampaignDTO,
+    onDelete: () -> Unit,
+    onArchive: () -> Unit,
     viewModel: CampaignDashboardViewModel = koinViewModel(),
 ) {
-    LaunchedEffect(campaignId) {
-        viewModel.initialize(campaignId)
+    LaunchedEffect(campaign.id) {
+        viewModel.initialize(campaign.id)
     }
 
     var showDeleteConfirm by remember { mutableStateOf(false) }
     var showArchiveConfirm by remember { mutableStateOf(false) }
 
-    LaunchedEffect(campaignId) {
+    LaunchedEffect(campaign.id) {
         showDeleteConfirm = false
         showArchiveConfirm = false
     }
@@ -67,15 +68,17 @@ fun CampaignDashboardScreen(
                     viewModel.campaign?.let { campaign ->
                         CampaignSummary(
                             campaign = campaign,
-                            onEdit = onEdit,
+                            onEdit = {
+                                viewModel.openEditDialog()
+                            },
                             onConfirmDelete = {
                                 viewModel.delete(campaign.id) {
-                                    onDelete(it)
+                                    onDelete()
                                 }
                             },
                             onConfirmArchive = {
                                 viewModel.archive(campaign.id) {
-                                    onArchive(it)
+                                    onArchive()
                                 }
                             },
                             isProcessing = viewModel.isProcessing,
@@ -92,6 +95,21 @@ fun CampaignDashboardScreen(
                 )
             }
         }
+    }
+
+    if (viewModel.showEditDialog) {
+        CampaignFormDialog(
+            mode = FormState.EDIT,
+            campaign = campaign,
+            isProcessing = viewModel.isEditingProcessing,
+            errorMessage = viewModel.editDialogError,
+            onDismiss = { viewModel.closeEditDialog() },
+            onConfirm = {
+                viewModel.edit(campaign.id, it) {
+                    viewModel.closeEditDialog()
+                }
+            }
+        )
     }
 }
 

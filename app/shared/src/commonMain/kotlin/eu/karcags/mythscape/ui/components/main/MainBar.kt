@@ -46,9 +46,7 @@ fun MainBar(
                 text = when (state) {
                     is WorkspaceScreenState.Dashboard -> "General Feed"
                     is WorkspaceScreenState.Profile -> "Profile"
-                    is WorkspaceScreenState.CampaignDashboard -> "Campaign // ${state.campaign.title}"
-                    is WorkspaceScreenState.CampaignCreate -> "Campaign create"
-                    is WorkspaceScreenState.CampaignEdit -> "Campaign edit // ${state.campaign.title}"
+                    is WorkspaceScreenState.CampaignWorkspace -> "Campaign // ${state.campaign.title}"
                 },
                 color = Color.Gray,
                 fontSize = 10.sp,

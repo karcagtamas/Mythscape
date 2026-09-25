@@ -8,9 +8,5 @@ sealed class WorkspaceScreenState {
 
     data object Profile : WorkspaceScreenState()
 
-    class CampaignDashboard(val campaign: CampaignDTO) : WorkspaceScreenState()
-
-    data object CampaignCreate : WorkspaceScreenState()
-
-    class CampaignEdit(val campaign: CampaignDTO) : WorkspaceScreenState()
+    class CampaignWorkspace(val campaign: CampaignDTO) : WorkspaceScreenState()
 }

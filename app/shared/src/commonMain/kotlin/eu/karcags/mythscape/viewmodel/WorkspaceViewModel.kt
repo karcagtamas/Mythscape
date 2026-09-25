@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eu.karcags.mythscape.common.SessionManager
 import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
+import eu.karcags.mythscape.dtos.campaigns.CampaignRequestDTO
 import eu.karcags.mythscape.network.CampaignRepository
 import eu.karcags.mythscape.enums.WorkspaceScreenState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,6 +28,13 @@ class WorkspaceViewModel(
     var state by mutableStateOf<WorkspaceScreenState>(WorkspaceScreenState.Dashboard)
         private set
 
+    var isCreatingCampaign by mutableStateOf(false)
+        private set
+    var createCampaignError by mutableStateOf<String?>(null)
+        private set
+    var showCampaignCreateDialog by mutableStateOf(false)
+        private set
+
     init {
         loadUserCampaigns()
     }
@@ -40,15 +48,35 @@ class WorkspaceViewModel(
     }
 
     fun selectCampaign(campaign: CampaignDTO) {
-        updateState(WorkspaceScreenState.CampaignDashboard(campaign))
+        updateState(WorkspaceScreenState.CampaignWorkspace(campaign))
     }
 
-    fun selectCampaignCreate() {
-        updateState(WorkspaceScreenState.CampaignCreate)
+    fun openCampaignCreateDialog() {
+        showCampaignCreateDialog = true
     }
 
-    fun selectCampaignEdit(campaign: CampaignDTO) {
-        updateState(WorkspaceScreenState.CampaignEdit(campaign))
+    fun closeCampaignCreateDialog() {
+        showCampaignCreateDialog = false
+    }
+
+    fun createCampaign(dto: CampaignRequestDTO) {
+        isCreatingCampaign = true
+        createCampaignError = null
+        viewModelScope.launch {
+            try {
+                val response = campaignRepository.createCampaign(dto)
+                if (response.success) {
+                    loadUserCampaigns()
+                    isCreatingCampaign = false
+                } else {
+                    createCampaignError = response.error?.message ?: "Unknown error"
+                }
+            } catch (e: Exception) {
+                createCampaignError = e.message ?: "Unknown error"
+            } finally {
+                isCreatingCampaign = false
+            }
+        }
     }
 
     fun loadUserCampaigns() {

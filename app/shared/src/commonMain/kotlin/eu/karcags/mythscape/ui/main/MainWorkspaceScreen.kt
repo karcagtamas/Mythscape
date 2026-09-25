@@ -11,9 +11,11 @@ import eu.karcags.mythscape.enums.FormState
 import eu.karcags.mythscape.enums.WorkspaceScreenState
 import eu.karcags.mythscape.ui.components.common.HorizontalLine
 import eu.karcags.mythscape.ui.components.common.VerticalLine
+import eu.karcags.mythscape.ui.components.dialogs.campaign.CampaignFormDialog
 import eu.karcags.mythscape.ui.components.main.MainBar
 import eu.karcags.mythscape.ui.components.main.WorkspaceBar
 import eu.karcags.mythscape.ui.dashboard.DashboardScreen
+import eu.karcags.mythscape.ui.main.campaign.CampaignWorkspaceScreen
 import eu.karcags.mythscape.viewmodel.AppViewModel
 import eu.karcags.mythscape.viewmodel.WorkspaceViewModel
 import org.koin.compose.viewmodel.koinViewModel
@@ -36,7 +38,7 @@ fun MainWorkspaceScreen(
             campaigns = campaigns,
             onProfileSelect = { workspaceViewModel.selectProfile() },
             onCampaignSelect = { workspaceViewModel.selectCampaign(it) },
-            onCampaignCreate = { workspaceViewModel.selectCampaignCreate() },
+            onCampaignCreate = { workspaceViewModel.openCampaignCreateDialog() },
             onLogout = { appViewModel.logout() },
         )
 
@@ -69,52 +71,36 @@ fun MainWorkspaceScreen(
                         ProfileScreen()
                     }
 
-                    is WorkspaceScreenState.CampaignDashboard -> {
-                        CampaignDashboardScreen(
-                            (workspaceViewModel.state as WorkspaceScreenState.CampaignDashboard).campaign.id,
-                            onEdit = { campaign ->
-                                workspaceViewModel.selectCampaignEdit(campaign)
-                            },
-                            onDelete = { campaign ->
+                    is WorkspaceScreenState.CampaignWorkspace -> {
+                        CampaignWorkspaceScreen(
+                            campaign = (workspaceViewModel.state as WorkspaceScreenState.CampaignWorkspace).campaign,
+                            onDelete = {
                                 workspaceViewModel.loadUserCampaigns()
                                 workspaceViewModel.selectDashboard()
                             },
-                            onArchive = { campaign ->
+                            onArchive = {
                                 workspaceViewModel.loadUserCampaigns()
                                 workspaceViewModel.selectDashboard()
                             },
-                        )
-                    }
-
-                    WorkspaceScreenState.CampaignCreate -> {
-                        CampaignFormScreen(
-                            mode = FormState.CREATE,
-                            onCancel = {
-                                workspaceViewModel.selectDashboard()
-                            },
-                            onComplete = { campaign ->
-                                workspaceViewModel.loadUserCampaigns()
-                                workspaceViewModel.selectCampaign(campaign)
-                            }
-                        )
-                    }
-
-                    is WorkspaceScreenState.CampaignEdit -> {
-                        val campaign = (workspaceViewModel.state as WorkspaceScreenState.CampaignEdit).campaign
-                        CampaignFormScreen(
-                            mode = FormState.EDIT,
-                            campaign = campaign,
-                            onCancel = {
-                                workspaceViewModel.selectCampaign(campaign)
-                            },
-                            onComplete = { campaign ->
-                                workspaceViewModel.loadUserCampaigns()
-                                workspaceViewModel.selectCampaign(campaign)
-                            }
                         )
                     }
                 }
             }
         }
+    }
+
+    if (workspaceViewModel.showCampaignCreateDialog) {
+        CampaignFormDialog(
+            mode = FormState.CREATE,
+            isProcessing = workspaceViewModel.isCreatingCampaign,
+            errorMessage = workspaceViewModel.createCampaignError,
+            onDismiss = { workspaceViewModel.closeCampaignCreateDialog() },
+            onConfirm = {
+                workspaceViewModel.createCampaign(it)
+                if (workspaceViewModel.createCampaignError == null) {
+                    workspaceViewModel.closeCampaignCreateDialog()
+                }
+            }
+        )
     }
 }

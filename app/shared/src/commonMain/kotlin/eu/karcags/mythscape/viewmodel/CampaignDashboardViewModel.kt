@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
 import eu.karcags.mythscape.dtos.campaigns.CampaignMemberDTO
+import eu.karcags.mythscape.dtos.campaigns.CampaignRequestDTO
 import eu.karcags.mythscape.dtos.sessions.SessionDTO
 import eu.karcags.mythscape.network.CampaignRepository
 import eu.karcags.mythscape.network.SessionRepository
@@ -24,6 +25,21 @@ class CampaignDashboardViewModel(
     var isLoading by mutableStateOf(false)
     var isProcessing by mutableStateOf(false)
     var errorMessage by mutableStateOf<String?>(null)
+
+    var showEditDialog by mutableStateOf(false)
+        private set
+    var isEditingProcessing by mutableStateOf(false)
+        private set
+    var editDialogError by mutableStateOf<String?>(null)
+        private set
+
+    fun openEditDialog() {
+        showEditDialog = true
+    }
+
+    fun closeEditDialog() {
+        showEditDialog = false
+    }
 
     fun initialize(campaignId: Int) {
         viewModelScope.launch {
@@ -49,6 +65,27 @@ class CampaignDashboardViewModel(
                 errorMessage = e.message ?: "Something went wrong"
             } finally {
                 isLoading = false
+            }
+        }
+    }
+
+    fun edit(campaignId: Int, dto: CampaignRequestDTO, onUpdate: () -> Unit) {
+        isEditingProcessing = true
+        editDialogError = null
+        viewModelScope.launch {
+            try {
+                val response = campaignRepository.updateCampaign(campaignId, dto)
+                if (response.success) {
+                    showEditDialog = false
+                    initialize(campaignId)
+                    onUpdate()
+                } else {
+                    editDialogError = response.error?.message ?: "Unknown error"
+                }
+            } catch (e: Exception) {
+                editDialogError = e.message ?: "Unknown error"
+            } finally {
+                isEditingProcessing = false
             }
         }
     }
