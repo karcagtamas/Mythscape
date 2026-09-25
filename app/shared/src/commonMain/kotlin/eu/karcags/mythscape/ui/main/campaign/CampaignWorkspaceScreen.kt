@@ -21,12 +21,14 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun CampaignWorkspaceScreen(
-    campaign: CampaignDTO,
+    campaignId: Int,
+    onEdit: (CampaignDTO) -> Unit,
     onDelete: () -> Unit,
     onArchive: () -> Unit,
     viewModel: CampaignWorkspaceViewModel = koinViewModel(),
 ) {
-    LaunchedEffect(campaign.id) {
+    LaunchedEffect(campaignId) {
+        viewModel.initialize(campaignId)
         viewModel.resetToDashBoard()
     }
 
@@ -69,38 +71,44 @@ fun CampaignWorkspaceScreen(
                 .weight(1f)
                 .fillMaxWidth(),
         ) {
-            when (viewModel.screenState) {
-                is CampaignWorkspaceScreenState.Dashboard -> {
-                    CampaignDashboardScreen(
-                        campaign = campaign,
-                        onDelete = { onDelete() },
-                        onArchive = { onArchive() },
-                    )
-                }
-
-                is CampaignWorkspaceScreenState.Sessions -> {
-                    Box(
-                        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            "SESSIONS MANAGEMENT CONSOLE FOR: ${campaign.name.uppercase()}",
-                            color = Color.Gray,
-                            fontSize = 11.sp
+            viewModel.campaign?.let { campaign ->
+                when (viewModel.screenState) {
+                    is CampaignWorkspaceScreenState.Dashboard -> {
+                        CampaignDashboardScreen(
+                            campaign = campaign,
+                            onEdit = {
+                                viewModel.initialize(campaign.id)
+                                onEdit(it)
+                            },
+                            onDelete = { onDelete() },
+                            onArchive = { onArchive() },
                         )
                     }
-                }
 
-                is CampaignWorkspaceScreenState.Notes -> {
-                    Box(
-                        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            "NOTEBOOK TREE SYSTEM & SCRIPTABLE MONACO CODE EDITOR CANVAS",
-                            color = Color.Gray,
-                            fontSize = 11.sp
-                        )
+                    is CampaignWorkspaceScreenState.Sessions -> {
+                        Box(
+                            modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                "SESSIONS MANAGEMENT CONSOLE FOR: ${campaign.name.uppercase()}",
+                                color = Color.Gray,
+                                fontSize = 11.sp
+                            )
+                        }
+                    }
+
+                    is CampaignWorkspaceScreenState.Notes -> {
+                        Box(
+                            modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                "NOTEBOOK TREE SYSTEM & SCRIPTABLE MONACO CODE EDITOR CANVAS",
+                                color = Color.Gray,
+                                fontSize = 11.sp
+                            )
+                        }
                     }
                 }
             }

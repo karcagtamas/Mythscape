@@ -63,8 +63,7 @@ fun WorkspaceBar(
                 TextAvatar(
                     text = campaign.name,
                     size = 32,
-                    isSelected = state is WorkspaceScreenState.CampaignWorkspace
-                            && state.campaign.id == campaign.id,
+                    isSelected = state is WorkspaceScreenState.CampaignWorkspace && state.campaignId == campaign.id,
                     onClick = { onCampaignSelect(campaign) },
                 )
             }

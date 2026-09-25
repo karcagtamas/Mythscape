@@ -73,7 +73,11 @@ fun MainWorkspaceScreen(
 
                     is WorkspaceScreenState.CampaignWorkspace -> {
                         CampaignWorkspaceScreen(
-                            campaign = (workspaceViewModel.state as WorkspaceScreenState.CampaignWorkspace).campaign,
+                            campaignId = (workspaceViewModel.state as WorkspaceScreenState.CampaignWorkspace).campaignId,
+                            onEdit = {
+                                workspaceViewModel.loadUserCampaigns()
+                                workspaceViewModel.updateCampaign(it.title)
+                            },
                             onDelete = {
                                 workspaceViewModel.loadUserCampaigns()
                                 workspaceViewModel.selectDashboard()

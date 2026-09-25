@@ -28,6 +28,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun CampaignDashboardScreen(
     campaign: CampaignDTO,
+    onEdit: (CampaignDTO) -> Unit,
     onDelete: () -> Unit,
     onArchive: () -> Unit,
     viewModel: CampaignDashboardViewModel = koinViewModel(),
@@ -65,7 +66,7 @@ fun CampaignDashboardScreen(
                         .fillMaxHeight(),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    viewModel.campaign?.let { campaign ->
+                    campaign.let { campaign ->
                         CampaignSummary(
                             campaign = campaign,
                             onEdit = {
@@ -105,8 +106,9 @@ fun CampaignDashboardScreen(
             errorMessage = viewModel.editDialogError,
             onDismiss = { viewModel.closeEditDialog() },
             onConfirm = {
-                viewModel.edit(campaign.id, it) {
+                viewModel.edit(campaign.id, it) { dto ->
                     viewModel.closeEditDialog()
+                    onEdit(dto)
                 }
             }
         )

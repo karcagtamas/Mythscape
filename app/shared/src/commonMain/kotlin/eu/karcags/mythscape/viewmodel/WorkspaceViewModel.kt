@@ -48,7 +48,18 @@ class WorkspaceViewModel(
     }
 
     fun selectCampaign(campaign: CampaignDTO) {
-        updateState(WorkspaceScreenState.CampaignWorkspace(campaign))
+        updateState(WorkspaceScreenState.CampaignWorkspace(campaign.id, campaign.title))
+    }
+
+    fun updateCampaign(title: String) {
+        if (state is WorkspaceScreenState.CampaignWorkspace) {
+            updateState(
+                WorkspaceScreenState.CampaignWorkspace(
+                    (state as WorkspaceScreenState.CampaignWorkspace).campaignId,
+                    title
+                )
+            )
+        }
     }
 
     fun openCampaignCreateDialog() {

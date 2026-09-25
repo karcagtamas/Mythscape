@@ -17,8 +17,6 @@ class CampaignDashboardViewModel(
     private val campaignRepository: CampaignRepository,
     private val sessionRepository: SessionRepository,
 ) : ViewModel() {
-
-    var campaign by mutableStateOf<CampaignDTO?>(null)
     var members by mutableStateOf<List<CampaignMemberDTO>>(emptyList())
     var recentSessions by mutableStateOf<List<SessionDTO>>(emptyList())
 
@@ -46,13 +44,8 @@ class CampaignDashboardViewModel(
             isLoading = true
             errorMessage = null
             try {
-                val campaignRes = campaignRepository.getCampaign(campaignId)
                 val membersRes = campaignRepository.getCampaignMembers(campaignId)
                 val sessionsRes = sessionRepository.getRecentSessions(campaignId)
-
-                if (campaignRes.success && campaignRes.data != null) {
-                    campaign = campaignRes.data
-                }
 
                 if (membersRes.success && membersRes.data != null) {
                     members = membersRes.data!!
@@ -69,16 +62,16 @@ class CampaignDashboardViewModel(
         }
     }
 
-    fun edit(campaignId: Int, dto: CampaignRequestDTO, onUpdate: () -> Unit) {
+    fun edit(campaignId: Int, dto: CampaignRequestDTO, onUpdate: (CampaignDTO) -> Unit) {
         isEditingProcessing = true
         editDialogError = null
         viewModelScope.launch {
             try {
                 val response = campaignRepository.updateCampaign(campaignId, dto)
-                if (response.success) {
+                if (response.success && response.data != null) {
                     showEditDialog = false
                     initialize(campaignId)
-                    onUpdate()
+                    onUpdate(response.data!!)
                 } else {
                     editDialogError = response.error?.message ?: "Unknown error"
                 }
