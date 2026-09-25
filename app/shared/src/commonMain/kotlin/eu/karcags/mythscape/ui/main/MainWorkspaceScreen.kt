@@ -76,9 +76,11 @@ fun MainWorkspaceScreen(
                                 workspaceViewModel.selectCampaignEdit(campaign)
                             },
                             onDelete = { campaign ->
+                                workspaceViewModel.loadUserCampaigns()
                                 workspaceViewModel.selectDashboard()
                             },
                             onArchive = { campaign ->
+                                workspaceViewModel.loadUserCampaigns()
                                 workspaceViewModel.selectDashboard()
                             },
                         )
