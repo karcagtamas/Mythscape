@@ -9,6 +9,7 @@ import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
 import eu.karcags.mythscape.dtos.campaigns.CampaignRequestDTO
 import eu.karcags.mythscape.enums.FormState
 import eu.karcags.mythscape.network.CampaignRepository
+import eu.karcags.mythscape.utils.nullIfEmpty
 import kotlinx.coroutines.launch
 
 class CampaignFormViewModel(
@@ -58,7 +59,7 @@ class CampaignFormViewModel(
                 val dto = CampaignRequestDTO(
                     name,
                     title,
-                    description,
+                    description = description.nullIfEmpty(),
                 )
 
                 val response = if (mode == FormState.EDIT) {
