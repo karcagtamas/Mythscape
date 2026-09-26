@@ -22,7 +22,7 @@ import eu.karcags.mythscape.ui.components.common.*
 import eu.karcags.mythscape.ui.components.dialogs.ConfirmDialog
 import eu.karcags.mythscape.ui.components.dialogs.campaign.CampaignFormDialog
 import eu.karcags.mythscape.utils.formatted
-import eu.karcags.mythscape.viewmodel.CampaignDashboardViewModel
+import eu.karcags.mythscape.viewmodel.campaign.CampaignDashboardViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable

@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.sp
 import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
 import eu.karcags.mythscape.enums.CampaignWorkspaceScreenState
 import eu.karcags.mythscape.ui.components.common.HorizontalLine
-import eu.karcags.mythscape.viewmodel.CampaignWorkspaceViewModel
+import eu.karcags.mythscape.viewmodel.campaign.CampaignWorkspaceViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -86,16 +86,7 @@ fun CampaignWorkspaceScreen(
                     }
 
                     is CampaignWorkspaceScreenState.Sessions -> {
-                        Box(
-                            modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                "SESSIONS MANAGEMENT CONSOLE FOR: ${campaign.name.uppercase()}",
-                                color = Color.Gray,
-                                fontSize = 11.sp
-                            )
-                        }
+                        CampaignSessionsScreen(campaignId = campaign.id)
                     }
 
                     is CampaignWorkspaceScreenState.Notes -> {

@@ -14,7 +14,7 @@ data class SessionDTO(
 )
 
 @Serializable
-data class SessionEditDTO(
+data class SessionRequestDTO(
     val date: LocalDate,
     val startTime: LocalTime,
     val endTime: LocalTime,
