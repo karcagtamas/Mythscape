@@ -12,6 +12,7 @@ class SessionEntity(id: EntityID<Int>) : IntEntity(id) {
     var date by SessionsTable.date
     var startTime by SessionsTable.startTime
     var endTime by SessionsTable.endTime
+    var canceled by SessionsTable.canceled
     var campaign by CampaignEntity referencedOn SessionsTable.campaign
 
     fun dto(): SessionDTO {
@@ -20,6 +21,7 @@ class SessionEntity(id: EntityID<Int>) : IntEntity(id) {
             date,
             startTime,
             endTime,
+            canceled,
         )
     }
 }

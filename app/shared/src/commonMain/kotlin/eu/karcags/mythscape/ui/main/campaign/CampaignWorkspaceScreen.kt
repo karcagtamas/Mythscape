@@ -41,7 +41,7 @@ fun CampaignWorkspaceScreen(
                 .fillMaxWidth()
                 .height(32.dp)
                 .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
-                .padding(horizontal = 8.dp),
+                .padding(horizontal = 4.dp, vertical = 2.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4.dp),
         ) {

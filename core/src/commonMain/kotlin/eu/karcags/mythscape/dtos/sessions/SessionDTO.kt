@@ -5,7 +5,19 @@ import kotlinx.datetime.LocalTime
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SessionDTO(val id: Int, val date: LocalDate, val startTime: LocalTime, val endTime: LocalTime)
+data class SessionDTO(
+    val id: Int,
+    val date: LocalDate,
+    val startTime: LocalTime,
+    val endTime: LocalTime,
+    val canceled: Boolean = false,
+)
 
 @Serializable
-data class SessionEditDTO(val date: LocalDate, val startTime: LocalTime, val endTime: LocalTime, val campaignId: Int)
+data class SessionEditDTO(
+    val date: LocalDate,
+    val startTime: LocalTime,
+    val endTime: LocalTime,
+    val campaignId: Int,
+    val canceled: Boolean = false,
+)

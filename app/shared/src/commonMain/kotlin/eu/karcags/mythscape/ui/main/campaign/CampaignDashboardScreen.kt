@@ -49,7 +49,7 @@ fun CampaignDashboardScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .padding(18.dp),
+            .padding(12.dp),
         contentAlignment = Alignment.TopStart,
     ) {
         LoadingBox(

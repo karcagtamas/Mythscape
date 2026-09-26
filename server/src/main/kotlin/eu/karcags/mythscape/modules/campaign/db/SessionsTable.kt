@@ -10,5 +10,6 @@ object SessionsTable : IntIdTable("sessions") {
     val date = date(name = "date")
     val startTime = time("start_time")
     val endTime = time("end_time")
+    val canceled = bool("canceled").default(false)
     val campaign = reference("campaign_id", CampaignsTable, onDelete = ReferenceOption.CASCADE)
 }

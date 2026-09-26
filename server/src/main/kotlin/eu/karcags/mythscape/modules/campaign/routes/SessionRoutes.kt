@@ -97,6 +97,7 @@ fun Route.sessionRoutes() {
                     it.date = dto.date
                     it.startTime = dto.startTime
                     it.endTime = dto.endTime
+                    it.canceled = dto.canceled
                 }.required()
             }
 

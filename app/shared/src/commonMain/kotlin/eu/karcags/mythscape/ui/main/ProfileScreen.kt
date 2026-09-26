@@ -25,7 +25,7 @@ fun ProfileScreen(viewModel: ProfileViewModel = koinViewModel()) {
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .padding(18.dp),
+            .padding(12.dp),
         contentAlignment = Alignment.TopStart,
     ) {
         LoadingBox(
@@ -34,7 +34,7 @@ fun ProfileScreen(viewModel: ProfileViewModel = koinViewModel()) {
             Column(
                 modifier = Modifier
                     .fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 PrimaryCard(
                     title = "Chronicler Profile"
