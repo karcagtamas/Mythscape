@@ -8,6 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
+val SmallIconSize = 16.dp
+
 val AppColors = darkColorScheme(
     primary = Color(0xFFFDBD79),
     onPrimary = Color(0xFF0B0C10),

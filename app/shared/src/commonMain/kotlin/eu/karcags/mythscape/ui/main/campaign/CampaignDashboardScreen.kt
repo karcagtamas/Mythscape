@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.sp
 import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
 import eu.karcags.mythscape.dtos.campaigns.CampaignMemberDTO
 import eu.karcags.mythscape.dtos.sessions.SessionDTO
+import eu.karcags.mythscape.enums.ColorVariant
 import eu.karcags.mythscape.enums.FormState
 import eu.karcags.mythscape.ui.components.common.*
 import eu.karcags.mythscape.ui.components.dialogs.ConfirmDialog
@@ -163,8 +164,7 @@ private fun CampaignSummary(
                 AppButton(
                     text = "Delete",
                     onClick = { showDeleteDialog = true },
-                    color = MaterialTheme.colorScheme.error,
-                    textColor = MaterialTheme.colorScheme.onError,
+                    color = ColorVariant.Error,
                 )
             }
 
@@ -174,8 +174,7 @@ private fun CampaignSummary(
                 AppButton(
                     text = "Archive",
                     onClick = { showArchiveDialog = true },
-                    color = MaterialTheme.colorScheme.error,
-                    textColor = MaterialTheme.colorScheme.onError,
+                    color = ColorVariant.Error,
                 )
             }
         }

@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import eu.karcags.mythscape.enums.ColorVariant
 import eu.karcags.mythscape.ui.components.common.AppButton
 import eu.karcags.mythscape.ui.components.common.LoadingBox
 import eu.karcags.mythscape.ui.components.common.MetaRow
@@ -105,8 +106,7 @@ fun ProfileScreen(viewModel: ProfileViewModel = koinViewModel()) {
                                 text = "Delete Account",
                                 onClick = {},
                                 enabled = false,
-                                color = MaterialTheme.colorScheme.error,
-                                textColor = MaterialTheme.colorScheme.onError,
+                                color = ColorVariant.Error,
                             )
                         }
                     }
