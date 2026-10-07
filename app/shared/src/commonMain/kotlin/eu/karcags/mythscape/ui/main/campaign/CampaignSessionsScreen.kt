@@ -21,6 +21,7 @@ import eu.karcags.mythscape.enums.ColorVariant
 import eu.karcags.mythscape.theme.SmallIconSize
 import eu.karcags.mythscape.ui.components.common.AppButton
 import eu.karcags.mythscape.ui.components.common.HorizontalLine
+import eu.karcags.mythscape.ui.components.common.InfoBox
 import eu.karcags.mythscape.ui.components.common.Page
 import eu.karcags.mythscape.ui.components.common.PageHeader
 import eu.karcags.mythscape.ui.components.dialogs.campaign.SessionFormDialog
@@ -97,7 +98,7 @@ fun CampaignSessionsScreen(
                         },
                         onDelete = {
                             viewModel.deleteSession(session)
-                        }
+                        },
                     )
                 }
             }
@@ -125,7 +126,7 @@ private fun SessionRow(
 ) {
     val isPast = session.date < today.date
     val backgroundTint = if (session.canceled) {
-        MaterialTheme.colorScheme.error.copy(alpha = 0.5f)
+        MaterialTheme.colorScheme.error.copy(alpha = 0.3f)
     } else if (isPast) {
         MaterialTheme.colorScheme.surface.copy(alpha = 0.4f)
     } else {
@@ -135,11 +136,11 @@ private fun SessionRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(backgroundTint, shape = MaterialTheme.shapes.small)
+            .background(backgroundTint, shape = MaterialTheme.shapes.medium)
             .border(
                 1.dp,
                 MaterialTheme.colorScheme.outline.copy(alpha = if (isPast) 0.3f else 1f),
-                MaterialTheme.shapes.small
+                MaterialTheme.shapes.medium
             )
             .padding(12.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -160,18 +161,8 @@ private fun SessionRow(
                 )
 
                 if (session.canceled) {
-                    Text(
-                        "Canceled",
-                        color = MaterialTheme.colorScheme.error,
-                        fontSize = 9.sp,
-                        fontWeight = FontWeight.Black,
-                        modifier = Modifier
-                            .border(
-                                1.dp,
-                                MaterialTheme.colorScheme.error,
-                                MaterialTheme.shapes.small
-                            )
-                            .padding(horizontal = 4.dp, vertical = 1.dp),
+                    InfoBox(
+                        MaterialTheme.colorScheme.error,
                     )
                 } else if (isPast) {
                     Text(
@@ -192,19 +183,21 @@ private fun SessionRow(
         Row(
             horizontalArrangement = Arrangement.spacedBy(6.dp),
         ) {
-            AppButton(
-                text = if (session.canceled) "Re-schedule" else "Cancel",
-                modifier = Modifier.width(80.dp),
-                onClick = { onCancelToggle() },
-                icon = {
-                    Icon(
-                        painterResource(Res.drawable.ic_close_24),
-                        contentDescription = null,
-                        modifier = Modifier.size(SmallIconSize),
-                    )
-                },
-                color = ColorVariant.Secondary,
-            )
+            if (!isPast) {
+                AppButton(
+                    text = if (session.canceled) "Re-schedule" else "Cancel",
+                    modifier = Modifier.width(100.dp),
+                    onClick = { onCancelToggle() },
+                    icon = {
+                        Icon(
+                            painterResource(Res.drawable.ic_close_24),
+                            contentDescription = null,
+                            modifier = Modifier.size(SmallIconSize),
+                        )
+                    },
+                    color = ColorVariant.Secondary,
+                )
+            }
 
             AppButton(
                 text = "Edit",

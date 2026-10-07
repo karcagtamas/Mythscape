@@ -44,7 +44,8 @@ class CampaignSessionsViewModel(
 
         viewModelScope.launch {
             try {
-                val res = repository.getSessions(activeCampaignId, page = currentPage, size = pageSize)
+                val res =
+                    repository.getSessions(activeCampaignId, showCanceled = true, page = currentPage, size = pageSize)
                 if (res.success && !res.data.isNullOrEmpty()) {
                     _sessions.value += res.data!!
                     currentPage++

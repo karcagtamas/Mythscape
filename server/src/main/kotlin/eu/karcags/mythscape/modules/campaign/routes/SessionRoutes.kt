@@ -14,7 +14,7 @@ fun Route.sessionRoutes() {
     route("/sessions") {
         get {
             val campaignId = call.queryParameters["campaignId"]?.toIntOrNull()
-            val showCancelled = call.queryParameters["showAll"]?.toBoolean() ?: false
+            val showCanceled = call.queryParameters["showCanceled"]?.toBoolean() ?: false
             val page = call.queryParameters["page"]?.toIntOrNull() ?: 0
             val size = call.queryParameters["size"]?.toIntOrNull() ?: 15
 
@@ -27,7 +27,7 @@ fun Route.sessionRoutes() {
                             operations.add(SessionsTable.campaign eq campaignId)
                         }
 
-                        if (!showCancelled) {
+                        if (!showCanceled) {
                             operations.add(SessionsTable.canceled eq Op.FALSE)
                         }
 
