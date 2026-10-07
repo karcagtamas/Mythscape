@@ -23,6 +23,7 @@ val appModule = module {
     viewModelOf(::AuthViewModel)
     viewModelOf(::WorkspaceViewModel)
     viewModelOf(::ProfileViewModel)
+    viewModelOf(::CalendarViewModel)
     viewModelOf(::CampaignWorkspaceViewModel)
     viewModelOf(::CampaignDashboardViewModel)
     viewModelOf(::CampaignSessionsViewModel)

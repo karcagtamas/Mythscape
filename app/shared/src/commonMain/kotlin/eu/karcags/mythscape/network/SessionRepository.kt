@@ -15,14 +15,16 @@ import kotlinx.serialization.json.Json
 
 class SessionRepository(private val client: HttpClient) {
     suspend fun getSessions(
-        campaignId: Int,
+        campaignId: Int?,
         page: Int,
         size: Int,
         showCanceled: Boolean = false
     ): ServerResponse<List<SessionDTO>> {
         val response = client.get("/api/sessions") {
             url {
-                parameter("campaignId", campaignId)
+                if (campaignId != null) {
+                    parameter("campaignId", campaignId)
+                }
                 parameter("page", page)
                 parameter("size", size)
                 parameter("showCanceled", showCanceled)

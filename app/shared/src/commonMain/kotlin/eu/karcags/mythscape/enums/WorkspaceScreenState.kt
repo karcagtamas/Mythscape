@@ -8,5 +8,7 @@ sealed class WorkspaceScreenState {
 
     data object Profile : WorkspaceScreenState()
 
+    data object Calendar : WorkspaceScreenState()
+
     class CampaignWorkspace(val campaignId: Int, val title: String) : WorkspaceScreenState()
 }

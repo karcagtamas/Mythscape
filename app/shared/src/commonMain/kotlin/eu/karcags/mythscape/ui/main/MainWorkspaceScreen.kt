@@ -88,6 +88,10 @@ fun MainWorkspaceScreen(
                             },
                         )
                     }
+
+                    WorkspaceScreenState.Calendar -> {
+                        CalendarScreen()
+                    }
                 }
             }
         }
