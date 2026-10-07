@@ -3,7 +3,6 @@ package eu.karcags.mythscape.ui.main.campaign
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Icon
@@ -19,25 +18,15 @@ import androidx.compose.ui.unit.sp
 import eu.karcags.mythscape.dtos.sessions.SessionDTO
 import eu.karcags.mythscape.enums.ColorVariant
 import eu.karcags.mythscape.theme.SmallIconSize
-import eu.karcags.mythscape.ui.components.common.AppButton
-import eu.karcags.mythscape.ui.components.common.HorizontalLine
-import eu.karcags.mythscape.ui.components.common.InfoBox
-import eu.karcags.mythscape.ui.components.common.Page
-import eu.karcags.mythscape.ui.components.common.PageHeader
+import eu.karcags.mythscape.ui.components.common.*
 import eu.karcags.mythscape.ui.components.dialogs.campaign.SessionFormDialog
 import eu.karcags.mythscape.viewmodel.campaign.CampaignSessionsViewModel
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import mythscape.app.shared.generated.resources.Res
-import mythscape.app.shared.generated.resources.ic_add_24
-import mythscape.app.shared.generated.resources.ic_close_24
-import mythscape.app.shared.generated.resources.ic_delete_24
-import mythscape.app.shared.generated.resources.ic_edit_24
-import org.jetbrains.compose.resources.imageResource
+import mythscape.app.shared.generated.resources.*
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
-import kotlin.text.compareTo
 import kotlin.time.Clock
 
 @Composable
@@ -59,6 +48,12 @@ fun CampaignSessionsScreen(
             PageHeader(
                 "Campaign Sessions",
             ) {
+                CheckboxField(
+                    isChecked = viewModel.showCanceled,
+                    onCheckedChange = { viewModel.handleShowCanceledChange(it) },
+                    caption = "Show Canceled",
+                )
+
                 AppButton(
                     text = "Add",
                     modifier = Modifier
@@ -142,13 +137,11 @@ private fun SessionRow(
                 MaterialTheme.colorScheme.outline.copy(alpha = if (isPast) 0.3f else 1f),
                 MaterialTheme.shapes.medium
             )
-            .padding(12.dp),
+            .padding(8.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(2.dp),
-        ) {
+        Column {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -168,7 +161,7 @@ private fun SessionRow(
                     Text(
                         "Past entry",
                         color = Color.DarkGray,
-                        fontSize = 9.sp,
+                        fontSize = 10.sp,
                         fontWeight = FontWeight.Bold,
                     )
                 }

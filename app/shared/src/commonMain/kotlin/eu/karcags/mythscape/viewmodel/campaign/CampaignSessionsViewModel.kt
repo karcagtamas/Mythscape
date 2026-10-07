@@ -22,6 +22,7 @@ class CampaignSessionsViewModel(
     var isLoading by mutableStateOf(false)
     var currentPage by mutableStateOf(0)
     var isLastPage by mutableStateOf(false)
+    var showCanceled by mutableStateOf(true)
 
     var showFormDialog by mutableStateOf(false)
     var editingSession by mutableStateOf<SessionDTO?>(null)
@@ -45,7 +46,12 @@ class CampaignSessionsViewModel(
         viewModelScope.launch {
             try {
                 val res =
-                    repository.getSessions(activeCampaignId, showCanceled = true, page = currentPage, size = pageSize)
+                    repository.getSessions(
+                        activeCampaignId,
+                        showCanceled = showCanceled,
+                        page = currentPage,
+                        size = pageSize,
+                    )
                 if (res.success && !res.data.isNullOrEmpty()) {
                     _sessions.value += res.data!!
                     currentPage++
@@ -126,5 +132,11 @@ class CampaignSessionsViewModel(
                 _sessions.value -= session
             }
         }
+    }
+
+    fun handleShowCanceledChange(showCanceled: Boolean) {
+        this.showCanceled = showCanceled
+        resetPaging()
+        loadNextPage()
     }
 }

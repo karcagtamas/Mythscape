@@ -31,7 +31,7 @@ fun PageHeader(
             fontWeight = FontWeight.Bold,
         )
         Row(
-            horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.End),
+            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             actions()

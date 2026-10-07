@@ -1,13 +1,12 @@
 package eu.karcags.mythscape.ui.components.dialogs.campaign
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -15,6 +14,7 @@ import eu.karcags.mythscape.dtos.sessions.SessionDTO
 import eu.karcags.mythscape.dtos.sessions.SessionRequestDTO
 import eu.karcags.mythscape.ui.components.common.AppButton
 import eu.karcags.mythscape.ui.components.common.AppTextField
+import eu.karcags.mythscape.ui.components.common.CheckboxField
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 
@@ -89,30 +89,14 @@ fun SessionFormDialog(
                     label = "End Time (HH:MM)"
                 )
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
+                CheckboxField(
+                    isChecked = isCanceled,
+                    onCheckedChange = { isCanceled = it },
+                    checkedColor = MaterialTheme.colorScheme.error,
+                    caption = "Mark session as canceled",
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 4.dp)
-                        .clickable { isCanceled = !isCanceled },
-                ) {
-                    Checkbox(
-                        checked = isCanceled,
-                        onCheckedChange = { isCanceled = it },
-                        colors = CheckboxDefaults.colors(
-                            checkedColor = MaterialTheme.colorScheme.error,
-                            uncheckedColor = MaterialTheme.colorScheme.outline,
-                        ),
-                        modifier = Modifier.size(20.dp),
-                    )
-
-                    Text(
-                        text = "Mark session as canceled",
-                        fontSize = 11.sp,
-                        color = Color.Gray,
-                        modifier = Modifier.padding(start = 8.dp),
-                    )
-                }
+                        .fillMaxWidth(),
+                )
 
                 val activeError = validationError ?: errorMessage
 
