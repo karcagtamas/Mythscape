@@ -8,6 +8,9 @@ import eu.karcags.mythscape.utils.*
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.plus
 import org.jetbrains.exposed.v1.core.*
 
 fun Route.sessionRoutes() {
@@ -17,6 +20,8 @@ fun Route.sessionRoutes() {
             val showCanceled = call.queryParameters["showCanceled"]?.toBoolean() ?: false
             val page = call.queryParameters["page"]?.toIntOrNull() ?: 0
             val size = call.queryParameters["size"]?.toIntOrNull() ?: 15
+            val after = call.queryParameters["after"]?.let { LocalDate.parse(it) }
+            val before = call.queryParameters["before"]?.let { LocalDate.parse(it) }
 
             val sessions = dbQuery {
                 SessionEntity
@@ -31,6 +36,14 @@ fun Route.sessionRoutes() {
                             operations.add(SessionsTable.canceled eq Op.FALSE)
                         }
 
+                        after?.also {
+                            operations.add(SessionsTable.date greaterEq it)
+                        }
+
+                        before?.also {
+                            operations.add(SessionsTable.date lessEq it)
+                        }
+
                         operations.fold((SessionsTable.id greater 0) as Op<Boolean>) { acc, a ->
                             acc and a
                         }
@@ -41,6 +54,23 @@ fun Route.sessionRoutes() {
                     )
                     .limit(size)
                     .offset((page * size).toLong())
+                    .map { it.dto() }
+            }
+
+            call.wrapped(sessions)
+        }
+
+        get("/agenda") {
+            val date = call.queryParameters["date"].requireNonNull().let { LocalDate.parse(it) }
+
+            val sessions = dbQuery {
+                SessionEntity
+                    .find {
+                        (SessionsTable.date greaterEq date) and (SessionsTable.date lessEq date.plus(
+                            1,
+                            DateTimeUnit.MONTH
+                        ))
+                    }
                     .map { it.dto() }
             }
 

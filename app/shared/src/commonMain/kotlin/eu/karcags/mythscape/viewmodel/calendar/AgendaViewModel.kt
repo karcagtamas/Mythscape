@@ -10,6 +10,7 @@ import eu.karcags.mythscape.network.SessionRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
 
 class AgendaViewModel(private val repository: SessionRepository) : ViewModel() {
 
@@ -19,16 +20,12 @@ class AgendaViewModel(private val repository: SessionRepository) : ViewModel() {
     var isLoading by mutableStateOf(false)
         private set
 
-    init {
-        loadAgenda()
-    }
-
-    fun loadAgenda() {
+    fun loadAgenda(date: LocalDate) {
         isLoading = true
 
         viewModelScope.launch {
             try {
-                val res = repository.getAgenda()
+                val res = repository.getAgenda(date)
                 if (res.success && res.data != null) {
                     _sessions.value = res.data!!
                 }

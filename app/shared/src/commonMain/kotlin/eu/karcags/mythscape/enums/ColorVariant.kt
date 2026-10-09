@@ -31,9 +31,9 @@ fun ColorVariant.getTextColor() = when (this) {
     ColorVariant.Secondary -> MaterialTheme.colorScheme.onSecondary
     ColorVariant.Tertiary -> MaterialTheme.colorScheme.onTertiary
     ColorVariant.Error -> MaterialTheme.colorScheme.onError
-    ColorVariant.Background -> MaterialTheme.colorScheme.background
-    ColorVariant.Outline -> MaterialTheme.colorScheme.outline
-    ColorVariant.Surface -> MaterialTheme.colorScheme.surface
+    ColorVariant.Background -> MaterialTheme.colorScheme.onBackground
+    ColorVariant.Outline -> MaterialTheme.colorScheme.onBackground
+    ColorVariant.Surface -> MaterialTheme.colorScheme.onSurface
 }
 
 @Composable

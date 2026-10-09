@@ -48,8 +48,10 @@ class SessionRepository(private val client: HttpClient) {
         return Json.decodeFromString(response.bodyAsText())
     }
 
-    suspend fun getAgenda(): ServerResponse<List<SessionDTO>> {
-        val response = client.get("/api/sessions/agenda")
+    suspend fun getAgenda(date: LocalDate): ServerResponse<List<SessionDTO>> {
+        val response = client.get("/api/sessions/agenda") {
+            parameter("date", date)
+        }
         return Json.decodeFromString(response.bodyAsText())
     }
 
