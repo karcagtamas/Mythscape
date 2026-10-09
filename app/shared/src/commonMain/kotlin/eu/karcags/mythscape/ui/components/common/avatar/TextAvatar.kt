@@ -1,4 +1,4 @@
-package eu.karcags.mythscape.ui.components.common
+package eu.karcags.mythscape.ui.components.common.avatar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -28,21 +28,13 @@ fun TextAvatar(
     val glyph = remember(text) {
         if (text.length >= 2) text.take(2).uppercase() else text.uppercase()
     }
-
-    val backgroundColor = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface
     val textColor = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
-    val borderModifier = if (isSelected) {
-        Modifier.border(2.dp, MaterialTheme.colorScheme.primary, CircleShape)
-    } else Modifier
 
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier
-            .size(size.dp)
-            .then(borderModifier)
-            .clip(CircleShape)
-            .background(backgroundColor)
-            .clickable { onClick() },
+    Avatar(
+        onClick = onClick,
+        modifier = modifier,
+        isSelected = isSelected,
+        size = size,
     ) {
         Text(
             text = glyph,

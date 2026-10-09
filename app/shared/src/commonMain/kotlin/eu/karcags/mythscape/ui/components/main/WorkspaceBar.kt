@@ -22,8 +22,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
-import eu.karcags.mythscape.ui.components.common.TextAvatar
+import eu.karcags.mythscape.ui.components.common.avatar.TextAvatar
 import eu.karcags.mythscape.enums.WorkspaceScreenState
+import eu.karcags.mythscape.ui.components.common.avatar.IconAvatar
+import mythscape.app.shared.generated.resources.Res
+import mythscape.app.shared.generated.resources.ic_calendar_24
 
 @Composable
 fun WorkspaceBar(
@@ -32,6 +35,7 @@ fun WorkspaceBar(
     onProfileSelect: () -> Unit,
     onCampaignSelect: (CampaignDTO) -> Unit,
     onCampaignCreate: () -> Unit,
+    onCalendarSelect: () -> Unit,
     onLogout: () -> Unit,
 ) {
     Column(
@@ -52,6 +56,13 @@ fun WorkspaceBar(
                 size = 32,
                 isSelected = state is WorkspaceScreenState.Profile,
                 onClick = { onProfileSelect() }
+            )
+
+            IconAvatar(
+                icon = Res.drawable.ic_calendar_24,
+                size = 32,
+                isSelected = state is WorkspaceScreenState.Calendar,
+                onClick = { onCalendarSelect() }
             )
 
             HorizontalDivider(

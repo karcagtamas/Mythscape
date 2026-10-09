@@ -2,6 +2,10 @@ package eu.karcags.mythscape.common
 
 import eu.karcags.mythscape.network.*
 import eu.karcags.mythscape.viewmodel.*
+import eu.karcags.mythscape.viewmodel.calendar.AgendaViewModel
+import eu.karcags.mythscape.viewmodel.calendar.CalendarViewModel
+import eu.karcags.mythscape.viewmodel.calendar.MonthlyCalendarViewModel
+import eu.karcags.mythscape.viewmodel.calendar.WeeklyCalendarViewModel
 import eu.karcags.mythscape.viewmodel.campaign.CampaignDashboardViewModel
 import eu.karcags.mythscape.viewmodel.campaign.CampaignSessionsViewModel
 import eu.karcags.mythscape.viewmodel.campaign.CampaignWorkspaceViewModel
@@ -24,6 +28,9 @@ val appModule = module {
     viewModelOf(::WorkspaceViewModel)
     viewModelOf(::ProfileViewModel)
     viewModelOf(::CalendarViewModel)
+    viewModelOf(::AgendaViewModel)
+    viewModelOf(::WeeklyCalendarViewModel)
+    viewModelOf(::MonthlyCalendarViewModel)
     viewModelOf(::CampaignWorkspaceViewModel)
     viewModelOf(::CampaignDashboardViewModel)
     viewModelOf(::CampaignSessionsViewModel)

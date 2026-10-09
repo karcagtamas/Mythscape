@@ -47,6 +47,7 @@ fun MainBar(
                     is WorkspaceScreenState.Dashboard -> "General Feed"
                     is WorkspaceScreenState.Profile -> "Profile"
                     is WorkspaceScreenState.CampaignWorkspace -> "Campaign // ${state.title}"
+                    is WorkspaceScreenState.Calendar -> "Calendar"
                 },
                 color = Color.Gray,
                 fontSize = 10.sp,

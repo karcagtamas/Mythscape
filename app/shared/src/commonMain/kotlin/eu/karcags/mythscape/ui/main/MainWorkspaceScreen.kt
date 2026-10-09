@@ -15,6 +15,7 @@ import eu.karcags.mythscape.ui.components.dialogs.campaign.CampaignFormDialog
 import eu.karcags.mythscape.ui.components.main.MainBar
 import eu.karcags.mythscape.ui.components.main.WorkspaceBar
 import eu.karcags.mythscape.ui.dashboard.DashboardScreen
+import eu.karcags.mythscape.ui.main.calendar.CalendarScreen
 import eu.karcags.mythscape.ui.main.campaign.CampaignWorkspaceScreen
 import eu.karcags.mythscape.viewmodel.AppViewModel
 import eu.karcags.mythscape.viewmodel.WorkspaceViewModel
@@ -39,6 +40,7 @@ fun MainWorkspaceScreen(
             onProfileSelect = { workspaceViewModel.selectProfile() },
             onCampaignSelect = { workspaceViewModel.selectCampaign(it) },
             onCampaignCreate = { workspaceViewModel.openCampaignCreateDialog() },
+            onCalendarSelect = { workspaceViewModel.selectCalendar() },
             onLogout = { appViewModel.logout() },
         )
 

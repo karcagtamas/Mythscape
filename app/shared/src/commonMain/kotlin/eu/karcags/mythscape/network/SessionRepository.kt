@@ -11,14 +11,17 @@ import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
+import kotlinx.datetime.LocalDate
 import kotlinx.serialization.json.Json
 
 class SessionRepository(private val client: HttpClient) {
     suspend fun getSessions(
-        campaignId: Int?,
-        page: Int,
-        size: Int,
-        showCanceled: Boolean = false
+        campaignId: Int? = null,
+        page: Int? = null,
+        size: Int? = null,
+        after: LocalDate? = null,
+        before: LocalDate? = null,
+        showCanceled: Boolean = false,
     ): ServerResponse<List<SessionDTO>> {
         val response = client.get("/api/sessions") {
             url {
@@ -28,6 +31,8 @@ class SessionRepository(private val client: HttpClient) {
                 parameter("page", page)
                 parameter("size", size)
                 parameter("showCanceled", showCanceled)
+                parameter("before", before)
+                parameter("after", after)
             }
         }
         return Json.decodeFromString(response.bodyAsText())
@@ -40,6 +45,11 @@ class SessionRepository(private val client: HttpClient) {
                 parameter("number", number)
             }
         }
+        return Json.decodeFromString(response.bodyAsText())
+    }
+
+    suspend fun getAgenda(): ServerResponse<List<SessionDTO>> {
+        val response = client.get("/api/sessions/agenda")
         return Json.decodeFromString(response.bodyAsText())
     }
 

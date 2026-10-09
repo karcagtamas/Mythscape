@@ -51,6 +51,10 @@ class WorkspaceViewModel(
         updateState(WorkspaceScreenState.CampaignWorkspace(campaign.id, campaign.title))
     }
 
+    fun selectCalendar() {
+        updateState(WorkspaceScreenState.Calendar)
+    }
+
     fun updateCampaign(title: String) {
         if (state is WorkspaceScreenState.CampaignWorkspace) {
             updateState(
