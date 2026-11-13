@@ -51,7 +51,7 @@ fun CalendarScreen(
                 }
 
                 CalendarViewMode.MONTH -> {
-                    AgendaScreen(today = today)
+                    MonthlyCalendarViewScreen(today = today)
                 }
 
                 CalendarViewMode.AGENDA -> {
