@@ -47,7 +47,7 @@ fun CalendarScreen(
 
             when (viewModel.viewMode) {
                 CalendarViewMode.WEEK -> {
-                    AgendaScreen(today = today)
+                    WeeklyCalendarViewScreen(today = today)
                 }
 
                 CalendarViewMode.MONTH -> {

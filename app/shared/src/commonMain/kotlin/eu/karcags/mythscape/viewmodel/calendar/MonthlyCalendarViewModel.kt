@@ -66,6 +66,7 @@ class MonthlyCalendarViewModel(private val repository: SessionRepository) : View
                 val res = repository.getSessions(
                     after = start,
                     before = end,
+                    showCanceled = true,
                 )
                 if (res.success && res.data != null) {
                     _sessions.value = res.data!!
