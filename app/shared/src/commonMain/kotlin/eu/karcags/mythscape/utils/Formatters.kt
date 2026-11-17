@@ -1,6 +1,8 @@
 package eu.karcags.mythscape.utils
 
+import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.Month
 import kotlinx.datetime.format
 
 val localDateTimeFormat = LocalDateTime.Format {
@@ -19,4 +21,12 @@ val localDateTimeFormat = LocalDateTime.Format {
 
 fun LocalDateTime.formatted(): String {
     return format(localDateTimeFormat)
+}
+
+fun DayOfWeek.short(): String {
+    return name.uppercase().take(3)
+}
+
+fun Month.short(): String {
+    return name.uppercase().take(3)
 }

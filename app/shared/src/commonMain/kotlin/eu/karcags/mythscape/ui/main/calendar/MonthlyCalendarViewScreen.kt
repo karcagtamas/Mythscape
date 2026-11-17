@@ -2,20 +2,7 @@ package eu.karcags.mythscape.ui.main.calendar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -32,12 +19,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import eu.karcags.mythscape.dtos.sessions.SessionDTO
-import eu.karcags.mythscape.ui.components.common.AppButton
 import eu.karcags.mythscape.ui.components.common.LoadingBox
 import eu.karcags.mythscape.ui.components.main.calendar.CalendarNavigator
+import eu.karcags.mythscape.utils.short
 import eu.karcags.mythscape.viewmodel.calendar.MonthlyCalendarViewModel
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DayOfWeek
@@ -51,7 +37,7 @@ fun MonthlyCalendarViewScreen(
     today: LocalDate,
 ) {
     val sessions by viewModel.sessions.collectAsState()
-    val daysOfWeek = remember { DayOfWeek.entries.map { it.name.take(3) } }
+    val daysOfWeek = remember { DayOfWeek.entries.map { it.short() } }
     val bounds = viewModel.calculateBounds()
 
     val totalGridDays = remember(bounds) {
