@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import eu.karcags.mythscape.ui.components.common.AppButton
 import eu.karcags.mythscape.ui.components.common.LoadingBox
+import eu.karcags.mythscape.ui.components.main.calendar.CalendarNavigator
 import eu.karcags.mythscape.viewmodel.calendar.MonthlyCalendarViewModel
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DayOfWeek
@@ -64,32 +65,11 @@ fun MonthlyCalendarViewScreen(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            AppButton(
-                text = "<",
-                onClick = { viewModel.stepBackward() },
-                modifier = Modifier
-                    .width(32.dp),
-            )
-            Text(
-                text = "${viewModel.anchor.month.name} ${viewModel.anchor.year}",
-                color = MaterialTheme.colorScheme.primary,
-                fontSize = 13.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.width(160.dp),
-                textAlign = TextAlign.Center,
-            )
-            AppButton(
-                text = ">",
-                onClick = { viewModel.stepForward() },
-                modifier = Modifier
-                    .width(32.dp),
-            )
-        }
+        CalendarNavigator(
+            text = "${viewModel.anchor.month.name} ${viewModel.anchor.year}",
+            back = { viewModel.stepBackward() },
+            forward = { viewModel.stepForward() }
+        )
 
         LoadingBox(
             isLoading = viewModel.isLoading,
@@ -97,8 +77,8 @@ fun MonthlyCalendarViewScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(48.dp)
-                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f)),
+                    .height(32.dp)
+                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f), shape = MaterialTheme.shapes.small),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 daysOfWeek.forEach { day ->

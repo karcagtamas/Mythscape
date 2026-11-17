@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import eu.karcags.mythscape.ui.components.common.AppButton
 import eu.karcags.mythscape.ui.components.common.HorizontalLine
 import eu.karcags.mythscape.ui.components.common.LoadingBox
+import eu.karcags.mythscape.ui.components.main.calendar.CalendarNavigator
 import eu.karcags.mythscape.viewmodel.calendar.WeeklyCalendarViewModel
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
@@ -44,31 +45,11 @@ fun WeeklyCalendarViewScreen(
             .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            AppButton(
-                text = "<",
-                onClick = { viewModel.stepBackward() },
-                modifier = Modifier.width(32.dp),
-            )
-            Text(
-                text = "${bounds.first} — ${bounds.second}",
-                color = MaterialTheme.colorScheme.primary,
-                fontSize = 13.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.width(200.dp),
-                textAlign = TextAlign.Center
-            )
-            AppButton(
-                text = ">",
-                onClick = { viewModel.stepForward() },
-                modifier = Modifier.width(32.dp),
-            )
-        }
+        CalendarNavigator(
+            text = "${bounds.first} — ${bounds.second}",
+            back = { viewModel.stepBackward() },
+            forward = { viewModel.stepForward() },
+        )
 
         LoadingBox(
             isLoading = viewModel.isLoading,
