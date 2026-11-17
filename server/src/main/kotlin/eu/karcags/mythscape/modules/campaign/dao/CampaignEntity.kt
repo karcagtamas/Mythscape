@@ -1,6 +1,7 @@
 package eu.karcags.mythscape.modules.campaign.dao
 
 import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
+import eu.karcags.mythscape.dtos.campaigns.CampaignLightDTO
 import eu.karcags.mythscape.dtos.notes.NoteTreeDTO
 import eu.karcags.mythscape.modules.note.dao.FolderEntity
 import eu.karcags.mythscape.modules.note.dao.NoteEntity
@@ -32,19 +33,23 @@ class CampaignEntity(id: EntityID<Int>) : IntEntity(id) {
     val notes by NoteEntity.Companion referrersOn NotesTable.campaign
     val sessions by SessionEntity.Companion referrersOn SessionsTable.campaign
 
-    fun dto(): CampaignDTO {
-        return CampaignDTO(
-            id.value,
-            name,
-            title,
-            imageId,
-            description,
-            archived,
-            creator.dto(),
-            creation,
-            lastUpdate,
-        )
-    }
+    fun dto(): CampaignDTO = CampaignDTO(
+        id.value,
+        name,
+        title,
+        imageId,
+        description,
+        archived,
+        creator.dto(),
+        creation,
+        lastUpdate,
+    )
+
+    fun lightDTO(): CampaignLightDTO = CampaignLightDTO(
+        id.value,
+        name,
+        title,
+    )
 
     fun treeDTO(): List<NoteTreeDTO> {
         return folders.filter { folder -> folder.parent == null }

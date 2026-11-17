@@ -1,12 +1,16 @@
 package eu.karcags.mythscape.utils
 
+import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DayOfWeek
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.Month
 import kotlinx.datetime.format
+import kotlinx.datetime.minus
+import kotlinx.datetime.plus
 
 val localDateTimeFormat = LocalDateTime.Format {
-    year();
+    year()
     chars("-")
     monthNumber()
     chars("-")
@@ -19,8 +23,32 @@ val localDateTimeFormat = LocalDateTime.Format {
     second()
 }
 
+val localDateFormat = LocalDate.Format {
+    year()
+    chars("-")
+    monthNumber()
+    chars("-")
+    day()
+}
+
 fun LocalDateTime.formatted(): String {
     return format(localDateTimeFormat)
+}
+
+fun LocalDate.formatted(): String {
+    return format(localDateFormat)
+}
+
+fun LocalDate.humanify(today: LocalDate? = null): String {
+    if (today == null) return formatted()
+
+    if (this == today) return "Today"
+
+    if (this == today.plus(1, DateTimeUnit.DAY)) return "Tomorrow"
+
+    if (this == today.minus(1, DateTimeUnit.DAY)) return "Yesterday"
+
+    return formatted()
 }
 
 fun DayOfWeek.short(): String {

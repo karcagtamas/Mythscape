@@ -105,7 +105,7 @@ private fun RowScope.DayColumn(
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text(
-                text = date.dayOfWeek.name.take(3),
+                text = date.dayOfWeek.short(),
                 color = if (isToday) MaterialTheme.colorScheme.primary else Color.Gray,
                 fontSize = 10.sp,
                 fontWeight = FontWeight.Bold,
@@ -155,7 +155,7 @@ private fun ColumnItem(
         verticalArrangement = Arrangement.spacedBy(2.dp),
     ) {
         Text(
-            text = "Session #${session.id}",
+            text = "${session.campaign.name} #${session.id}",
             color = if (session.canceled) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
             fontSize = 10.sp,
             fontWeight = FontWeight.Bold,

@@ -204,9 +204,9 @@ private fun SessionRow(
             .padding(horizontal = 4.dp, vertical = 1.dp),
     ) {
         Text(
-            text = if (session.canceled) "CANCELED" else "#${session.id} ${session.startTime}",
+            text = if (session.canceled) "CANCELED (${session.campaign.name})" else "${session.campaign.name} #${session.id} ${session.startTime}",
             color = if (session.canceled) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
-            fontSize = 8.sp,
+            fontSize = 9.sp,
             fontWeight = FontWeight.SemiBold,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,

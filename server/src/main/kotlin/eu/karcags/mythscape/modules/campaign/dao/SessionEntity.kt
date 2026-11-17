@@ -15,13 +15,12 @@ class SessionEntity(id: EntityID<Int>) : IntEntity(id) {
     var canceled by SessionsTable.canceled
     var campaign by CampaignEntity referencedOn SessionsTable.campaign
 
-    fun dto(): SessionDTO {
-        return SessionDTO(
-            id.value,
-            date,
-            startTime,
-            endTime,
-            canceled,
-        )
-    }
+    fun dto(): SessionDTO = SessionDTO(
+        id.value,
+        date,
+        startTime,
+        endTime,
+        canceled,
+        campaign.lightDTO(),
+    )
 }

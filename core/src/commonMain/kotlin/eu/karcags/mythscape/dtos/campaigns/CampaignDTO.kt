@@ -23,3 +23,10 @@ data class CampaignRequestDTO(
     val title: String,
     val description: String?,
 )
+
+@Serializable
+data class CampaignLightDTO(
+    val id: Int,
+    val name: String,
+    val title: String,
+)
