@@ -58,6 +58,12 @@ fun CampaignWorkspaceScreen(
             )
 
             TabMenuButton(
+                text = "Tags",
+                isSelected = viewModel.screenState is CampaignWorkspaceScreenState.Tags,
+                onClick = { viewModel.selectTab(CampaignWorkspaceScreenState.Tags) }
+            )
+
+            TabMenuButton(
                 text = "Notes",
                 isSelected = viewModel.screenState is CampaignWorkspaceScreenState.Notes,
                 onClick = { viewModel.selectTab(CampaignWorkspaceScreenState.Notes) }
@@ -87,6 +93,10 @@ fun CampaignWorkspaceScreen(
 
                     is CampaignWorkspaceScreenState.Sessions -> {
                         CampaignSessionsScreen(campaignId = campaign.id)
+                    }
+
+                    is CampaignWorkspaceScreenState.Tags -> {
+                        CampaignTagsScreen(campaignId = campaign.id)
                     }
 
                     is CampaignWorkspaceScreenState.Notes -> {

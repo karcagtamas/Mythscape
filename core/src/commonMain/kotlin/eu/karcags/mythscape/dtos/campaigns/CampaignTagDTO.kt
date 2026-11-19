@@ -12,7 +12,7 @@ data class CampaignTagDTO(
 )
 
 @Serializable
-data class CampaignTagEditDTO(
+data class CampaignTagRequestDTO(
     val caption: String,
     val color: String,
 )

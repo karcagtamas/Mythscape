@@ -13,16 +13,12 @@ class QueryWhereBuilder {
     }
 
     fun build(): Op<Boolean> {
-        if (operands.isEmpty()) {
-            return Op.TRUE
-        }
-
-        if (operands.size == 1) {
-            return operands[0]
-        }
-
-        return operands.reduce { ac, op ->
-            ac and op
+        return when {
+            operands.isEmpty() -> Op.TRUE
+            operands.size == 1 -> operands[0]
+            else -> operands.reduce { ac, op ->
+                ac and op
+            }
         }
     }
 }

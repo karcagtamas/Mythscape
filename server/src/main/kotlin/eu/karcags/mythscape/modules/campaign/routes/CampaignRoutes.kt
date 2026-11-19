@@ -1,7 +1,7 @@
 package eu.karcags.mythscape.modules.campaign.routes
 
 import eu.karcags.mythscape.dtos.campaigns.CampaignRequestDTO
-import eu.karcags.mythscape.dtos.campaigns.CampaignTagEditDTO
+import eu.karcags.mythscape.dtos.campaigns.CampaignTagRequestDTO
 import eu.karcags.mythscape.modules.campaign.dao.CampaignEntity
 import eu.karcags.mythscape.modules.campaign.dao.CampaignMemberEntity
 import eu.karcags.mythscape.modules.campaign.dao.CampaignTagEntity
@@ -142,9 +142,9 @@ fun Route.campaignRoutes() {
 
         post("/{id}/tags") {
             val id = call.parameters["id"]?.toIntOrNull().requireNonNull()
-            val dto = call.receive<CampaignTagEditDTO>()
+            val dto = call.receive<CampaignTagRequestDTO>()
 
-            val tag = dbQuery {
+            val data = dbQuery {
                 val campaign = CampaignEntity.findById(id).required()
 
                 CampaignTagEntity.new {
@@ -152,13 +152,27 @@ fun Route.campaignRoutes() {
                     color = dto.color
                     creation = current()
                     this.campaign = campaign
-                }
+                }.dto()
             }
 
-            call.wrapped(tag.id.value, HttpStatusCode.Created)
+            call.wrapped(data, HttpStatusCode.Created)
         }
 
-        delete("/{id}/tags/{tagId}") {
+        put("/tags/{tagId}") {
+            val tagId = call.parameters["tagId"]?.toIntOrNull().requireNonNull()
+            val dto = call.receive<CampaignTagRequestDTO>()
+
+            val data = dbQuery {
+                CampaignTagEntity.findByIdAndUpdate(tagId) {
+                    it.caption = dto.caption
+                    it.color = dto.color
+                }.required().dto()
+            }
+
+            call.wrapped(data)
+        }
+
+        delete("/tags/{tagId}") {
             val tagId = call.parameters["tagId"]?.toIntOrNull().requireNonNull()
 
             dbQuery {

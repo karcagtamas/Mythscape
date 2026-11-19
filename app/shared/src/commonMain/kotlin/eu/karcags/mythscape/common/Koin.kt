@@ -8,6 +8,7 @@ import eu.karcags.mythscape.viewmodel.calendar.MonthlyCalendarViewModel
 import eu.karcags.mythscape.viewmodel.calendar.WeeklyCalendarViewModel
 import eu.karcags.mythscape.viewmodel.campaign.CampaignDashboardViewModel
 import eu.karcags.mythscape.viewmodel.campaign.CampaignSessionsViewModel
+import eu.karcags.mythscape.viewmodel.campaign.CampaignTagsViewModel
 import eu.karcags.mythscape.viewmodel.campaign.CampaignWorkspaceViewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
@@ -34,4 +35,5 @@ val appModule = module {
     viewModelOf(::CampaignWorkspaceViewModel)
     viewModelOf(::CampaignDashboardViewModel)
     viewModelOf(::CampaignSessionsViewModel)
+    viewModelOf(::CampaignTagsViewModel)
 }

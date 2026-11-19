@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
 import eu.karcags.mythscape.enums.CampaignWorkspaceScreenState
 import eu.karcags.mythscape.network.CampaignRepository
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 
 class CampaignWorkspaceViewModel(
@@ -32,6 +34,9 @@ class CampaignWorkspaceViewModel(
                     campaign = campaignRes.data
                 }
             } catch (e: Exception) {
+                if (e is CancellationException) {
+                    ensureActive()
+                }
                 errorMessage = e.message ?: "Something went wrong"
             } finally {
                 isLoading = false

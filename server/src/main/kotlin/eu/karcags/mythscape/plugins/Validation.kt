@@ -3,7 +3,7 @@ package eu.karcags.mythscape.plugins
 import eu.karcags.mythscape.dtos.campaigns.CampaignRequestDTO
 import eu.karcags.mythscape.dtos.auth.LoginDTO
 import eu.karcags.mythscape.dtos.auth.RegisterDTO
-import eu.karcags.mythscape.dtos.campaigns.CampaignTagEditDTO
+import eu.karcags.mythscape.dtos.campaigns.CampaignTagRequestDTO
 import io.ktor.server.application.*
 import io.ktor.server.plugins.requestvalidation.*
 
@@ -55,7 +55,7 @@ fun Application.configureValidation() {
                 .validate()
         }
 
-        validate<CampaignTagEditDTO> {
+        validate<CampaignTagRequestDTO> {
             Validation.start(it)
                 .notEmpty("caption") { caption }
                 .maxLength("caption", 40) { caption }
