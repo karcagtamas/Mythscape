@@ -15,6 +15,9 @@ data class CampaignDTO(
     val creator: UserDTO,
     val creation: LocalDateTime,
     val lastUpdate: LocalDateTime,
+    val tags: Long,
+    val members: Long,
+    val sessions: Long,
 )
 
 @Serializable

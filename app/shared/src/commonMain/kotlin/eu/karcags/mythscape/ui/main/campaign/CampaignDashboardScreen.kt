@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -23,7 +24,13 @@ import eu.karcags.mythscape.ui.components.common.*
 import eu.karcags.mythscape.ui.components.dialogs.ConfirmDialog
 import eu.karcags.mythscape.ui.components.dialogs.campaign.CampaignFormDialog
 import eu.karcags.mythscape.utils.formatted
+import eu.karcags.mythscape.utils.padded
 import eu.karcags.mythscape.viewmodel.campaign.CampaignDashboardViewModel
+import mythscape.app.shared.generated.resources.Res
+import mythscape.app.shared.generated.resources.ic_archive_24
+import mythscape.app.shared.generated.resources.ic_delete_24
+import mythscape.app.shared.generated.resources.ic_edit_24
+import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -128,7 +135,7 @@ private fun CampaignSummary(
     var showArchiveDialog by remember { mutableStateOf(false) }
 
     PrimaryCard(
-        title = campaign.title,
+        title = "${campaign.title} [${campaign.name}]",
     ) {
         if (campaign.description != null && campaign.description!!.isNotEmpty()) {
             Text(
@@ -143,40 +150,40 @@ private fun CampaignSummary(
         MetaRow(label = "Created By", value = campaign.creator.name)
         MetaRow(label = "Launch", value = campaign.creation.formatted())
         MetaRow(label = "Last Update", value = campaign.lastUpdate.formatted())
+        MetaRow(label = "Tags", value = campaign.tags.formatted("ct."))
+        MetaRow(label = "Members", value = campaign.members.formatted("ct."))
+        MetaRow(label = "Sessions", value = campaign.sessions.formatted("ct."))
 
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End),
         ) {
-            Box(
-                modifier = Modifier.weight(1f),
-            ) {
-                AppButton(
-                    text = "Edit",
-                    onClick = { onEdit(campaign) },
-                )
-            }
+            AppButton(
+                text = "Edit",
+                onClick = { onEdit(campaign) },
+                icon = { Icon(painter = painterResource(Res.drawable.ic_edit_24), contentDescription = null) },
+                modifier = Modifier
+                    .width(100.dp),
+            )
 
-            Box(
-                modifier = Modifier.weight(1f),
-            ) {
-                AppButton(
-                    text = "Delete",
-                    onClick = { showDeleteDialog = true },
-                    color = ColorVariant.Error,
-                )
-            }
+            AppButton(
+                text = "Delete",
+                onClick = { showDeleteDialog = true },
+                color = ColorVariant.Error,
+                icon = { Icon(painter = painterResource(Res.drawable.ic_delete_24), contentDescription = null) },
+                modifier = Modifier
+                    .width(100.dp),
+            )
 
-            Box(
-                modifier = Modifier.weight(1f),
-            ) {
-                AppButton(
-                    text = "Archive",
-                    onClick = { showArchiveDialog = true },
-                    color = ColorVariant.Error,
-                )
-            }
+            AppButton(
+                text = "Archive",
+                onClick = { showArchiveDialog = true },
+                color = ColorVariant.Error,
+                icon = { Icon(painter = painterResource(Res.drawable.ic_archive_24), contentDescription = null) },
+                modifier = Modifier
+                    .width(100.dp),
+            )
         }
     }
 
@@ -228,17 +235,13 @@ private fun ColumnScope.CampaignRecentSessions(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
-                        text = "Session ${session.id}",
+                        text = "Session #${session.id}",
                         color = MaterialTheme.colorScheme.onSurface,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Medium,
                     )
                     Text(
-                        text = "${session.date} [${session.startTime.hour}:${
-                            session.startTime.minute.toString().padStart(2, '0')
-                        } - ${session.endTime.hour}:${
-                            session.endTime.minute.toString().padStart(2, '0')
-                        }]",
+                        text = "${session.date.formatted()} [${session.startTime.hour}:${session.startTime.minute.padded()} - ${session.endTime.hour}:${session.endTime.minute.padded()}]",
                         color = Color.Gray,
                         fontSize = 11.sp,
                     )
@@ -283,7 +286,7 @@ private fun RowScope.CampaignMembers(
                         )
                         Text(
                             text = "Joined: ${member.creation.formatted()}",
-                            color = Color.DarkGray,
+                            color = Color.Gray,
                             fontSize = 10.sp,
                         )
                     }

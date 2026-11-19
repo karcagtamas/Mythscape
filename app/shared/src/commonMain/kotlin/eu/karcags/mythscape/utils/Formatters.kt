@@ -58,3 +58,17 @@ fun DayOfWeek.short(): String {
 fun Month.short(): String {
     return name.uppercase().take(3)
 }
+
+fun Long.formatted(suffix: String? = null): String {
+    if (suffix == null) return this.toString()
+
+    return "$this $suffix"
+}
+
+fun Int.formatted(suffix: String? = null): String {
+    return this.toLong().formatted(suffix)
+}
+
+fun Int.padded(length: Int = 2, character: Char = '0'): String {
+    return toString().padStart(length, character)
+}

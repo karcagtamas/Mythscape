@@ -11,6 +11,8 @@ import eu.karcags.mythscape.dtos.campaigns.CampaignRequestDTO
 import eu.karcags.mythscape.dtos.sessions.SessionDTO
 import eu.karcags.mythscape.network.CampaignRepository
 import eu.karcags.mythscape.network.SessionRepository
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 
 class CampaignDashboardViewModel(
@@ -55,6 +57,9 @@ class CampaignDashboardViewModel(
                     recentSessions = sessionsRes.data!!
                 }
             } catch (e: Exception) {
+                if (e is CancellationException) {
+                    ensureActive()
+                }
                 errorMessage = e.message ?: "Something went wrong"
             } finally {
                 isLoading = false
@@ -76,6 +81,9 @@ class CampaignDashboardViewModel(
                     editDialogError = response.error?.message ?: "Unknown error"
                 }
             } catch (e: Exception) {
+                if (e is CancellationException) {
+                    ensureActive()
+                }
                 editDialogError = e.message ?: "Unknown error"
             } finally {
                 isEditingProcessing = false
@@ -90,6 +98,9 @@ class CampaignDashboardViewModel(
                 val res = campaignRepository.archiveCampaign(campaignId)
                 if (res.success) onComplete()
             } catch (e: Exception) {
+                if (e is CancellationException) {
+                    ensureActive()
+                }
                 errorMessage = e.message ?: "Failed to execute realm archive operation."
             } finally {
                 isProcessing = false
@@ -104,6 +115,9 @@ class CampaignDashboardViewModel(
                 val res = campaignRepository.deleteCampaign(campaignId)
                 if (res.success) onComplete()
             } catch (e: Exception) {
+                if (e is CancellationException) {
+                    ensureActive()
+                }
                 errorMessage = e.message ?: "Failed to purge campaign realm from database."
             } finally {
                 isProcessing = false

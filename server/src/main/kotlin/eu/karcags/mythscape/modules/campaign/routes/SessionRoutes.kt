@@ -26,26 +26,22 @@ fun Route.sessionRoutes() {
             val sessions = dbQuery {
                 SessionEntity
                     .find {
-                        val operations = mutableListOf<Op<Boolean>>()
+                        queryWhere {
+                            if (campaignId != null) {
+                                add(SessionsTable.campaign eq campaignId)
+                            }
 
-                        if (campaignId != null) {
-                            operations.add(SessionsTable.campaign eq campaignId)
-                        }
+                            if (!showCanceled) {
+                                add(SessionsTable.canceled eq Op.FALSE)
+                            }
 
-                        if (!showCanceled) {
-                            operations.add(SessionsTable.canceled eq Op.FALSE)
-                        }
+                            after?.also {
+                                add(SessionsTable.date greaterEq it)
+                            }
 
-                        after?.also {
-                            operations.add(SessionsTable.date greaterEq it)
-                        }
-
-                        before?.also {
-                            operations.add(SessionsTable.date lessEq it)
-                        }
-
-                        operations.fold((SessionsTable.id greater 0) as Op<Boolean>) { acc, a ->
-                            acc and a
+                            before?.also {
+                                add(SessionsTable.date lessEq it)
+                            }
                         }
                     }
                     .orderBy(
@@ -84,14 +80,16 @@ fun Route.sessionRoutes() {
             val sessions = dbQuery {
                 SessionEntity
                     .find {
-                        if (campaignId != null) {
-                            SessionsTable.campaign eq campaignId
-                        } else {
-                            Op.TRUE
+                        queryWhere {
+                            if (campaignId != null) {
+                                add(SessionsTable.campaign eq campaignId)
+                            }
+
+                            add(SessionsTable.date lessEq currentDate())
                         }
                     }
                     .orderBy(
-                        SessionsTable.date to SortOrder.ASC,
+                        SessionsTable.date to SortOrder.DESC,
                         SessionsTable.startTime to SortOrder.ASC,
                     )
                     .take(number)

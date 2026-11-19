@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eu.karcags.mythscape.dtos.sessions.SessionDTO
 import eu.karcags.mythscape.network.SessionRepository
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -66,6 +68,9 @@ class WeeklyCalendarViewModel(private val repository: SessionRepository) : ViewM
                     _sessions.value = res.data!!
                 }
             } catch (e: Exception) {
+                if (e is CancellationException) {
+                    ensureActive()
+                }
                 _sessions.value = emptyList()
             } finally {
                 isLoading = false

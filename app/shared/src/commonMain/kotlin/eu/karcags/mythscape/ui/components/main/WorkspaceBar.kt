@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,7 +27,12 @@ import eu.karcags.mythscape.ui.components.common.avatar.TextAvatar
 import eu.karcags.mythscape.enums.WorkspaceScreenState
 import eu.karcags.mythscape.ui.components.common.avatar.IconAvatar
 import mythscape.app.shared.generated.resources.Res
+import mythscape.app.shared.generated.resources.ic_add_24
 import mythscape.app.shared.generated.resources.ic_calendar_24
+import mythscape.app.shared.generated.resources.ic_close_24
+import mythscape.app.shared.generated.resources.ic_logout_24
+import mythscape.app.shared.generated.resources.ic_person_24
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun WorkspaceBar(
@@ -51,8 +57,8 @@ fun WorkspaceBar(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            TextAvatar(
-                text = "Profile",
+            IconAvatar(
+                icon = Res.drawable.ic_person_24,
                 size = 32,
                 isSelected = state is WorkspaceScreenState.Profile,
                 onClick = { onProfileSelect() }
@@ -93,11 +99,10 @@ fun WorkspaceBar(
                     .border(1.dp, MaterialTheme.colorScheme.primary, MaterialTheme.shapes.small)
                     .clickable { onCampaignCreate() },
             ) {
-                Text(
-                    text = "+",
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
+                Icon(
+                    painter = painterResource(Res.drawable.ic_add_24),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
                 )
             }
         }
@@ -113,11 +118,11 @@ fun WorkspaceBar(
                     onLogout()
                 },
         ) {
-            Text(
-                text = "➔",
-                color = MaterialTheme.colorScheme.error,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
+            Icon(
+                painter = painterResource(Res.drawable.ic_logout_24),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.error,
+                modifier = Modifier.size(20.dp)
             )
         }
     }

@@ -43,6 +43,9 @@ class CampaignEntity(id: EntityID<Int>) : IntEntity(id) {
         creator.dto(),
         creation,
         lastUpdate,
+        tags.count(),
+        members.count(),
+        sessions.count { !it.canceled }.toLong(),
     )
 
     fun lightDTO(): CampaignLightDTO = CampaignLightDTO(
