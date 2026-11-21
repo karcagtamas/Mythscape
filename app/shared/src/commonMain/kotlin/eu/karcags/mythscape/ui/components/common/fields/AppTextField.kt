@@ -19,10 +19,14 @@ fun AppTextField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
+    leading: @Composable (() -> Unit)? = null,
     leadingIcon: Painter? = null,
+    trailing: @Composable (() -> Unit)? = null,
+    trailingIcon: Painter? = null,
     modifier: Modifier = Modifier,
     isPassword: Boolean = false,
     errorMessage: String? = null,
+    readOnly: Boolean = false,
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
 
@@ -42,7 +46,7 @@ fun AppTextField(
                         modifier = Modifier.size(24.dp),
                     )
                 }
-            },
+            } ?: leading?.let { { it.invoke() } },
             trailingIcon = if (isPassword) {
                 {
                     IconButton(
@@ -55,7 +59,15 @@ fun AppTextField(
                         )
                     }
                 }
-            } else null,
+            } else trailingIcon?.let { icon ->
+                {
+                    Icon(
+                        painter = icon,
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp),
+                    )
+                }
+            } ?: trailing?.let { { it() } },
             visualTransformation = if (isPassword && !passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
             isError = errorMessage != null,
             singleLine = true,
@@ -83,6 +95,7 @@ fun AppTextField(
                 unfocusedTrailingIconColor = MaterialTheme.colorScheme.outline,
             ),
             modifier = Modifier.fillMaxWidth(),
+            readOnly = readOnly,
         )
 
         if (errorMessage != null) {

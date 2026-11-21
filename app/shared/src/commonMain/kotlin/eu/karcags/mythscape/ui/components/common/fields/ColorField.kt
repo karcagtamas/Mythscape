@@ -28,7 +28,7 @@ fun ColorField(
     var hexText by remember(color) { mutableStateOf(color?.toHexString() ?: "") }
     var localErrorMessage by remember { mutableStateOf<String?>(null) }
 
-    OutlinedTextField(
+    AppTextField(
         value = hexText,
         onValueChange = { input ->
             val sanitized = input.uppercase().filter { it in "0123456789ABCDEF#" }
@@ -45,11 +45,9 @@ fun ColorField(
                 }
             }
         },
-        label = { Text(label) },
-        placeholder = { Text("#FFFFFF") },
-        isError = (localErrorMessage ?: errorMessage) != null,
-        singleLine = true,
-        leadingIcon = {
+        label = label,
+        errorMessage = errorMessage,
+        leading = {
             color?.let {
                 Box(
                     modifier = Modifier
@@ -60,29 +58,6 @@ fun ColorField(
                 )
             }
         },
-        shape = MaterialTheme.shapes.medium,
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedTextColor = MaterialTheme.colorScheme.onSurface,
-            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-            errorTextColor = MaterialTheme.colorScheme.error,
-
-            focusedContainerColor = MaterialTheme.colorScheme.background,
-            unfocusedContainerColor = MaterialTheme.colorScheme.background,
-            errorContainerColor = MaterialTheme.colorScheme.background,
-
-            focusedBorderColor = MaterialTheme.colorScheme.primary,
-            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-            errorBorderColor = MaterialTheme.colorScheme.error,
-
-            focusedLabelColor = MaterialTheme.colorScheme.primary,
-            unfocusedLabelColor = MaterialTheme.colorScheme.outline,
-            errorLabelColor = MaterialTheme.colorScheme.error,
-
-            focusedLeadingIconColor = MaterialTheme.colorScheme.outline,
-            unfocusedLeadingIconColor = MaterialTheme.colorScheme.outline,
-            focusedTrailingIconColor = MaterialTheme.colorScheme.outline,
-            unfocusedTrailingIconColor = MaterialTheme.colorScheme.outline,
-        ),
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier,
     )
 }

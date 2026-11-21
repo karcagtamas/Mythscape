@@ -31,50 +31,14 @@ fun DateField(
     var showPicker by remember { mutableStateOf(false) }
 
     Box(modifier = modifier) {
-        OutlinedTextField(
+        AppTextField(
             value = date?.toString() ?: "",
             onValueChange = {},
-            label = { Text(label) },
-            trailingIcon = {
-                Icon(painterResource(Res.drawable.ic_date_range_24), contentDescription = "Select date")
-            },
-            isError = errorMessage != null,
-            singleLine = true,
-            shape = MaterialTheme.shapes.medium,
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-                errorTextColor = MaterialTheme.colorScheme.error,
-
-                focusedContainerColor = MaterialTheme.colorScheme.background,
-                unfocusedContainerColor = MaterialTheme.colorScheme.background,
-                errorContainerColor = MaterialTheme.colorScheme.background,
-
-                focusedBorderColor = MaterialTheme.colorScheme.primary,
-                unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-                errorBorderColor = MaterialTheme.colorScheme.error,
-
-                focusedLabelColor = MaterialTheme.colorScheme.primary,
-                unfocusedLabelColor = MaterialTheme.colorScheme.outline,
-                errorLabelColor = MaterialTheme.colorScheme.error,
-
-                focusedLeadingIconColor = MaterialTheme.colorScheme.outline,
-                unfocusedLeadingIconColor = MaterialTheme.colorScheme.outline,
-                focusedTrailingIconColor = MaterialTheme.colorScheme.outline,
-                unfocusedTrailingIconColor = MaterialTheme.colorScheme.outline,
-            ),
-            modifier = Modifier.fillMaxWidth(),
+            label = label,
+            trailingIcon = painterResource(Res.drawable.ic_date_range_24),
+            errorMessage = errorMessage,
             readOnly = true,
         )
-
-        if (errorMessage != null) {
-            Text(
-                text = errorMessage,
-                color = MaterialTheme.colorScheme.error,
-                fontSize = 12.sp,
-                modifier = Modifier.padding(start = 2.dp, top = 1.dp),
-            )
-        }
 
         Box(
             modifier = Modifier
