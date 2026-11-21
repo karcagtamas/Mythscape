@@ -15,6 +15,7 @@ import eu.karcags.mythscape.ui.components.common.fields.CheckboxField
 import eu.karcags.mythscape.ui.components.dialogs.EditDialog
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
+import kotlinx.datetime.parseOrNull
 
 @Composable
 fun SessionFormDialog(
@@ -28,73 +29,93 @@ fun SessionFormDialog(
 ) {
     val isEdit = session != null
 
-    var dateStr by remember { mutableStateOf("") }
-    var startStr by remember { mutableStateOf("") }
-    var endStr by remember { mutableStateOf("") }
+    var date by remember { mutableStateOf<LocalDate?>(null) }
+    var start by remember { mutableStateOf<LocalTime?>(LocalTime(18, 0)) }
+    var end by remember { mutableStateOf<LocalTime?>(LocalTime(21, 0)) }
     var isCanceled by remember { mutableStateOf(false) }
-    var validationError by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(session) {
         if (isEdit) {
-            dateStr = session.date.toString()
-            startStr = session.startTime.toString()
-            endStr = session.endTime.toString()
+            date = session.date
+            start = session.startTime
+            end = session.endTime
             isCanceled = session.canceled
         } else {
-            dateStr = ""
-            startStr = "18:00"
-            endStr = "21:00"
+            date = null
+            start = LocalTime(18, 0)
+            end = LocalTime(21, 0)
             isCanceled = false
         }
-        validationError = null
+    }
+
+    val dateError by remember {
+        derivedStateOf {
+            when {
+                date == null -> "Date is required"
+                else -> null
+            }
+        }
+    }
+
+    val startError by remember {
+        derivedStateOf {
+            when {
+                start == null -> "Start Time is required"
+                else -> null
+            }
+        }
+    }
+
+    val endError by remember {
+        derivedStateOf {
+            when {
+                end == null -> "End Time is required"
+                else -> null
+            }
+        }
     }
 
     EditDialog(
         onDismiss = onDismiss,
         onOk = {
-            try {
-                val parsedDate = LocalDate.parse(dateStr)
-                val parsedStartTime = LocalTime.parse(startStr)
-                val parsedEndTime = LocalTime.parse(endStr)
-
-                onConfirm(
-                    SessionRequestDTO(
-                        date = parsedDate,
-                        startTime = parsedStartTime,
-                        endTime = parsedEndTime,
-                        canceled = isCanceled,
-                        campaignId = campaignId,
-                    )
+            onConfirm(
+                SessionRequestDTO(
+                    date = date!!,
+                    startTime = start!!,
+                    endTime = end!!,
+                    canceled = isCanceled,
+                    campaignId = campaignId,
                 )
-            } catch (_: Exception) {
-                validationError = "Invalid Date or Time syntax"
-            }
+            )
         },
         title = if (isEdit) "Edit Session" else "Schedule Session",
         modifier = modifier
             .width(400.dp),
         okText = if (isEdit) "Edit" else "Schedule",
         isProcessing = isProcessing,
-        okEnabled = dateStr.isNotBlank() && startStr.isNotBlank() && endStr.isNotBlank(),
-        errorMessage = validationError ?: errorMessage,
+        okEnabled = dateError == null && startError == null && endError == null,
+        errorMessage = errorMessage,
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             AppTextField(
-                value = dateStr,
-                onValueChange = { dateStr = it; validationError = null },
-                label = "Date (YYYY-MM-DD)"
+                value = date.toString(),
+                onValueChange = { date = LocalDate.parseOrNull(it) },
+                label = "Date (YYYY-MM-DD)",
+                errorMessage = dateError,
             )
 
             AppTextField(
-                value = startStr,
-                onValueChange = { startStr = it; validationError = null },
-                label = "Start Time (HH:MM)"
+                value = start.toString(),
+                onValueChange = { start = LocalTime.parseOrNull(it) },
+                label = "Start Time (HH:MM)",
+                errorMessage = startError,
             )
 
             AppTextField(
-                value = endStr,
-                onValueChange = { endStr = it; validationError = null },
-                label = "End Time (HH:MM)"
+                value = end.toString(),
+                onValueChange = { end = LocalTime.parseOrNull(it) },
+                label = "End Time (HH:MM)",
+                errorMessage = endError,
             )
 
             CheckboxField(

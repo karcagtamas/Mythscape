@@ -27,7 +27,25 @@ fun CampaignTagFormDialog(
 
     var caption by remember { mutableStateOf("") }
     var color by remember { mutableStateOf("#FFFFFF".parseHexOrNull()) }
-    var validationError by remember { mutableStateOf<String?>(null) }
+
+    val captionError by remember {
+        derivedStateOf {
+            when {
+                caption.isBlank() -> "Caption is required"
+                caption.length >= 40 -> "Caption has to be at least 40 characters"
+                else -> null
+            }
+        }
+    }
+
+    val colorError by remember {
+        derivedStateOf {
+            when {
+                color == null -> "Caption is required"
+                else -> null
+            }
+        }
+    }
 
     LaunchedEffect(tag) {
         if (isEdit) {
@@ -37,41 +55,38 @@ fun CampaignTagFormDialog(
             caption = ""
             color = "#FFFFFF".parseHexOrNull()
         }
-        validationError = null
     }
 
     EditDialog(
         onDismiss = onDismiss,
         onOk = {
-            try {
-                onConfirm(
-                    CampaignTagRequestDTO(
-                        caption = caption,
-                        color = color?.toHexString()!!,
-                    )
+            onConfirm(
+                CampaignTagRequestDTO(
+                    caption = caption,
+                    color = color?.toHexString()!!,
                 )
-            } catch (_: Exception) {
-                validationError = "Invalid Date or Time syntax"
-            }
+            )
         },
         title = if (isEdit) "Edit Campaign Tag" else "Create Campaign Tag",
         modifier = modifier
             .width(400.dp),
         okText = if (isEdit) "Edit" else "Create",
         isProcessing = isProcessing,
-        okEnabled = caption.isNotBlank() && color != null,
-        errorMessage = validationError ?: errorMessage,
+        okEnabled = captionError == null && colorError == null,
+        errorMessage = errorMessage,
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             AppTextField(
                 value = caption,
-                onValueChange = { caption = it; validationError = null },
+                onValueChange = { caption = it },
                 label = "Caption",
+                errorMessage = captionError,
             )
             ColorField(
                 color = color,
-                onColorChange = { color = it; validationError = null },
+                onColorChange = { color = it },
                 label = "Color",
+                errorMessage = colorError,
             )
         }
     }

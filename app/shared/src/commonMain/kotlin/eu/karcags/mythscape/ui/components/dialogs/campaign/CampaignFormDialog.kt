@@ -25,6 +25,26 @@ fun CampaignFormDialog(
     var title by remember { mutableStateOf(campaign?.title ?: "") }
     var description by remember { mutableStateOf(campaign?.description ?: "") }
 
+    val nameError by remember {
+        derivedStateOf {
+            when {
+                name.isBlank() -> "Name is required"
+                name.length >= 40 -> "Name has to be at least 40 characters"
+                else -> null
+            }
+        }
+    }
+
+    val titleError by remember {
+        derivedStateOf {
+            when {
+                title.isBlank() -> "Title is required"
+                title.length >= 120 -> "Title has to be at least 120 characters"
+                else -> null
+            }
+        }
+    }
+
     LaunchedEffect(campaign?.id) {
         isEdit = campaign != null
         campaign?.let {
@@ -50,19 +70,21 @@ fun CampaignFormDialog(
             .width(400.dp),
         okText = if (isEdit) "Edit" else "Forge",
         isProcessing = isProcessing,
-        okEnabled = name.isNotBlank() && title.isNotBlank(),
+        okEnabled = nameError == null && titleError == null,
         errorMessage = errorMessage,
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             AppTextField(
                 value = name,
                 onValueChange = { name = it },
-                label = "Name (Acronym)"
+                label = "Name (Acronym)",
+                errorMessage = nameError,
             )
             AppTextField(
                 value = title,
                 onValueChange = { title = it },
-                label = "Title"
+                label = "Title",
+                errorMessage = titleError,
             )
             AppTextField(
                 value = description,
