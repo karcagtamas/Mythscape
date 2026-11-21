@@ -19,6 +19,7 @@ import eu.karcags.mythscape.dtos.sessions.SessionDTO
 import eu.karcags.mythscape.enums.ColorVariant
 import eu.karcags.mythscape.theme.SmallIconSize
 import eu.karcags.mythscape.ui.components.common.*
+import eu.karcags.mythscape.ui.components.common.fields.CheckboxField
 import eu.karcags.mythscape.ui.components.dialogs.campaign.SessionFormDialog
 import eu.karcags.mythscape.viewmodel.campaign.CampaignSessionsViewModel
 import kotlinx.datetime.LocalDateTime

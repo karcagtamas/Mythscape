@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import eu.karcags.mythscape.dtos.sessions.SessionDTO
 import eu.karcags.mythscape.dtos.sessions.SessionRequestDTO
-import eu.karcags.mythscape.ui.components.common.AppTextField
-import eu.karcags.mythscape.ui.components.common.CheckboxField
+import eu.karcags.mythscape.ui.components.common.fields.AppTextField
+import eu.karcags.mythscape.ui.components.common.fields.CheckboxField
 import eu.karcags.mythscape.ui.components.dialogs.EditDialog
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime

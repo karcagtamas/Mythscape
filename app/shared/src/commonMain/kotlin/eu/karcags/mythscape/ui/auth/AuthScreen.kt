@@ -16,7 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import eu.karcags.mythscape.ui.components.common.AppButton
-import eu.karcags.mythscape.ui.components.common.AppTextField
+import eu.karcags.mythscape.ui.components.common.fields.AppTextField
 import eu.karcags.mythscape.viewmodel.AuthMode
 import eu.karcags.mythscape.viewmodel.AuthViewModel
 import mythscape.app.shared.generated.resources.Res

@@ -8,8 +8,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import eu.karcags.mythscape.dtos.campaigns.CampaignTagDTO
 import eu.karcags.mythscape.dtos.campaigns.CampaignTagRequestDTO
-import eu.karcags.mythscape.ui.components.common.AppTextField
+import eu.karcags.mythscape.ui.components.common.fields.AppTextField
+import eu.karcags.mythscape.ui.components.common.fields.ColorField
 import eu.karcags.mythscape.ui.components.dialogs.EditDialog
+import eu.karcags.mythscape.utils.parseHexOrNull
+import eu.karcags.mythscape.utils.toHexString
 
 @Composable
 fun CampaignTagFormDialog(
@@ -23,16 +26,16 @@ fun CampaignTagFormDialog(
     val isEdit = tag != null
 
     var caption by remember { mutableStateOf("") }
-    var color by remember { mutableStateOf("#FFFFFF") }
+    var color by remember { mutableStateOf("#FFFFFF".parseHexOrNull()) }
     var validationError by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(tag) {
         if (isEdit) {
             caption = tag.caption
-            color = tag.color
+            color = tag.color.parseHexOrNull()
         } else {
             caption = ""
-            color = "#FFFFFF"
+            color = "#FFFFFF".parseHexOrNull()
         }
         validationError = null
     }
@@ -44,7 +47,7 @@ fun CampaignTagFormDialog(
                 onConfirm(
                     CampaignTagRequestDTO(
                         caption = caption,
-                        color = color,
+                        color = color?.toHexString()!!,
                     )
                 )
             } catch (_: Exception) {
@@ -56,7 +59,7 @@ fun CampaignTagFormDialog(
             .width(400.dp),
         okText = if (isEdit) "Edit" else "Create",
         isProcessing = isProcessing,
-        okEnabled = caption.isNotBlank() && color.isNotBlank(),
+        okEnabled = caption.isNotBlank() && color != null,
         errorMessage = validationError ?: errorMessage,
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -65,10 +68,10 @@ fun CampaignTagFormDialog(
                 onValueChange = { caption = it; validationError = null },
                 label = "Caption",
             )
-            AppTextField(
-                value = color,
-                onValueChange = { color = it; validationError = null },
-                label = "Color"
+            ColorField(
+                color = color,
+                onColorChange = { color = it; validationError = null },
+                label = "Color",
             )
         }
     }

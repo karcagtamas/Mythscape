@@ -1,4 +1,4 @@
-package eu.karcags.mythscape.ui.components.common
+package eu.karcags.mythscape.ui.components.common.fields
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*

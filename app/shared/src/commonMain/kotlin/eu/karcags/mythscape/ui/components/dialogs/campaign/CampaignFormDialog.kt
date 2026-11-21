@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
 import eu.karcags.mythscape.dtos.campaigns.CampaignRequestDTO
-import eu.karcags.mythscape.ui.components.common.AppTextField
+import eu.karcags.mythscape.ui.components.common.fields.AppTextField
 import eu.karcags.mythscape.ui.components.dialogs.EditDialog
 
 @Composable
