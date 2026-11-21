@@ -12,6 +12,8 @@ import eu.karcags.mythscape.dtos.sessions.SessionDTO
 import eu.karcags.mythscape.dtos.sessions.SessionRequestDTO
 import eu.karcags.mythscape.ui.components.common.fields.AppTextField
 import eu.karcags.mythscape.ui.components.common.fields.CheckboxField
+import eu.karcags.mythscape.ui.components.common.fields.DateField
+import eu.karcags.mythscape.ui.components.common.fields.TimeField
 import eu.karcags.mythscape.ui.components.dialogs.EditDialog
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
@@ -97,24 +99,24 @@ fun SessionFormDialog(
         errorMessage = errorMessage,
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            AppTextField(
-                value = date.toString(),
-                onValueChange = { date = LocalDate.parseOrNull(it) },
-                label = "Date (YYYY-MM-DD)",
+            DateField(
+                date = date,
+                onDateChange = { date = it },
+                label = "Date",
                 errorMessage = dateError,
             )
 
-            AppTextField(
-                value = start.toString(),
-                onValueChange = { start = LocalTime.parseOrNull(it) },
-                label = "Start Time (HH:MM)",
+            TimeField(
+                time = start,
+                onTimeChange = { start = it },
+                label = "Start Time",
                 errorMessage = startError,
             )
 
-            AppTextField(
-                value = end.toString(),
-                onValueChange = { end = LocalTime.parseOrNull(it) },
-                label = "End Time (HH:MM)",
+            TimeField(
+                time = end,
+                onTimeChange = { end = it },
+                label = "End Time",
                 errorMessage = endError,
             )
 
