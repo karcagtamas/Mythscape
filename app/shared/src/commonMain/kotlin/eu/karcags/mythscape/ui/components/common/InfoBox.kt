@@ -13,10 +13,11 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun InfoBox(
+    text: String,
     color: Color,
 ) {
     Text(
-        "Canceled",
+        text = text,
         color = color,
         fontSize = 10.sp,
         fontWeight = FontWeight.Black,

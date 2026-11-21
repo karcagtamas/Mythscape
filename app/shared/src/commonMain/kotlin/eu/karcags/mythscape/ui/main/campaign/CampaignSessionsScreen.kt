@@ -155,6 +155,7 @@ private fun SessionRow(
 
                 if (session.canceled) {
                     InfoBox(
+                        text = "CANCELED",
                         MaterialTheme.colorScheme.error,
                     )
                 } else if (isPast) {
