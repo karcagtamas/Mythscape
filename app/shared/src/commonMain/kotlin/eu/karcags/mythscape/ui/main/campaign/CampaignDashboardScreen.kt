@@ -19,7 +19,6 @@ import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
 import eu.karcags.mythscape.dtos.campaigns.CampaignMemberDTO
 import eu.karcags.mythscape.dtos.sessions.SessionDTO
 import eu.karcags.mythscape.enums.ColorVariant
-import eu.karcags.mythscape.enums.FormState
 import eu.karcags.mythscape.ui.components.common.*
 import eu.karcags.mythscape.ui.components.dialogs.ConfirmDialog
 import eu.karcags.mythscape.ui.components.dialogs.campaign.CampaignFormDialog
@@ -108,7 +107,6 @@ fun CampaignDashboardScreen(
 
     if (viewModel.showEditDialog) {
         CampaignFormDialog(
-            mode = FormState.EDIT,
             campaign = campaign,
             isProcessing = viewModel.isEditingProcessing,
             errorMessage = viewModel.editDialogError,

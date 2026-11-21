@@ -29,7 +29,7 @@ fun ConfirmDialog(
             Text(
                 text = title,
                 color = MaterialTheme.colorScheme.secondary,
-                fontSize = 14.sp,
+                fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
             )
         },
@@ -41,14 +41,19 @@ fun ConfirmDialog(
             )
         },
         confirmButton = {
-            Box(modifier = Modifier.width(80.dp)) {
-                AppButton(text = confirmText, onClick = onConfirm, isLoading = isProcessing)
-            }
+            AppButton(
+                text = confirmText,
+                onClick = onConfirm,
+                isLoading = isProcessing,
+                modifier = Modifier.width(80.dp),
+            )
         },
         dismissButton = {
-            Box(modifier = Modifier.width(80.dp)) {
-                AppButton(text = "Cancel", onClick = onDismiss)
-            }
+            AppButton(
+                text = "Cancel",
+                onClick = onDismiss,
+                modifier = Modifier.width(80.dp),
+            )
         }
     )
 }

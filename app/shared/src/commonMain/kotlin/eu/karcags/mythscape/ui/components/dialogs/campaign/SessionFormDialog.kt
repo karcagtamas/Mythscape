@@ -1,20 +1,18 @@
 package eu.karcags.mythscape.ui.components.dialogs.campaign
 
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.AlertDialog
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import eu.karcags.mythscape.dtos.sessions.SessionDTO
 import eu.karcags.mythscape.dtos.sessions.SessionRequestDTO
-import eu.karcags.mythscape.ui.components.common.AppButton
 import eu.karcags.mythscape.ui.components.common.AppTextField
 import eu.karcags.mythscape.ui.components.common.CheckboxField
+import eu.karcags.mythscape.ui.components.dialogs.EditDialog
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 
@@ -51,100 +49,62 @@ fun SessionFormDialog(
         validationError = null
     }
 
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        shape = MaterialTheme.shapes.medium,
-        containerColor = MaterialTheme.colorScheme.surface,
-        modifier = modifier
-            .width(360.dp)
-            .border(1.dp, MaterialTheme.colorScheme.outline, MaterialTheme.shapes.medium),
-        title = {
-            Text(
-                text = if (isEdit) "Edit session" else "Create session",
-                color = MaterialTheme.colorScheme.primary,
-                fontSize = 13.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 0.5.sp,
-            )
-        },
-        text = {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                AppTextField(
-                    value = dateStr,
-                    onValueChange = { dateStr = it; validationError = null },
-                    label = "Date (YYYY-MM-DD)"
-                )
+    EditDialog(
+        onDismiss = onDismiss,
+        onOk = {
+            try {
+                val parsedDate = LocalDate.parse(dateStr)
+                val parsedStartTime = LocalTime.parse(startStr)
+                val parsedEndTime = LocalTime.parse(endStr)
 
-                AppTextField(
-                    value = startStr,
-                    onValueChange = { startStr = it; validationError = null },
-                    label = "Start Time (HH:MM)"
-                )
-
-                AppTextField(
-                    value = endStr,
-                    onValueChange = { endStr = it; validationError = null },
-                    label = "End Time (HH:MM)"
-                )
-
-                CheckboxField(
-                    isChecked = isCanceled,
-                    onCheckedChange = { isCanceled = it },
-                    checkedColor = MaterialTheme.colorScheme.error,
-                    caption = "Mark session as canceled",
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                )
-
-                val activeError = validationError ?: errorMessage
-
-                activeError?.let { error ->
-                    Text(
-                        text = error,
-                        color = MaterialTheme.colorScheme.error,
-                        fontSize = 10.sp,
-                        modifier = Modifier.padding(start = 2.dp, top = 2.dp),
+                onConfirm(
+                    SessionRequestDTO(
+                        date = parsedDate,
+                        startTime = parsedStartTime,
+                        endTime = parsedEndTime,
+                        canceled = isCanceled,
+                        campaignId = campaignId,
                     )
-                }
+                )
+            } catch (_: Exception) {
+                validationError = "Invalid Date or Time syntax"
             }
         },
-        confirmButton = {
-            Box(modifier = Modifier.width(84.dp)) {
-                AppButton(
-                    text = "Save",
-                    isLoading = isProcessing,
-                    enabled = dateStr.isNotBlank() && startStr.isNotBlank() && endStr.isNotBlank(),
-                    onClick = {
-                        try {
-                            val parsedDate = LocalDate.parse(dateStr)
-                            val parsedStartTime = LocalTime.parse(startStr)
-                            val parsedEndTime = LocalTime.parse(endStr)
+        title = if (isEdit) "Edit Session" else "Schedule Session",
+        modifier = modifier
+            .width(400.dp),
+        okText = if (isEdit) "Edit" else "Schedule",
+        isProcessing = isProcessing,
+        okEnabled = dateStr.isNotBlank() && startStr.isNotBlank() && endStr.isNotBlank(),
+        errorMessage = validationError ?: errorMessage,
+    ) {
+        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            AppTextField(
+                value = dateStr,
+                onValueChange = { dateStr = it; validationError = null },
+                label = "Date (YYYY-MM-DD)"
+            )
 
-                            onConfirm(
-                                SessionRequestDTO(
-                                    date = parsedDate,
-                                    startTime = parsedStartTime,
-                                    endTime = parsedEndTime,
-                                    canceled = isCanceled,
-                                    campaignId = campaignId,
-                                )
-                            )
-                        } catch (e: Exception) {
-                            validationError = "Invalid Date or Time syntax"
-                        }
-                    }
-                )
-            }
-        },
-        dismissButton = {
-            Box(modifier = Modifier.width(84.dp)) {
-                AppButton(
-                    text = "Cancel",
-                    onClick = { onDismiss() },
-                )
-            }
-        },
-    )
+            AppTextField(
+                value = startStr,
+                onValueChange = { startStr = it; validationError = null },
+                label = "Start Time (HH:MM)"
+            )
+
+            AppTextField(
+                value = endStr,
+                onValueChange = { endStr = it; validationError = null },
+                label = "End Time (HH:MM)"
+            )
+
+            CheckboxField(
+                isChecked = isCanceled,
+                onCheckedChange = { isCanceled = it },
+                checkedColor = MaterialTheme.colorScheme.error,
+                caption = "Mark session as canceled",
+                modifier = Modifier
+                    .fillMaxWidth(),
+            )
+        }
+    }
 }
