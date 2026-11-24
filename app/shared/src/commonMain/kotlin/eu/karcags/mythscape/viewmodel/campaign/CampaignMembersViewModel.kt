@@ -5,10 +5,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import eu.karcags.mythscape.dtos.UserDTO
 import eu.karcags.mythscape.dtos.campaigns.CampaignMemberDTO
 import eu.karcags.mythscape.dtos.campaigns.CampaignMemberRequestDTO
 import eu.karcags.mythscape.network.CampaignRepository
+import eu.karcags.mythscape.network.UserRepository
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,6 +23,9 @@ class CampaignMembersViewModel(
 
     private val _members = MutableStateFlow<List<CampaignMemberDTO>>(emptyList())
     val members: StateFlow<List<CampaignMemberDTO>> = _members
+
+    private val _users = MutableStateFlow<List<UserDTO>>(emptyList())
+    val users: StateFlow<List<UserDTO>> = _users
 
     var isLoading by mutableStateOf(false)
 
@@ -42,13 +48,8 @@ class CampaignMembersViewModel(
 
         viewModelScope.launch {
             try {
-                val res =
-                    repository.getCampaignMembers(activeCampaignId)
-                if (res.success && !res.data.isNullOrEmpty()) {
-                    _members.value = res.data!!
-                } else {
-                    _members.value = emptyList()
-                }
+                loadMembers()
+                loadUsers()
             } catch (e: Exception) {
                 if (e is CancellationException) {
                     ensureActive()
@@ -100,6 +101,26 @@ class CampaignMembersViewModel(
             if (repository.deleteCampaignMember(member.id).success) {
                 _members.value -= member
             }
+        }
+    }
+
+    private suspend fun CoroutineScope.loadMembers() {
+        val res = repository.getCampaignMembers(activeCampaignId)
+
+        if (res.success && !res.data.isNullOrEmpty()) {
+            _members.value = res.data!!
+        } else {
+            _members.value = emptyList()
+        }
+    }
+
+    private suspend fun CoroutineScope.loadUsers() {
+        val res = repository.getPossibleUsers(activeCampaignId)
+
+        if (res.success && !res.data.isNullOrEmpty()) {
+            _users.value = res.data!!
+        } else {
+            _users.value = emptyList()
         }
     }
 }

@@ -1,6 +1,7 @@
 package eu.karcags.mythscape.network
 
 import eu.karcags.mythscape.ServerResponse
+import eu.karcags.mythscape.dtos.UserDTO
 import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
 import eu.karcags.mythscape.dtos.campaigns.CampaignRequestDTO
 import eu.karcags.mythscape.dtos.campaigns.CampaignMemberDTO
@@ -92,6 +93,11 @@ class CampaignRepository(private val client: HttpClient) {
 
     suspend fun deleteCampaignMember(memberId: Int): ServerResponse<Unit> {
         val response = client.delete("/api/campaigns/members/$memberId")
+        return Json.decodeFromString(response.bodyAsText())
+    }
+
+    suspend fun getPossibleUsers(id: Int): ServerResponse<List<UserDTO>> {
+        val response = client.get("/api/campaigns/$id/possible-users")
         return Json.decodeFromString(response.bodyAsText())
     }
 }

@@ -4,6 +4,7 @@ import eu.karcags.mythscape.dtos.campaigns.CampaignMemberRequestDTO
 import eu.karcags.mythscape.dtos.campaigns.CampaignRequestDTO
 import eu.karcags.mythscape.dtos.campaigns.CampaignTagRequestDTO
 import eu.karcags.mythscape.modules.application.dao.UserEntity
+import eu.karcags.mythscape.modules.application.db.UsersTable
 import eu.karcags.mythscape.modules.campaign.dao.CampaignEntity
 import eu.karcags.mythscape.modules.campaign.dao.CampaignMemberEntity
 import eu.karcags.mythscape.modules.campaign.dao.CampaignTagEntity
@@ -18,7 +19,10 @@ import io.ktor.server.routing.*
 import org.jetbrains.exposed.v1.core.Op
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.isNull
+import org.jetbrains.exposed.v1.core.leftJoin
 import org.jetbrains.exposed.v1.core.neq
+import org.jetbrains.exposed.v1.jdbc.select
 
 fun Route.campaignRoutes() {
     route("/campaigns") {
@@ -234,6 +238,26 @@ fun Route.campaignRoutes() {
             }
 
             call.success()
+        }
+
+        get("/{id}/possible-users") {
+            val id = call.parameters["id"]?.toIntOrNull().requireNonNull()
+
+            val data = dbQuery {
+                UsersTable
+                    .leftJoin(
+                        otherTable = CampaignMembersTable,
+                        onColumn = { UsersTable.id },
+                        otherColumn = { CampaignMembersTable.user },
+                        additionalConstraint = { CampaignMembersTable.campaign eq id }
+                    )
+                    .select(UsersTable.columns)
+                    .where { CampaignMembersTable.id.isNull() }
+                    .let { UserEntity.wrapRows(it) }
+                    .map { it.dto() }
+            }
+
+            call.wrapped(data)
         }
     }
 }

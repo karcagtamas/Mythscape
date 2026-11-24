@@ -6,9 +6,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import eu.karcags.mythscape.dtos.UserDTO
 import eu.karcags.mythscape.dtos.campaigns.CampaignMemberDTO
 import eu.karcags.mythscape.dtos.campaigns.CampaignMemberRequestDTO
 import eu.karcags.mythscape.ui.components.common.fields.AppTextField
+import eu.karcags.mythscape.ui.components.common.fields.UserField
 import eu.karcags.mythscape.ui.components.dialogs.EditDialog
 
 @Composable
@@ -17,12 +19,14 @@ fun CampaignMemberFormDialog(
     onConfirm: (CampaignMemberRequestDTO) -> Unit,
     modifier: Modifier = Modifier,
     member: CampaignMemberDTO? = null,
+    users: List<UserDTO> = emptyList(),
     isProcessing: Boolean = false,
     errorMessage: String? = null,
 ) {
     val isEdit = member != null
 
     var name by remember { mutableStateOf("") }
+    var user by remember { mutableStateOf<UserDTO?>(null) }
 
     val nameError by remember {
         derivedStateOf {
@@ -37,8 +41,10 @@ fun CampaignMemberFormDialog(
     LaunchedEffect(member) {
         if (isEdit) {
             name = member.name
+            user = member.user
         } else {
             name = ""
+            user = null
         }
     }
 
@@ -48,7 +54,7 @@ fun CampaignMemberFormDialog(
             onConfirm(
                 CampaignMemberRequestDTO(
                     name = name,
-                    userId = null,
+                    userId = user?.id,
                 )
             )
         },
@@ -66,6 +72,18 @@ fun CampaignMemberFormDialog(
                 onValueChange = { name = it },
                 label = "Name",
                 errorMessage = nameError,
+                readOnly = user != null
+            )
+
+            UserField(
+                selectedUser = user,
+                users = users,
+                onSelect = {
+                    name = it?.name ?: ""
+                    user = it
+                },
+                label = "User",
+                clearable = true,
             )
         }
     }

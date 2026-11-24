@@ -37,6 +37,7 @@ fun CampaignMembersScreen(
     }
 
     val members by viewModel.members.collectAsState()
+    val users by viewModel.users.collectAsState()
 
     Page {
         Column(
@@ -83,6 +84,7 @@ fun CampaignMembersScreen(
         if (viewModel.showFormDialog) {
             CampaignMemberFormDialog(
                 member = viewModel.editing,
+                users = users,
                 isProcessing = viewModel.isProcessing,
                 onDismiss = { viewModel.showFormDialog = false },
                 onConfirm = { viewModel.save(it) },
@@ -103,32 +105,34 @@ private fun MemberRow(
         Row(
             horizontalArrangement = Arrangement.spacedBy(6.dp),
         ) {
-            AppButton(
-                text = "Edit",
-                modifier = Modifier.width(80.dp),
-                onClick = { onEdit() },
-                icon = {
-                    Icon(
-                        painterResource(Res.drawable.ic_edit_24),
-                        contentDescription = null,
-                        modifier = Modifier.size(SmallIconSize),
-                    )
-                },
-            )
+            if (!member.isDM) {
+                AppButton(
+                    text = "Edit",
+                    modifier = Modifier.width(80.dp),
+                    onClick = { onEdit() },
+                    icon = {
+                        Icon(
+                            painterResource(Res.drawable.ic_edit_24),
+                            contentDescription = null,
+                            modifier = Modifier.size(SmallIconSize),
+                        )
+                    },
+                )
 
-            AppButton(
-                text = "Delete",
-                modifier = Modifier.width(80.dp),
-                onClick = { onDelete() },
-                icon = {
-                    Icon(
-                        painterResource(Res.drawable.ic_delete_24),
-                        contentDescription = null,
-                        modifier = Modifier.size(SmallIconSize),
-                    )
-                },
-                color = ColorVariant.Error,
-            )
+                AppButton(
+                    text = "Delete",
+                    modifier = Modifier.width(80.dp),
+                    onClick = { onDelete() },
+                    icon = {
+                        Icon(
+                            painterResource(Res.drawable.ic_delete_24),
+                            contentDescription = null,
+                            modifier = Modifier.size(SmallIconSize),
+                        )
+                    },
+                    color = ColorVariant.Error,
+                )
+            }
         }
     }
 }

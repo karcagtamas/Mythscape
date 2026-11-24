@@ -1,5 +1,6 @@
 package eu.karcags.mythscape.ui.components.common.fields
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -27,6 +28,7 @@ fun AppTextField(
     isPassword: Boolean = false,
     errorMessage: String? = null,
     readOnly: Boolean = false,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
 
@@ -96,6 +98,7 @@ fun AppTextField(
             ),
             modifier = Modifier.fillMaxWidth(),
             readOnly = readOnly,
+            interactionSource = interactionSource,
         )
 
         if (errorMessage != null) {
