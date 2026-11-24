@@ -7,6 +7,7 @@ import eu.karcags.mythscape.viewmodel.calendar.CalendarViewModel
 import eu.karcags.mythscape.viewmodel.calendar.MonthlyCalendarViewModel
 import eu.karcags.mythscape.viewmodel.calendar.WeeklyCalendarViewModel
 import eu.karcags.mythscape.viewmodel.campaign.CampaignDashboardViewModel
+import eu.karcags.mythscape.viewmodel.campaign.CampaignMembersViewModel
 import eu.karcags.mythscape.viewmodel.campaign.CampaignSessionsViewModel
 import eu.karcags.mythscape.viewmodel.campaign.CampaignTagsViewModel
 import eu.karcags.mythscape.viewmodel.campaign.CampaignWorkspaceViewModel
@@ -36,4 +37,5 @@ val appModule = module {
     viewModelOf(::CampaignDashboardViewModel)
     viewModelOf(::CampaignSessionsViewModel)
     viewModelOf(::CampaignTagsViewModel)
+    viewModelOf(::CampaignMembersViewModel)
 }

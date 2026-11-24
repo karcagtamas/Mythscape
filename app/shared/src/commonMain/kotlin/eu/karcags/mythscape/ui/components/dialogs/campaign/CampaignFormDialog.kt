@@ -29,7 +29,7 @@ fun CampaignFormDialog(
         derivedStateOf {
             when {
                 name.isBlank() -> "Name is required"
-                name.length >= 40 -> "Name has to be at least 40 characters"
+                name.length >= 40 -> "Name has to be maximum 40 characters"
                 else -> null
             }
         }
@@ -39,7 +39,7 @@ fun CampaignFormDialog(
         derivedStateOf {
             when {
                 title.isBlank() -> "Title is required"
-                title.length >= 120 -> "Title has to be at least 120 characters"
+                title.length >= 120 -> "Title has to be maximum 120 characters"
                 else -> null
             }
         }

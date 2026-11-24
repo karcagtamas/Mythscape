@@ -5,5 +5,6 @@ sealed class CampaignWorkspaceScreenState {
     data object Dashboard : CampaignWorkspaceScreenState()
     data object Sessions : CampaignWorkspaceScreenState()
     data object Tags : CampaignWorkspaceScreenState()
+    data object Members : CampaignWorkspaceScreenState()
     data object Notes : CampaignWorkspaceScreenState()
 }

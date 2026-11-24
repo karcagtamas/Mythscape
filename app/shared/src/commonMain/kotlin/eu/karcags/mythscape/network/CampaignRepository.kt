@@ -4,6 +4,7 @@ import eu.karcags.mythscape.ServerResponse
 import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
 import eu.karcags.mythscape.dtos.campaigns.CampaignRequestDTO
 import eu.karcags.mythscape.dtos.campaigns.CampaignMemberDTO
+import eu.karcags.mythscape.dtos.campaigns.CampaignMemberRequestDTO
 import eu.karcags.mythscape.dtos.campaigns.CampaignTagDTO
 import eu.karcags.mythscape.dtos.campaigns.CampaignTagRequestDTO
 import io.ktor.client.*
@@ -72,6 +73,25 @@ class CampaignRepository(private val client: HttpClient) {
 
     suspend fun deleteCampaignTag(tagId: Int): ServerResponse<Unit> {
         val response = client.delete("/api/campaigns/tags/$tagId")
+        return Json.decodeFromString(response.bodyAsText())
+    }
+
+    suspend fun createCampaignMember(id: Int, dto: CampaignMemberRequestDTO): ServerResponse<CampaignMemberDTO> {
+        val response = client.post("/api/campaigns/${id}/members") {
+            setBody(dto)
+        }
+        return Json.decodeFromString(response.bodyAsText())
+    }
+
+    suspend fun updateCampaignMember(memberId: Int, dto: CampaignMemberRequestDTO): ServerResponse<CampaignMemberDTO> {
+        val response = client.put("/api/campaigns/members/${memberId}") {
+            setBody(dto)
+        }
+        return Json.decodeFromString(response.bodyAsText())
+    }
+
+    suspend fun deleteCampaignMember(memberId: Int): ServerResponse<Unit> {
+        val response = client.delete("/api/campaigns/members/$memberId")
         return Json.decodeFromString(response.bodyAsText())
     }
 }

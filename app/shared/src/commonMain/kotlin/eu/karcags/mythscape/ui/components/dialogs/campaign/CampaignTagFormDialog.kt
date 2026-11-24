@@ -32,7 +32,7 @@ fun CampaignTagFormDialog(
         derivedStateOf {
             when {
                 caption.isBlank() -> "Caption is required"
-                caption.length >= 40 -> "Caption has to be at least 40 characters"
+                caption.length >= 40 -> "Caption has to be maximum 40 characters"
                 else -> null
             }
         }
@@ -41,7 +41,7 @@ fun CampaignTagFormDialog(
     val colorError by remember {
         derivedStateOf {
             when {
-                color == null -> "Caption is required"
+                color == null -> "Color is required"
                 else -> null
             }
         }

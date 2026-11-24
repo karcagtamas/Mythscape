@@ -22,6 +22,7 @@ import eu.karcags.mythscape.enums.ColorVariant
 import eu.karcags.mythscape.ui.components.common.*
 import eu.karcags.mythscape.ui.components.dialogs.ConfirmDialog
 import eu.karcags.mythscape.ui.components.dialogs.campaign.CampaignFormDialog
+import eu.karcags.mythscape.ui.components.main.campaign.CampaignMemberRow
 import eu.karcags.mythscape.utils.formatted
 import eu.karcags.mythscape.utils.padded
 import eu.karcags.mythscape.viewmodel.campaign.CampaignDashboardViewModel
@@ -264,50 +265,10 @@ private fun RowScope.CampaignMembers(
             modifier = Modifier.fillMaxSize(),
         ) {
             items(members) { member ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            MaterialTheme.colorScheme.background.copy(alpha = 0.3f),
-                            shape = MaterialTheme.shapes.small
-                        )
-                        .padding(vertical = 6.dp, horizontal = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Column {
-                        Text(
-                            text = member.name,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Medium,
-                        )
-                        Text(
-                            text = "Joined: ${member.creation.formatted()}",
-                            color = Color.Gray,
-                            fontSize = 10.sp,
-                        )
-                    }
-
-                    if (member.isDM) {
-                        Text(
-                            text = "DM",
-                            color = MaterialTheme.colorScheme.primary,
-                            fontSize = 9.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier
-                                .border(1.dp, MaterialTheme.colorScheme.primary, MaterialTheme.shapes.small)
-                                .padding(horizontal = 4.dp, vertical = 2.dp),
-                        )
-                    } else {
-                        Text(
-                            text = "PLAYER",
-                            color = MaterialTheme.colorScheme.secondary,
-                            fontSize = 9.sp,
-                            fontWeight = FontWeight.SemiBold,
-                        )
-                    }
-                }
+                CampaignMemberRow(
+                    member,
+                    backgroundColor = MaterialTheme.colorScheme.background.copy(alpha = 0.3f),
+                )
             }
         }
     }

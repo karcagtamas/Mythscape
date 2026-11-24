@@ -13,3 +13,9 @@ data class CampaignMemberDTO(
     val creation: LocalDateTime,
     val isDM: Boolean,
 )
+
+@Serializable
+data class CampaignMemberRequestDTO(
+    val name: String,
+    val userId: Int?,
+)

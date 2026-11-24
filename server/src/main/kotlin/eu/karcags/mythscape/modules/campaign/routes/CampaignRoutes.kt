@@ -1,7 +1,9 @@
 package eu.karcags.mythscape.modules.campaign.routes
 
+import eu.karcags.mythscape.dtos.campaigns.CampaignMemberRequestDTO
 import eu.karcags.mythscape.dtos.campaigns.CampaignRequestDTO
 import eu.karcags.mythscape.dtos.campaigns.CampaignTagRequestDTO
+import eu.karcags.mythscape.modules.application.dao.UserEntity
 import eu.karcags.mythscape.modules.campaign.dao.CampaignEntity
 import eu.karcags.mythscape.modules.campaign.dao.CampaignMemberEntity
 import eu.karcags.mythscape.modules.campaign.dao.CampaignTagEntity
@@ -177,6 +179,58 @@ fun Route.campaignRoutes() {
 
             dbQuery {
                 CampaignTagEntity.findById(tagId).required().delete()
+            }
+
+            call.success()
+        }
+
+        post("/{id}/members") {
+            val id = call.parameters["id"]?.toIntOrNull().requireNonNull()
+            val dto = call.receive<CampaignMemberRequestDTO>()
+
+            val data = dbQuery {
+                val campaign = CampaignEntity.findById(id).required()
+                val user = dto.userId?.let { UserEntity.findById(it) }
+
+                CampaignMemberEntity.new {
+                    name = dto.name
+                    this.user = user
+                    creation = current()
+                    this.campaign = campaign
+                }.dto()
+            }
+
+            call.wrapped(data, HttpStatusCode.Created)
+        }
+
+        put("/members/{memberId}") {
+            val memberId = call.parameters["memberId"]?.toIntOrNull().requireNonNull()
+            val dto = call.receive<CampaignMemberRequestDTO>()
+
+            val data = dbQuery {
+                CampaignMemberEntity.findByIdAndUpdate(memberId) {
+                    if (it.user != null) {
+                        throw ServerException.Forbidden("User cannot be updated when there is connected user")
+                    }
+
+                    it.name = dto.name
+                }.required().dto()
+            }
+
+            call.wrapped(data)
+        }
+
+        delete("/members/{memberId}") {
+            val memberId = call.parameters["memberId"]?.toIntOrNull().requireNonNull()
+
+            dbQuery {
+                val entity = CampaignMemberEntity.findById(memberId).required()
+
+                if (entity.isDM) {
+                    throw ServerException.Forbidden("DM cannot be deleted")
+                }
+
+                entity.delete()
             }
 
             call.success()
