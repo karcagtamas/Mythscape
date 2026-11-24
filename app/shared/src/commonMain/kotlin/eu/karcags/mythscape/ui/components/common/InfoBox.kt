@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -15,6 +16,7 @@ import androidx.compose.ui.unit.sp
 fun InfoBox(
     text: String,
     color: Color,
+    modifier: Modifier = Modifier,
 ) {
     Text(
         text = text,
@@ -28,5 +30,8 @@ fun InfoBox(
                 MaterialTheme.shapes.medium,
             )
             .padding(horizontal = 4.dp, vertical = 1.dp),
+        maxLines = 1,
+        softWrap = false,
+        overflow = TextOverflow.Ellipsis,
     )
 }

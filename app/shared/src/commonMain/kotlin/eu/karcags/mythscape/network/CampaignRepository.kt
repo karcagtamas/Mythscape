@@ -100,4 +100,9 @@ class CampaignRepository(private val client: HttpClient) {
         val response = client.get("/api/campaigns/$id/possible-users")
         return Json.decodeFromString(response.bodyAsText())
     }
+
+    suspend fun markAsDM(memberId: Int): ServerResponse<Unit> {
+        val response = client.put("/api/campaigns/members/$memberId/mark-as-dm")
+        return Json.decodeFromString(response.bodyAsText())
+    }
 }

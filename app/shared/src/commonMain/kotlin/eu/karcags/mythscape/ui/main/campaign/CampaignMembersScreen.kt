@@ -76,6 +76,9 @@ fun CampaignMembersScreen(
                         onDelete = {
                             viewModel.delete(member)
                         },
+                        onMarkAsDM = {
+                            viewModel.markAsDM(member)
+                        }
                     )
                 }
             }
@@ -98,6 +101,7 @@ private fun MemberRow(
     member: CampaignMemberDTO,
     onEdit: () -> Unit,
     onDelete: () -> Unit,
+    onMarkAsDM: () -> Unit,
 ) {
     CampaignMemberRow(
         member = member,
@@ -106,6 +110,20 @@ private fun MemberRow(
             horizontalArrangement = Arrangement.spacedBy(6.dp),
         ) {
             if (!member.isDM) {
+                AppButton(
+                    text = "Mark as DM",
+                    modifier = Modifier.width(120.dp),
+                    onClick = { onMarkAsDM() },
+                    icon = {
+                        Icon(
+                            painterResource(Res.drawable.ic_star_24),
+                            contentDescription = null,
+                            modifier = Modifier.size(SmallIconSize),
+                        )
+                    },
+                    color = ColorVariant.Tertiary,
+                )
+
                 AppButton(
                     text = "Edit",
                     modifier = Modifier.width(80.dp),

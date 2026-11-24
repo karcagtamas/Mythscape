@@ -104,6 +104,16 @@ class CampaignMembersViewModel(
         }
     }
 
+    fun markAsDM(member: CampaignMemberDTO) {
+        if (member.isDM) return
+
+        viewModelScope.launch {
+            if (repository.markAsDM(member.id).success) {
+                load()
+            }
+        }
+    }
+
     private suspend fun CoroutineScope.loadMembers() {
         val res = repository.getCampaignMembers(activeCampaignId)
 

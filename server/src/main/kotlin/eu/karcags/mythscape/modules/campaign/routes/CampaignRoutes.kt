@@ -17,12 +17,14 @@ import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import org.jetbrains.exposed.v1.core.Op
+import org.jetbrains.exposed.v1.core.SortOrder
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.core.isNull
 import org.jetbrains.exposed.v1.core.leftJoin
 import org.jetbrains.exposed.v1.core.neq
 import org.jetbrains.exposed.v1.jdbc.select
+import org.jetbrains.exposed.v1.jdbc.update
 
 fun Route.campaignRoutes() {
     route("/campaigns") {
@@ -52,7 +54,10 @@ fun Route.campaignRoutes() {
             val tags = dbQuery {
                 CampaignTagEntity.find {
                     CampaignTagsTable.campaign eq id
-                }.toList().map { it.dto() }
+                }
+                    .orderBy(CampaignTagsTable.caption to SortOrder.ASC)
+                    .toList()
+                    .map { it.dto() }
             }
 
             call.wrapped(tags)
@@ -64,7 +69,13 @@ fun Route.campaignRoutes() {
             val members = dbQuery {
                 CampaignMemberEntity.find {
                     CampaignMembersTable.campaign eq id
-                }.toList().map { it.dto() }
+                }
+                    .orderBy(
+                        CampaignMembersTable.isDM to SortOrder.DESC,
+                        CampaignMembersTable.name to SortOrder.ASC,
+                    )
+                    .toList()
+                    .map { it.dto() }
             }
 
             call.wrapped(members)
@@ -253,11 +264,32 @@ fun Route.campaignRoutes() {
                     )
                     .select(UsersTable.columns)
                     .where { CampaignMembersTable.id.isNull() }
+                    .orderBy(
+                        UsersTable.name to SortOrder.ASC,
+                        UsersTable.username to SortOrder.ASC,
+                    )
                     .let { UserEntity.wrapRows(it) }
                     .map { it.dto() }
             }
 
             call.wrapped(data)
+        }
+
+        put("/members/{memberId}/mark-as-dm") {
+            val memberId = call.parameters["memberId"]?.toIntOrNull().requireNonNull()
+
+            dbQuery {
+                val target = CampaignMemberEntity.findById(memberId).required()
+
+                CampaignMemberEntity.find {
+                    (CampaignMembersTable.campaign eq target.campaign.id)
+                }
+                    .forEach { it.isDM = false }
+
+                target.isDM = true
+            }
+
+            call.success()
         }
     }
 }
