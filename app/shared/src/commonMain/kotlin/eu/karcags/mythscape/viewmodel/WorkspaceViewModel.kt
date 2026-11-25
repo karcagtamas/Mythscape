@@ -9,7 +9,7 @@ import eu.karcags.mythscape.common.SessionManager
 import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
 import eu.karcags.mythscape.dtos.campaigns.CampaignRequestDTO
 import eu.karcags.mythscape.network.CampaignRepository
-import eu.karcags.mythscape.enums.WorkspaceScreenState
+import eu.karcags.mythscape.data.WorkspaceScreenState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

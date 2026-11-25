@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import eu.karcags.mythscape.enums.WorkspaceScreenState
+import eu.karcags.mythscape.data.WorkspaceScreenState
 import eu.karcags.mythscape.ui.components.common.HorizontalLine
 import eu.karcags.mythscape.ui.components.common.VerticalLine
 import eu.karcags.mythscape.ui.components.dialogs.campaign.CampaignFormDialog

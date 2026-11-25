@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eu.karcags.mythscape.dtos.sessions.SessionDTO
-import eu.karcags.mythscape.enums.WorkspaceScreenState
 import eu.karcags.mythscape.network.SessionRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

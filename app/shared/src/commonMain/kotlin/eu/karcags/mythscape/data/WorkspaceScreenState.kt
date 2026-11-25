@@ -1,6 +1,4 @@
-package eu.karcags.mythscape.enums
-
-import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
+package eu.karcags.mythscape.data
 
 sealed class WorkspaceScreenState {
 

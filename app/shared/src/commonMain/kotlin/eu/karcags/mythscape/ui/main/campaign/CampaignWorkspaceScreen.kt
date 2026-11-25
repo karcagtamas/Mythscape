@@ -14,8 +14,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
-import eu.karcags.mythscape.enums.CampaignWorkspaceScreenState
+import eu.karcags.mythscape.data.campaign.CampaignWorkspaceScreenState
 import eu.karcags.mythscape.ui.components.common.HorizontalLine
+import eu.karcags.mythscape.ui.main.note.NoteWorkspaceScreen
 import eu.karcags.mythscape.viewmodel.campaign.CampaignWorkspaceViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -110,16 +111,7 @@ fun CampaignWorkspaceScreen(
                     }
 
                     is CampaignWorkspaceScreenState.Notes -> {
-                        Box(
-                            modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                "NOTEBOOK TREE SYSTEM & SCRIPTABLE MONACO CODE EDITOR CANVAS",
-                                color = Color.Gray,
-                                fontSize = 11.sp
-                            )
-                        }
+                        NoteWorkspaceScreen(campaignId = campaign.id)
                     }
                 }
             }

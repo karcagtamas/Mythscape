@@ -11,6 +11,8 @@ import eu.karcags.mythscape.viewmodel.campaign.CampaignMembersViewModel
 import eu.karcags.mythscape.viewmodel.campaign.CampaignSessionsViewModel
 import eu.karcags.mythscape.viewmodel.campaign.CampaignTagsViewModel
 import eu.karcags.mythscape.viewmodel.campaign.CampaignWorkspaceViewModel
+import eu.karcags.mythscape.viewmodel.note.NoteEditorViewModel
+import eu.karcags.mythscape.viewmodel.note.NoteWorkspaceViewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
@@ -38,4 +40,6 @@ val appModule = module {
     viewModelOf(::CampaignSessionsViewModel)
     viewModelOf(::CampaignTagsViewModel)
     viewModelOf(::CampaignMembersViewModel)
+    viewModelOf(::NoteWorkspaceViewModel)
+    viewModelOf(::NoteEditorViewModel)
 }

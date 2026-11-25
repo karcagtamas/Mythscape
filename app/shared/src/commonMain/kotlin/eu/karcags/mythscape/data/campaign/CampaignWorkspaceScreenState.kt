@@ -1,4 +1,4 @@
-package eu.karcags.mythscape.enums
+package eu.karcags.mythscape.data.campaign
 
 sealed class CampaignWorkspaceScreenState {
 
