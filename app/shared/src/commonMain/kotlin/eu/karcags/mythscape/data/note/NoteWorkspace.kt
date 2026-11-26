@@ -16,12 +16,14 @@ sealed interface NoteWorkspaceItem {
         override val parentId: Int?,
         override val name: String,
         val content: String = "",
+        val tagId: Int? = null,
     ) : NoteWorkspaceItem
 }
 
 data class NoteTab(
     val noteId: Int,
     val title: String,
+    val tagId: Int? = null,
     val content: String,
     val isDirty: Boolean = false,
 )

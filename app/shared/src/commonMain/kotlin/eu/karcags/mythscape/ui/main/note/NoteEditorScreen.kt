@@ -27,7 +27,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun NoteEditorScreen(
     tab: NoteTab,
-    onDraftChanged: (title: String, content: String) -> Unit,
+    onDraftChanged: (title: String, content: String, tagId: Int?) -> Unit,
     viewModel: NoteEditorViewModel = koinViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -47,7 +47,7 @@ fun NoteEditorScreen(
             value = state.title,
             onValueChange = { newTitle ->
                 viewModel.onTitleChange(newTitle)
-                onDraftChanged(newTitle, state.content)
+                onDraftChanged(newTitle, state.content, null)
             },
             singleLine = true,
             textStyle = MaterialTheme.typography.headlineSmall.copy(
@@ -75,7 +75,7 @@ fun NoteEditorScreen(
             value = state.content,
             onValueChange = { newContent ->
                 viewModel.onContentChange(newContent)
-                onDraftChanged(state.title, newContent)
+                onDraftChanged(state.title, newContent, null)
             },
             textStyle = MaterialTheme.typography.bodyLarge.copy(
                 color = MaterialTheme.colorScheme.onSurface,
