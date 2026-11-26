@@ -1,13 +1,13 @@
 package eu.karcags.mythscape.network
 
-import eu.karcags.mythscape.ServerResponse
-import eu.karcags.mythscape.dtos.UserDTO
-import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
-import eu.karcags.mythscape.dtos.campaigns.CampaignRequestDTO
-import eu.karcags.mythscape.dtos.campaigns.CampaignMemberDTO
-import eu.karcags.mythscape.dtos.campaigns.CampaignMemberRequestDTO
-import eu.karcags.mythscape.dtos.campaigns.CampaignTagDTO
-import eu.karcags.mythscape.dtos.campaigns.CampaignTagRequestDTO
+import eu.karcags.mythscape.core.ServerResponse
+import eu.karcags.mythscape.core.dtos.UserDTO
+import eu.karcags.mythscape.core.dtos.campaigns.CampaignDTO
+import eu.karcags.mythscape.core.dtos.campaigns.CampaignRequestDTO
+import eu.karcags.mythscape.core.dtos.campaigns.CampaignMemberDTO
+import eu.karcags.mythscape.core.dtos.campaigns.CampaignMemberRequestDTO
+import eu.karcags.mythscape.core.dtos.campaigns.CampaignTagDTO
+import eu.karcags.mythscape.core.dtos.campaigns.CampaignTagRequestDTO
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*

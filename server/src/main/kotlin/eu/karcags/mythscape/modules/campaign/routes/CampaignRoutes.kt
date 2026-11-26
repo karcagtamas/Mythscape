@@ -1,8 +1,8 @@
 package eu.karcags.mythscape.modules.campaign.routes
 
-import eu.karcags.mythscape.dtos.campaigns.CampaignMemberRequestDTO
-import eu.karcags.mythscape.dtos.campaigns.CampaignRequestDTO
-import eu.karcags.mythscape.dtos.campaigns.CampaignTagRequestDTO
+import eu.karcags.mythscape.core.dtos.campaigns.CampaignMemberRequestDTO
+import eu.karcags.mythscape.core.dtos.campaigns.CampaignRequestDTO
+import eu.karcags.mythscape.core.dtos.campaigns.CampaignTagRequestDTO
 import eu.karcags.mythscape.modules.application.dao.UserEntity
 import eu.karcags.mythscape.modules.application.db.UsersTable
 import eu.karcags.mythscape.modules.campaign.dao.CampaignEntity
@@ -24,7 +24,6 @@ import org.jetbrains.exposed.v1.core.isNull
 import org.jetbrains.exposed.v1.core.leftJoin
 import org.jetbrains.exposed.v1.core.neq
 import org.jetbrains.exposed.v1.jdbc.select
-import org.jetbrains.exposed.v1.jdbc.update
 
 fun Route.campaignRoutes() {
     route("/campaigns") {

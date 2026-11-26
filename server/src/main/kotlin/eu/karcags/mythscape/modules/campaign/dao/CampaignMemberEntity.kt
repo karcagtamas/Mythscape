@@ -1,6 +1,6 @@
 package eu.karcags.mythscape.modules.campaign.dao
 
-import eu.karcags.mythscape.dtos.campaigns.CampaignMemberDTO
+import eu.karcags.mythscape.core.dtos.campaigns.CampaignMemberDTO
 import eu.karcags.mythscape.modules.campaign.db.CampaignMembersTable
 import eu.karcags.mythscape.modules.application.dao.UserEntity
 import org.jetbrains.exposed.v1.core.dao.id.EntityID

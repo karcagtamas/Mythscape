@@ -1,4 +1,4 @@
-package eu.karcags.mythscape
+package eu.karcags.mythscape.core
 
 import kotlinx.serialization.Serializable
 

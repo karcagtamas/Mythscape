@@ -6,8 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eu.karcags.mythscape.common.SessionManager
-import eu.karcags.mythscape.dtos.auth.LoginDTO
-import eu.karcags.mythscape.dtos.auth.RegisterDTO
+import eu.karcags.mythscape.core.dtos.auth.LoginDTO
+import eu.karcags.mythscape.core.dtos.auth.RegisterDTO
 import eu.karcags.mythscape.network.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

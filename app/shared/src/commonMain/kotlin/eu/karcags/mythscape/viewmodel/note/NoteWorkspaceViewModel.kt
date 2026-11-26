@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import eu.karcags.mythscape.data.note.NoteTab
 import eu.karcags.mythscape.data.note.NoteWorkspaceItem
 import eu.karcags.mythscape.data.note.NoteWorkspaceState
-import eu.karcags.mythscape.dtos.campaigns.CampaignTagDTO
+import eu.karcags.mythscape.core.dtos.campaigns.CampaignTagDTO
 import eu.karcags.mythscape.network.CampaignRepository
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.currentCoroutineContext
@@ -14,11 +14,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update

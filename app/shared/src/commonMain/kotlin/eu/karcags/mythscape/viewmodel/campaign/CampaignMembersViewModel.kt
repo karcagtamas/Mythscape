@@ -5,11 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import eu.karcags.mythscape.dtos.UserDTO
-import eu.karcags.mythscape.dtos.campaigns.CampaignMemberDTO
-import eu.karcags.mythscape.dtos.campaigns.CampaignMemberRequestDTO
+import eu.karcags.mythscape.core.dtos.UserDTO
+import eu.karcags.mythscape.core.dtos.campaigns.CampaignMemberDTO
+import eu.karcags.mythscape.core.dtos.campaigns.CampaignMemberRequestDTO
 import eu.karcags.mythscape.network.CampaignRepository
-import eu.karcags.mythscape.network.UserRepository
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ensureActive

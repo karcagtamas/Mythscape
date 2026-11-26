@@ -3,8 +3,8 @@ package eu.karcags.mythscape.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eu.karcags.mythscape.common.SessionManager
-import eu.karcags.mythscape.dtos.auth.LogoutDTO
-import eu.karcags.mythscape.dtos.auth.RefreshDTO
+import eu.karcags.mythscape.core.dtos.auth.LogoutDTO
+import eu.karcags.mythscape.core.dtos.auth.RefreshDTO
 import eu.karcags.mythscape.network.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

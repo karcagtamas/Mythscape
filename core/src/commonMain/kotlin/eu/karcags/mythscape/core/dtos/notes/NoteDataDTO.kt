@@ -1,4 +1,4 @@
-package eu.karcags.mythscape.dtos.notes
+package eu.karcags.mythscape.core.dtos.notes
 
 import kotlinx.serialization.Serializable
 

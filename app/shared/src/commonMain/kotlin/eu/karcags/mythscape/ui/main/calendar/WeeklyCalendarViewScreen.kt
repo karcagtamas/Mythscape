@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import eu.karcags.mythscape.dtos.sessions.SessionDTO
+import eu.karcags.mythscape.core.dtos.sessions.SessionDTO
 import eu.karcags.mythscape.ui.components.common.HorizontalLine
 import eu.karcags.mythscape.ui.components.common.LoadingBox
 import eu.karcags.mythscape.ui.components.main.calendar.CalendarNavigator

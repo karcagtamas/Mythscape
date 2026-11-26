@@ -1,7 +1,11 @@
 package eu.karcags.mythscape.network
 
-import eu.karcags.mythscape.ServerResponse
-import eu.karcags.mythscape.dtos.auth.*
+import eu.karcags.mythscape.core.ServerResponse
+import eu.karcags.mythscape.core.dtos.auth.LoginDTO
+import eu.karcags.mythscape.core.dtos.auth.LogoutDTO
+import eu.karcags.mythscape.core.dtos.auth.RefreshDTO
+import eu.karcags.mythscape.core.dtos.auth.RegisterDTO
+import eu.karcags.mythscape.core.dtos.auth.TokenDTO
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*

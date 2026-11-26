@@ -1,7 +1,6 @@
-package eu.karcags.mythscape.dtos.sessions
+package eu.karcags.mythscape.core.dtos.sessions
 
-import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
-import eu.karcags.mythscape.dtos.campaigns.CampaignLightDTO
+import eu.karcags.mythscape.core.dtos.campaigns.CampaignLightDTO
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.serialization.Serializable

@@ -1,6 +1,6 @@
 package eu.karcags.mythscape.modules.application.dao
 
-import eu.karcags.mythscape.dtos.UserDTO
+import eu.karcags.mythscape.core.dtos.UserDTO
 import eu.karcags.mythscape.modules.application.db.UsersTable
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.dao.IntEntity

@@ -1,4 +1,4 @@
-package eu.karcags.mythscape.dtos.auth
+package eu.karcags.mythscape.core.dtos.auth
 
 import kotlinx.serialization.Serializable
 

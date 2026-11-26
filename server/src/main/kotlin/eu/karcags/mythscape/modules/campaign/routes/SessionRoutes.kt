@@ -1,6 +1,6 @@
 package eu.karcags.mythscape.modules.campaign.routes
 
-import eu.karcags.mythscape.dtos.sessions.SessionRequestDTO
+import eu.karcags.mythscape.core.dtos.sessions.SessionRequestDTO
 import eu.karcags.mythscape.modules.campaign.dao.CampaignEntity
 import eu.karcags.mythscape.modules.campaign.dao.SessionEntity
 import eu.karcags.mythscape.modules.campaign.db.SessionsTable

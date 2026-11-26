@@ -1,8 +1,8 @@
 package eu.karcags.mythscape.network
 
-import eu.karcags.mythscape.ServerResponse
-import eu.karcags.mythscape.dtos.sessions.SessionDTO
-import eu.karcags.mythscape.dtos.sessions.SessionRequestDTO
+import eu.karcags.mythscape.core.ServerResponse
+import eu.karcags.mythscape.core.dtos.sessions.SessionDTO
+import eu.karcags.mythscape.core.dtos.sessions.SessionRequestDTO
 import io.ktor.client.HttpClient
 import io.ktor.client.request.delete
 import io.ktor.client.request.get

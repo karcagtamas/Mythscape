@@ -18,6 +18,7 @@ application {
 
 dependencies {
     api(project(":core"))
+    api(project(":notedsl"))
 
     implementation(libs.ktor.server.core)
     implementation(libs.ktor.server.netty)

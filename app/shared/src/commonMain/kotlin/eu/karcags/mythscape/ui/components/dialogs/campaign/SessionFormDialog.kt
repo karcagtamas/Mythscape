@@ -8,16 +8,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import eu.karcags.mythscape.dtos.sessions.SessionDTO
-import eu.karcags.mythscape.dtos.sessions.SessionRequestDTO
-import eu.karcags.mythscape.ui.components.common.fields.AppTextField
+import eu.karcags.mythscape.core.dtos.sessions.SessionDTO
+import eu.karcags.mythscape.core.dtos.sessions.SessionRequestDTO
 import eu.karcags.mythscape.ui.components.common.fields.CheckboxField
 import eu.karcags.mythscape.ui.components.common.fields.DateField
 import eu.karcags.mythscape.ui.components.common.fields.TimeField
 import eu.karcags.mythscape.ui.components.dialogs.EditDialog
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
-import kotlinx.datetime.parseOrNull
 
 @Composable
 fun SessionFormDialog(

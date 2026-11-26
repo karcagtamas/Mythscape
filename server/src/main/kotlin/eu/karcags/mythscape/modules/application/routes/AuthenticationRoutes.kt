@@ -3,7 +3,11 @@ package eu.karcags.mythscape.modules.application.routes
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import eu.karcags.mythscape.ConfigKey
-import eu.karcags.mythscape.dtos.auth.*
+import eu.karcags.mythscape.core.dtos.auth.LoginDTO
+import eu.karcags.mythscape.core.dtos.auth.LogoutDTO
+import eu.karcags.mythscape.core.dtos.auth.RefreshDTO
+import eu.karcags.mythscape.core.dtos.auth.RegisterDTO
+import eu.karcags.mythscape.core.dtos.auth.TokenDTO
 import eu.karcags.mythscape.modules.application.dao.RefreshTokenEntity
 import eu.karcags.mythscape.modules.application.dao.UserEntity
 import eu.karcags.mythscape.modules.application.services.RefreshTokenService

@@ -31,8 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
-import eu.karcags.mythscape.dtos.UserDTO
+import eu.karcags.mythscape.core.dtos.UserDTO
 import mythscape.app.shared.generated.resources.Res
 import mythscape.app.shared.generated.resources.ic_check_24
 import mythscape.app.shared.generated.resources.ic_close_24

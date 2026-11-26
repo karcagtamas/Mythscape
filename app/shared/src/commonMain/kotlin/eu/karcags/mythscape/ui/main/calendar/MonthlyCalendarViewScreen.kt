@@ -20,7 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import eu.karcags.mythscape.dtos.sessions.SessionDTO
+import eu.karcags.mythscape.core.dtos.sessions.SessionDTO
 import eu.karcags.mythscape.ui.components.common.LoadingBox
 import eu.karcags.mythscape.ui.components.main.calendar.CalendarNavigator
 import eu.karcags.mythscape.utils.short

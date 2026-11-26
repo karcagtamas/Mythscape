@@ -1,6 +1,6 @@
 package eu.karcags.mythscape.modules.note.dao
 
-import eu.karcags.mythscape.dtos.notes.CampaignNoteCategoryDTO
+import eu.karcags.mythscape.core.dtos.notes.CampaignNoteCategoryDTO
 import eu.karcags.mythscape.modules.note.db.NoteCategoriesTable
 import eu.karcags.mythscape.modules.application.dao.UserEntity
 import org.jetbrains.exposed.v1.core.dao.id.EntityID

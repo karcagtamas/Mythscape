@@ -1,13 +1,16 @@
-package eu.karcags.mythscape.dtos.notes
+package eu.karcags.mythscape.core.dtos.notes
 
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class NoteDTO(
+data class FolderDTO(
     val id: Int,
     val name: String,
-    val folderId: Int?,
+    val folders: List<FolderDTO>,
+    val notes: List<NoteDTO>,
+    val categoryId: Int?,
+    val sessionId: Int?,
     val creation: LocalDateTime,
     val lastUpdate: LocalDateTime,
 )

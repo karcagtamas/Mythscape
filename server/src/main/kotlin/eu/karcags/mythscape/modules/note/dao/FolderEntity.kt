@@ -1,7 +1,7 @@
 package eu.karcags.mythscape.modules.note.dao
 
-import eu.karcags.mythscape.dtos.notes.FolderDTO
-import eu.karcags.mythscape.dtos.notes.NoteTreeDTO
+import eu.karcags.mythscape.core.dtos.notes.FolderDTO
+import eu.karcags.mythscape.core.dtos.notes.NoteTreeDTO
 import eu.karcags.mythscape.modules.campaign.dao.CampaignEntity
 import eu.karcags.mythscape.modules.campaign.dao.SessionEntity
 import eu.karcags.mythscape.modules.note.db.FoldersTable

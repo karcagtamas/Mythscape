@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
+import eu.karcags.mythscape.core.dtos.campaigns.CampaignDTO
 import eu.karcags.mythscape.data.campaign.CampaignWorkspaceScreenState
 import eu.karcags.mythscape.ui.components.common.HorizontalLine
 import eu.karcags.mythscape.ui.main.note.NoteWorkspaceScreen

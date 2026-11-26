@@ -1,8 +1,8 @@
 package eu.karcags.mythscape.modules.note.dao
 
-import eu.karcags.mythscape.dtos.notes.NoteDTO
-import eu.karcags.mythscape.dtos.notes.NoteDataDTO
-import eu.karcags.mythscape.dtos.notes.NoteTreeDTO
+import eu.karcags.mythscape.core.dtos.notes.NoteDTO
+import eu.karcags.mythscape.core.dtos.notes.NoteDataDTO
+import eu.karcags.mythscape.core.dtos.notes.NoteTreeDTO
 import eu.karcags.mythscape.modules.note.db.NotesTable
 import eu.karcags.mythscape.modules.application.dao.UserEntity
 import eu.karcags.mythscape.modules.campaign.dao.CampaignEntity

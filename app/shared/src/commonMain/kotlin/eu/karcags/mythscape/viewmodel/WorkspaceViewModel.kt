@@ -6,8 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eu.karcags.mythscape.common.SessionManager
-import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
-import eu.karcags.mythscape.dtos.campaigns.CampaignRequestDTO
+import eu.karcags.mythscape.core.dtos.campaigns.CampaignDTO
+import eu.karcags.mythscape.core.dtos.campaigns.CampaignRequestDTO
 import eu.karcags.mythscape.network.CampaignRepository
 import eu.karcags.mythscape.data.WorkspaceScreenState
 import kotlinx.coroutines.flow.MutableStateFlow

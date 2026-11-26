@@ -1,8 +1,8 @@
 package eu.karcags.mythscape.modules.campaign.dao
 
-import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
-import eu.karcags.mythscape.dtos.campaigns.CampaignLightDTO
-import eu.karcags.mythscape.dtos.notes.NoteTreeDTO
+import eu.karcags.mythscape.core.dtos.campaigns.CampaignDTO
+import eu.karcags.mythscape.core.dtos.campaigns.CampaignLightDTO
+import eu.karcags.mythscape.core.dtos.notes.NoteTreeDTO
 import eu.karcags.mythscape.modules.note.dao.FolderEntity
 import eu.karcags.mythscape.modules.note.dao.NoteEntity
 import eu.karcags.mythscape.modules.campaign.db.CampaignMembersTable

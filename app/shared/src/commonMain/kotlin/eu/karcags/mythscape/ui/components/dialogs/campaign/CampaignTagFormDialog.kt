@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import eu.karcags.mythscape.dtos.campaigns.CampaignTagDTO
-import eu.karcags.mythscape.dtos.campaigns.CampaignTagRequestDTO
+import eu.karcags.mythscape.core.dtos.campaigns.CampaignTagDTO
+import eu.karcags.mythscape.core.dtos.campaigns.CampaignTagRequestDTO
 import eu.karcags.mythscape.ui.components.common.fields.AppTextField
 import eu.karcags.mythscape.ui.components.common.fields.ColorField
 import eu.karcags.mythscape.ui.components.dialogs.EditDialog

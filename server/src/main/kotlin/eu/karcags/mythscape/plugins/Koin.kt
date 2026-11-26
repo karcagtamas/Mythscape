@@ -3,6 +3,7 @@ package eu.karcags.mythscape.plugins
 import eu.karcags.mythscape.modules.application.ApplicationModule
 import eu.karcags.mythscape.modules.campaign.CampaignModule
 import eu.karcags.mythscape.modules.note.NoteModule
+import eu.karcags.mythscape.modules.notedsl.NoteDslModule
 import eu.karcags.mythscape.utils.ModuleRegistry
 import io.ktor.server.application.*
 import org.koin.dsl.module
@@ -16,6 +17,7 @@ val appModule = module {
                 ApplicationModule(),
                 CampaignModule(),
                 NoteModule(),
+                NoteDslModule()
             )
         )
     }

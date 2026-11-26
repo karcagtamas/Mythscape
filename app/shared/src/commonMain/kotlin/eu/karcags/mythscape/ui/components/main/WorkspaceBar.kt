@@ -19,7 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
+import eu.karcags.mythscape.core.dtos.campaigns.CampaignDTO
 import eu.karcags.mythscape.ui.components.common.avatar.TextAvatar
 import eu.karcags.mythscape.data.WorkspaceScreenState
 import eu.karcags.mythscape.ui.components.common.avatar.IconAvatar

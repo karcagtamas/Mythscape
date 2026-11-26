@@ -13,7 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import eu.karcags.mythscape.dtos.campaigns.CampaignMemberDTO
+import eu.karcags.mythscape.core.dtos.campaigns.CampaignMemberDTO
 import eu.karcags.mythscape.ui.components.common.InfoBox
 import eu.karcags.mythscape.utils.formatted
 

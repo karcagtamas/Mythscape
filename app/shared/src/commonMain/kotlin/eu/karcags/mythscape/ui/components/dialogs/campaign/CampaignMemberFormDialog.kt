@@ -6,9 +6,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import eu.karcags.mythscape.dtos.UserDTO
-import eu.karcags.mythscape.dtos.campaigns.CampaignMemberDTO
-import eu.karcags.mythscape.dtos.campaigns.CampaignMemberRequestDTO
+import eu.karcags.mythscape.core.dtos.UserDTO
+import eu.karcags.mythscape.core.dtos.campaigns.CampaignMemberDTO
+import eu.karcags.mythscape.core.dtos.campaigns.CampaignMemberRequestDTO
 import eu.karcags.mythscape.ui.components.common.fields.AppTextField
 import eu.karcags.mythscape.ui.components.common.fields.UserField
 import eu.karcags.mythscape.ui.components.dialogs.EditDialog

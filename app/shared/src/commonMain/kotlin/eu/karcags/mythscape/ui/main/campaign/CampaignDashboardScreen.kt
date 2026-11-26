@@ -1,7 +1,6 @@
 package eu.karcags.mythscape.ui.main.campaign
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -15,9 +14,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import eu.karcags.mythscape.dtos.campaigns.CampaignDTO
-import eu.karcags.mythscape.dtos.campaigns.CampaignMemberDTO
-import eu.karcags.mythscape.dtos.sessions.SessionDTO
+import eu.karcags.mythscape.core.dtos.campaigns.CampaignDTO
+import eu.karcags.mythscape.core.dtos.campaigns.CampaignMemberDTO
+import eu.karcags.mythscape.core.dtos.sessions.SessionDTO
 import eu.karcags.mythscape.enums.ColorVariant
 import eu.karcags.mythscape.ui.components.common.*
 import eu.karcags.mythscape.ui.components.dialogs.ConfirmDialog

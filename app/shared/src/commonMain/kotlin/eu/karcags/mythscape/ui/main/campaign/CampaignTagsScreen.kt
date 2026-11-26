@@ -15,15 +15,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import eu.karcags.mythscape.dtos.campaigns.CampaignTagDTO
-import eu.karcags.mythscape.dtos.sessions.SessionDTO
+import eu.karcags.mythscape.core.dtos.campaigns.CampaignTagDTO
 import eu.karcags.mythscape.enums.ColorVariant
 import eu.karcags.mythscape.theme.SmallIconSize
 import eu.karcags.mythscape.ui.components.common.*
 import eu.karcags.mythscape.ui.components.dialogs.campaign.CampaignTagFormDialog
 import eu.karcags.mythscape.utils.fromHex
 import eu.karcags.mythscape.viewmodel.campaign.CampaignTagsViewModel
-import kotlinx.datetime.LocalDateTime
 import mythscape.app.shared.generated.resources.*
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel

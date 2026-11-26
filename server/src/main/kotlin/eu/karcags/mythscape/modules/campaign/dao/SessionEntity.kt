@@ -1,6 +1,6 @@
 package eu.karcags.mythscape.modules.campaign.dao
 
-import eu.karcags.mythscape.dtos.sessions.SessionDTO
+import eu.karcags.mythscape.core.dtos.sessions.SessionDTO
 import eu.karcags.mythscape.modules.campaign.db.SessionsTable
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.dao.IntEntity

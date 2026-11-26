@@ -1,7 +1,7 @@
 package eu.karcags.mythscape.network
 
-import eu.karcags.mythscape.ServerResponse
-import eu.karcags.mythscape.dtos.UserDTO
+import eu.karcags.mythscape.core.ServerResponse
+import eu.karcags.mythscape.core.dtos.UserDTO
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
