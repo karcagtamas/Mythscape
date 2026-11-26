@@ -21,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
@@ -32,6 +33,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import eu.karcags.mythscape.data.note.NoteTab
+import eu.karcags.mythscape.data.note.NoteWorkspaceItem
 import eu.karcags.mythscape.ui.components.common.HorizontalLine
 import eu.karcags.mythscape.ui.components.common.Page
 import eu.karcags.mythscape.ui.components.common.VerticalLine
@@ -47,7 +49,12 @@ fun NoteWorkspaceScreen(
     campaignId: Int,
     viewModel: NoteWorkspaceViewModel = koinViewModel(),
 ) {
+    LaunchedEffect(campaignId) {
+        viewModel.setCampaignId(campaignId)
+    }
+
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val tags by viewModel.tags.collectAsStateWithLifecycle()
 
     Page {
         Row(
@@ -78,14 +85,21 @@ fun NoteWorkspaceScreen(
                 HorizontalLine()
 
                 val activeTab = state.activeTab
-
                 if (activeTab != null) {
                     key(activeTab.noteId) {
                         NoteEditorScreen(
                             tab = activeTab,
+                            tags = tags,
                             onDraftChanged = { title, content, tagId ->
                                 viewModel.syncTabDraft(activeTab.noteId, title, tagId, content)
                             },
+                            onNavigateToNote = { targetNoteId ->
+                                val existing = state.items.filterIsInstance<NoteWorkspaceItem.Note>()
+                                    .find { it.id == targetNoteId }
+                                if (existing != null) {
+                                    viewModel.openNote(existing)
+                                }
+                            }
                         )
                     }
                 } else {

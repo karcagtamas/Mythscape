@@ -3,7 +3,7 @@ package eu.karcags.mythscape.data.note
 data class NoteWorkspaceState(
     val items: List<NoteWorkspaceItem> = emptyList(),
     val openTabs: List<NoteTab> = listOf(
-        NoteTab(noteId = -1, title = "Untitled Note", content = ""),
+        NoteTab(noteId = -1, title = "Untitled Note", content = "", tagId = null),
     ),
     val activeNoteId: Int? = -1,
     val isSidebarVisible: Boolean = false,

@@ -69,7 +69,7 @@ class NoteWorkspaceViewModel(
                     content = note.content,
                 )
             }
-            state.copy(openTabs = updatedTabs)
+            state.copy(openTabs = updatedTabs, activeNoteId = note.id)
         }
     }
 

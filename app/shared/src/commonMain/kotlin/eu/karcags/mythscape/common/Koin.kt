@@ -26,6 +26,7 @@ val appModule = module {
     single { CampaignRepository(get()) }
     single { UserRepository(get()) }
     single { SessionRepository(get()) }
+    single { NoteDslRepository(get()) }
 
     viewModelOf(::AppViewModel)
     viewModelOf(::AuthViewModel)
